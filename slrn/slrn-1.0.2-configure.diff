@@ -1,0 +1,16 @@
+--- autoconf/aclocal.m4.orig	2014-10-01 17:52:58.113517400 +0200
++++ autoconf/aclocal.m4	2014-10-01 17:54:13.146809100 +0200
+@@ -533,11 +533,11 @@
+ 
+ AC_DEFUN([JD_ANSI_CC], dnl#{{{
+ [
+-AC_AIX
++AC_REQUIRE([AC_AIX])
+ AC_REQUIRE([AC_PROG_CC])
+ AC_REQUIRE([AC_PROG_CPP])
+ AC_REQUIRE([AC_PROG_GCC_TRADITIONAL])
+-AC_ISC_POSIX
++AC_REQUIRE([AC_ISC_POSIX])
+ 
+ dnl #This stuff came from Yorick config script
+ dnl

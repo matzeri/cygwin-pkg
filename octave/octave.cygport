@@ -1,0 +1,114 @@
+NAME="octave"
+VERSION=3.8.2
+RELEASE=1
+
+CATEGORY="Math"
+DESCRIPTION="GNU Octave is a high-level language for numerical computations"
+HOMEPAGE="http://www.gnu.org/software/octave/"
+
+SRC_URI="ftp://ftp.octave.org/pub/octave/${PN}-${PV}.tar.bz2"
+
+DR="${PN}-${PV}"
+OR="${PV}"
+
+SRC_DIR="${PN}-${PV}"
+
+PATCH_URI="rcfile.patch"
+
+PKG_NAMES="octave octave-devel octave-doc"
+
+octave_SUMMARY="GNU Octave language for numerical computations"
+octave_devel_SUMMARY="GNU Octave (development)"
+octave_doc_SUMMARY="GNU Octave:  additional docs in html and pdf"
+
+octave_CONTENTS=' usr/bin/cyg* usr/bin/oct* usr/lib/octave/'${OR}'/[eos]* usr/lib/octave/[as]*  usr/share/[aimos]* usr/share/doc/octave/[ABCINPRTe]*'
+
+octave_devel_CONTENTS=' usr/bin/mk* usr/include/ usr/lib/octave/'${OR}'/lib*'
+
+octave_doc_CONTENTS='usr/share/doc/octave/[hp]*'
+
+DIFF_EXCLUDES="*octave.info* version.texi stamp-vti" 
+
+RESTRICT="diff debuginfo"
+
+src_compile() {
+	cd ${S}
+    	cygautoreconf
+	cd ${B}
+	cygconf --libexecdir=/usr/lib \
+		--enable-shared \
+		--enable-float-truncate \
+                --disable-java \
+		lt_cv_deplibs_check_method=pass_all \
+		LDFLAGS="-Wl,-no-undefined -L/usr/local/lib"
+
+# workaround to avoid rebuilding of all interpreter documentation
+	touch AUTHORS BUGS INSTALL.OCTAVE
+
+	cygmake 
+}
+
+src_test() {
+	cd ${B}
+	make check	
+}
+
+src_install() {
+	cd ${B}
+	ARC=$(./libtool --features | grep "host:" |sed -e "s/host://")
+
+	keepdir /usr/lib/octave/${OR}/site/exec/${ARC}
+	keepdir /usr/lib/octave/${OR}/site/oct/${ARC}
+	keepdir /usr/lib/octave/api-v49+/site/exec/${ARC}
+ 	keepdir /usr/lib/octave/site/oct/api-v49+/${ARC} 
+        keepdir /usr/lib/octave/${OR}/site/exec
+        keepdir /usr/lib/octave/${OR}/site/oct
+        keepdir /usr/lib/octave/api-v49+/site/exec
+        keepdir /usr/lib/octave/site/exec/${ARC}
+        keepdir /usr/lib/octave/site/oct/api-v49+
+        keepdir /usr/lib/octave/site/oct/${ARC}
+        keepdir /usr/share/octave/${OR}/site/m
+        keepdir /usr/share/octave/site/api-v49+/m
+        keepdir /usr/lib/octave/${OR}/site
+        keepdir /usr/lib/octave/api-v49+/site
+        keepdir /usr/lib/octave/site/exec
+        keepdir /usr/lib/octave/site/oct
+        keepdir /usr/share/octave/${OR}/site
+        keepdir /usr/share/octave/site/api-v49+
+        keepdir /usr/lib/octave/api-v49+
+        keepdir /usr/lib/octave/site
+
+
+	cyginstall 
+	
+	insinto /usr/share/doc/${PN}/etc
+	doins ${S}/etc/README.Cygwin 
+	doins ${S}/etc/PROJECTS
+	insinto /usr/share/doc/${PN}
+	doins ${S}/NEWS 
+	doins ${S}/ChangeLog
+
+	dodir /usr/share/doc/${PN}/pdf
+	insinto /usr/share/doc/${PN}/pdf
+	doins ${S}/doc/interpreter/octave.pdf
+	doins ${S}/doc/liboctave/liboctave.pdf
+	doins ${S}/doc/refcard/refcard-a4.pdf
+	doins ${S}/doc/refcard/refcard-legal.pdf
+	doins ${S}/doc/refcard/refcard-letter.pdf
+#	doins ${S}/doc/faq/OctaveFAQ.pdf
+ 
+	dodir /usr/share/doc/${PN}/html/interpreter
+	insinto /usr/share/doc/${PN}/html/interpreter
+	doins ${S}/doc/interpreter/octave.html/* 
+	doins ${S}/doc/interpreter/octave.html/*.png 
+
+	dodir /usr/share/doc/${PN}/html/liboctave
+	insinto /usr/share/doc/${PN}/html/liboctave
+	doins ${S}/doc/liboctave/liboctave.html/* 
+
+	dodir /usr/share/info
+	insinto /usr/share/info
+	doins ${S}/doc/interpreter/octave.info* 
+	doins ${S}/doc/liboctave/liboctave.info
+#	doins ${S}/doc/faq/OctaveFAQ.info
+}

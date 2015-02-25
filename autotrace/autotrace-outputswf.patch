@@ -1,0 +1,10 @@
+--- origsrc/autotrace-0.31.1/output-swf.c	2002-10-10 22:44:14.000000000 +0200
++++ src/autotrace-0.31.1/output-swf.c	2013-04-27 18:42:31.802669600 +0200
+@@ -25,6 +25,7 @@
+ #include "color.h"
+ #include "output-swf.h"
+ #include <ming.h>
++extern void fileOutputMethod(byte b, void *data);
+ 
+ #define FPS 24.0
+ #define IMGID 1

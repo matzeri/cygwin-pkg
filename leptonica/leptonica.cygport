@@ -1,0 +1,24 @@
+NAME="leptonica"
+VERSION=1.71
+RELEASE=2
+
+CATEGORY="Libs"
+SUMMARY="Library for image processing and image analysis applications"
+DESCRIPTION="Library for image processing and image analysis applications"
+HOMEPAGE="http://www.leptonica.com/"
+SRC_URI="ihttp://www.leptonica.com/source/${PN}-${PV}.tar.gz"
+
+
+PKG_NAMES="leptonica libleptonica_3 libleptonica-devel"
+
+leptonica_CONTENTS="usr/bin/*.exe "
+libleptonica_3_SUMMARY="${SUMMARY} (C runtime)"
+libleptonica_3_CONTENTS="usr/bin/cyg*"  
+libleptonica_devel_SUMMARY="${SUMMARY} (development)"
+libleptonica_devel_CONTENTS="usr/include/ usr/lib/"
+
+
+DIFF_EXCLUDES=""
+
+KEEP_LA_FILES="none"
+

@@ -1,0 +1,30 @@
+--- origsrc/octave-3.8.0/scripts/startup/local-rcfile	2014-01-23 21:28:54.464711300 +0100
++++ src/octave-3.8.0/scripts/startup/local-rcfile	2014-01-23 21:22:33.000000000 +0100
+@@ -2,3 +2,27 @@
+ ##
+ ## This file should contain any commands that should be executed each
+ ## time Octave starts for every user at this site.
++
++## fltk still problematic on cygwin so reversing default
++graphics_toolkit gnuplot
++
++##  to updated automatically the package database every time a package is 
++##  added or removed
++
++# global package directory
++packages_dir=stat("/usr/share/octave/packages");
++
++# if no package directory, we remove database 
++if (isempty(packages_dir))
++	unlink("/usr/share/octave/octave_packages");	
++else
++	packages_list=stat("/usr/share/octave/octave_packages");
++# missing package database, or older than directory we update it	
++	if ( isempty(packages_list) )
++		pkg rebuild -noauto -global
++		pkg list
++	elseif  ((packages_dir.ctime-packages_list.ctime)>0) 
++		pkg rebuild -noauto -global
++		pkg list
++	endif
++endif

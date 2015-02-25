@@ -1,0 +1,34 @@
+inherit qt4
+
+NAME="TeXmacs"
+VERSION=1.99.2
+RELEASE=1
+
+HOMEPAGE="http://www.texmacs.org/"
+SRC_URI="ftp://ftp.texmacs.org/pub/TeXmacs/tmftp/source/${P}-src.tar.gz"
+SRC_DIR="${P}-src"
+# PATCH_URI=""
+
+CATEGORY="Editors"
+SUMMARY="WYSIWYG editor for science and math"
+DESCRIPTION="WYSIWYG editor for science and math"
+
+# REQUIRES="aspell ghostscript ImageMagick libfreetype6 libgcc1 libguile17 libiconv2 libImlib2_1 libQtCore4 libQtGui4 libstdc++6 netpbm python rsvg texlive texlive-collection-basic texlive-collection-fontutils texlive-collection-latexrecommended xmodmap"
+REQUIRES="aspell ghostscript netpbm rsvg"
+
+DIFF_EXCLUDES="SVNREV"
+
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	lndirs
+	cd ${B}
+	cygconf --with-iconv=/usr --with-imlib2=linked --with-gs --with-qt=${QT4_QTDIR}
+	cygmake
+}
+
+src_install() {
+	cd ${B}
+	cyginstall CP="cp -Lfr"
+}

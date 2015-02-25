@@ -1,0 +1,50 @@
+NAME="autotrace"
+VERSION="0.31.1"
+RELEASE="16"
+CATEGORY="Graphics Libs"
+SUMMARY="A program for converting bitmap to vector graphics"
+DESCRIPTION="AutoTrace is a program for converting bitmap to vector graphics.
+The aim of the AutoTrace project is the development of a freely available application
+with a functionality similar to CorelTrace or Adobe Streamline."
+
+HOMEPAGE="http://autotrace.sourceforge.net/"
+SRC_URI="http://ftp1.sourceforge.net/${PN}/${P}.tar.gz"
+PATCH_URI="
+  http://www.calculate-linux.org/packages/media-gfx/autotrace/files/autotrace-0.31.1-libpng-1.5.patch?format=raw
+  autotrace-noundefined.patch
+  autotrace-man1.patch
+  autotrace-m4.patch
+  autotrace-outputswf.patch
+  autotrace-configurein.patch
+"
+
+# Build dependencies only
+DEPEND="pstoedit-devel"
+
+
+abi=3
+PKG_NAMES="${PN} lib${PN}${abi} lib${PN}-devel"
+autotrace_SUMMARY="${SUMMARY} (utilities)"
+autotrace_CONTENTS="
+  usr/bin/*.exe
+  usr/share/doc/
+  usr/share/man/man1/
+"
+libautotrace3_SUMMARY="${SUMMARY} (runtime)"
+libautotrace3_CONTENTS="
+  usr/bin/*-${abi}.dll
+"
+libautotrace_devel_SUMMARY="${SUMMARY} (development)"
+libautotrace_devel_CATEGORY="Devel ${CATEGORY}"
+libautotrace_devel_REQUIRES="coreutils sed"
+libautotrace_devel_CONTENTS="
+  usr/bin/${PN}-config
+  usr/include/
+  usr/lib/
+  usr/share/aclocal/
+"
+
+
+WANT_AUTOMAKE=1.11
+
+DOCS="README.MING"

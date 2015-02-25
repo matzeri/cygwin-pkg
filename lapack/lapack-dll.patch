@@ -1,0 +1,29 @@
+--- origsrc/lapack-3.4.0/lib_cygwin/build.sh	1970-01-01 01:00:00.000000000 +0100
++++ lib_cygwin/build.sh	2012-03-04 07:55:56.504340900 +0100
+@@ -0,0 +1,26 @@
++#!/bin/bash
++
++# ar r liblapack.a ../src/lapack/reference/INSTALL/lsame.o 
++# ar r liblapack.a ../src/lapack/reference/SRC/xerbla.o
++# ar d libcblas.a xerbla.c.o 
++
++# building static merged blas
++
++ar x libcblas.a
++ar x libf77blas.a 
++rm xerbla.c.o
++ar r libblas.a *.o 
++
++
++# building dynamic library
++
++gcc -shared -Wl,--enable-auto-import -Wl,--enable-auto-image-base \
++    -o cygblas-0.dll -Wl,--out-implib=libblas.dll.a \
++    -Wl,--whole-archive libblas.a -Wl,--no-whole-archive \
++    -shared-libgcc -lgfortran 
++
++gcc -shared -Wl,--enable-auto-import -Wl,--enable-auto-image-base \
++    -o cyglapack-0.dll -Wl,--out-implib=liblapack.dll.a \
++    -Wl,--whole-archive liblapack.a -Wl,--no-whole-archive \
++    -shared-libgcc -lgfortran libblas.dll.a 
++

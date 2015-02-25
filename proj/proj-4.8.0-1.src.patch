@@ -1,0 +1,58 @@
+--- origsrc/proj-4.8.0/nad/Makefile.am	2012-03-07 06:58:49.000000000 +0100
++++ src/proj-4.8.0/nad/Makefile.am	2014-09-21 11:42:40.702583800 +0200
+@@ -1,5 +1,5 @@
+ # Executables paths passed to test scripts
+-EXEPATH = $(top_srcdir)/src
++EXEPATH = $(top_builddir)/src
+ PROJEXE = $(EXEPATH)/proj
+ CS2CSEXE = $(EXEPATH)/cs2cs
+ 
+--- origsrc/proj-4.8.0/src/Makefile.am	2012-03-07 06:58:49.000000000 +0100
++++ src/proj-4.8.0/src/Makefile.am	2014-09-21 11:42:40.712583800 +0200
+@@ -22,7 +22,18 @@ multistresstest_LDADD = libproj.la -lpth
+ 
+ lib_LTLIBRARIES = libproj.la
+ 
+-libproj_la_LDFLAGS = -no-undefined -version-info 7:0:7
++#
++# This abuses the version-info system. The rules say that
++# I should change 5:2:5 to 6:0:0 since I removed the geod*
++# functions. But that would bump the DLL number to 6. So,
++# 'fake it' using 6:2:5 for a DLL number of 1. This way,
++# if upstream eventually breaks the ABI, we can 'catch up'
++# to their new 6:0:0 then.
++# From Charles Wilson announce 
++# https://cygwin.com/ml/cygwin-announce/2009-03/msg00049.html
++#  
++
++libproj_la_LDFLAGS = -no-undefined -version-info 8:0:7
+ 
+ libproj_la_SOURCES = \
+ 	projects.h pj_list.h \
+--- origsrc/proj-4.8.0/src/proj.c	2010-12-05 17:06:29.000000000 +0100
++++ src/proj-4.8.0/src/proj.c	2014-09-21 11:42:40.722583800 +0200
+@@ -8,7 +8,7 @@
+ #include "emess.h"
+ 
+ /* TK 1999-02-13 */
+-#if defined(MSDOS) || defined(OS2) || defined(WIN32) || defined(__WIN32__)
++#if defined(MSDOS) || defined(OS2) || defined(WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
+ #  include <fcntl.h>
+ #  include <io.h>
+ #  define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
+@@ -147,6 +147,7 @@ process(FILE *fid) {
+ 				(void)fputs("\t<* * * * * *>", stdout);
+                 }
+ 		(void)fputs(bin_in ? "\n" : s, stdout);
++                fflush(stdout);
+ 	}
+ }
+ 	static void	/* file processing function --- verbosely */
+@@ -241,6 +242,7 @@ vprocess(FILE *fid) {
+ 		(void)printf(" [ %.8f ]\n", facs.conv * RAD_TO_DEG);
+ 		(void)printf("Max-min (Tissot axis a-b) scale error: %.5f %.5f\n\n",
+ 			facs.a, facs.b);
++                fflush(stdout);
+ 	}
+ }
+ 

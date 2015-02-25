@@ -1,0 +1,69 @@
+inherit font
+NAME="plotutils"
+VERSION=2.6
+RELEASE=4
+
+DESCRIPTION="2-D vector graphics library and scientific data plotting programs"
+HOMEPAGE="http://www.gnu.org/software/plotutils/"
+SRC_URI="mirror://gnu/${PN}/${P}.tar.gz"
+PATCH_URI="
+	mirror://portage/media-libs/${PN}/files/${PN}-2.5.1-rangecheck.patch
+	2.5.1-libtool22.patch
+	2.6-no-undefined.patch
+	libpng_longjmp.patch
+"
+
+PKG_NAMES="${PN} libplot2 libplot-devel libplotter2 libplotter-devel libxmi0 libxmi-devel font-tektronix-misc"
+
+CATEGORY="Graphics"
+
+plotutils_CONTENTS="--exclude=fonts --exclude=libplot --exclude=libxmi* usr/bin/*.exe usr/share/"
+plotutils_SUMMARY="2-D scientific data plotting utilities"
+
+libplot2_CONTENTS="usr/bin/cygplot-2.dll"
+libplot2_SUMMARY="2-D vector graphics export library (C runtime)"
+
+libplot_devel_CONTENTS="--exclude=plotter* usr/include/plot*.h
+                        usr/lib/libplot.* usr/share/libplot/"
+libplot_devel_SUMMARY="2-D vector graphics export library (C libdevel)"
+
+libplotter2_CONTENTS="usr/bin/cygplotter-2.dll"
+libplotter2_SUMMARY="2-D vector graphics export library (C++ runtime)"
+
+libplotter_devel_CONTENTS="usr/include/plotter.h usr/lib/libplotter.*"
+libplotter_devel_SUMMARY="2-D vector graphics export library (C++ libdevel)"
+
+libxmi0_CONTENTS="usr/bin/cygxmi-0.dll"
+libxmi0_SUMMARY="2-D vector graphics rasterization library (runtime)"
+
+libxmi_devel_CONTENTS="usr/include/xmi.h usr/lib/libxmi.* usr/share/info/libxmi*"
+libxmi_devel_SUMMARY="2-D vector graphics rasterization library (development)"
+
+# obsolete
+# plotutils_devel_CONTENTS=	# compat
+# plotutils_doc_CONTENTS=	# compat
+
+font_tektronix_misc_CONTENTS="etc/ usr/share/fonts/misc/"
+font_tektronix_misc_SUMMARY="Tektronix terminal emulator fonts"
+font_tektronix_misc_CATEGORY="X11"
+
+
+DIFF_EXCLUDES="config.hin"
+
+CYGCONF_ARGS="
+	--enable-libplotter
+	--enable-libxmi
+	--with-athena
+	--with-xpm
+"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	cd ${S}/fonts
+
+	fontinto misc
+	dofont pcf/*.pcf
+	gzip ${D}/usr/share/fonts/misc/*.pcf
+}

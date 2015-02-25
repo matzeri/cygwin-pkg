@@ -1,0 +1,61 @@
+NAME="mutt"
+VERSION=1.5.23
+RELEASE=2
+
+CATEGORY="Mail"
+DESCRIPTION="A text mode mail user agent (MUA)."
+SUMMARY="A text mode mail user agent (MUA)."
+
+HOMEPAGE="http://www.mutt.org"
+SRC_URI="http://prdownloads.sourceforge.net/mutt/${PN}-${PV}.tar.gz" 
+SRC_DIR="${PN}-${PV}"
+
+PATCH_URI="mutt-postinstall.patch
+mutt-1.5.21-cabundle.patch
+mutt-1.5.23-sendlib.patch"
+
+PKG_NAMES="mutt"
+
+CONTENTS='etc usr'
+
+DIFF_EXCLUDES="Makefile"
+KEEP_LA_FILES="none"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf 
+	cd ${B}
+    	export ac_cv_func_mmap_fixed_mapped=yes
+	cygconf -C \
+        --with-mailpath=/var/spool/mail \
+        --disable-dependency-tracking \
+        --docdir=/usr/share/doc/mutt \
+        --enable-fcntl \
+        --enable-hcache \
+        --enable-iconv \
+        --enable-imap \
+        --enable-locales-fix \
+        --enable-pop \
+        --with-ssl \
+	--enable-smtp \
+	--enable-gpgme \
+	--with-gss \
+	--with-sasl \
+	MUTT_MD5=mutt_md5
+	cygmake 
+	cygmake -C doc makedoc.exe
+}
+
+src_test() {
+	cd ${B}
+	cygmake -i check
+}
+
+src_install() {
+	cd ${B}
+	cyginstall 
+	cd ${D}/etc
+	mv -v Muttrc Muttrc.setupnew
+	mv -v mime.types mime.types.setupnew
+	
+}

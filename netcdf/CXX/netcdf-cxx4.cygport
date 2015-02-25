@@ -1,0 +1,54 @@
+NAME="netcdf-cxx4"
+VERSION=4.2.1
+RELEASE=3
+
+CATEGORY="Libs"
+SUMMARY="NetCDF C++ (network Common Data Form)"
+DESCRIPTION="NetCDF (network Common Data Form) are libraries for array-oriented scientific data"
+HOMEPAGE="http://www.unidata.ucar.edu/software/netcdf/"
+SRC_URI="http://www.unidata.ucar.edu/downloads/netcdf/ftp/${PN}-${PV}.tar.gz" 
+
+PATCH_URI="cxx4_noundefined.patch"
+
+abi=1
+
+PKG_NAMES="${PN} lib${PN}_${abi} lib${PN}-devel"
+
+KEEP_LA_FILES="none"
+PKG_SUMMARY[1]="${SUMMARY} (runtime)"
+PKG_SUMMARY[2]="${SUMMARY} (development)"
+
+PKG_CONTENTS[0]=""
+
+PKG_CONTENTS[1]="
+  usr/bin/*.dll
+"
+PKG_CONTENTS[2]="
+  usr/include/
+  usr/lib/
+  usr/bin/ncxx4-config
+  usr/share/doc/netcdf-cxx4
+"
+
+DIFF_EXCLUDES="netcdf-c.info* stamp-2 version-c.texi"
+
+src_compile() {
+        cd ${S}
+	cygautoreconf	
+        cd ${B}
+        cygconf --enable-shared \
+                lt_cv_deplibs_check_method=pass_all 
+
+        cygmake
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+}
+
+src_test() {
+       cd ${B}
+       make -i check
+}
+

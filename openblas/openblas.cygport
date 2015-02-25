@@ -1,0 +1,53 @@
+NAME="openblas"
+VERSION=0.2.13
+RELEASE=1
+
+CATEGORY="Math"
+DESCRIPTION="OpenBLAS is an optimized BLAS library based on GotoBLAS2"
+SUMMARY="OpenBLAS is an optimized BLAS library"
+HOMEPAGE="http://xianyi.github.com/OpenBLAS/"
+
+SRC_URI="https://github.com/xianyi/OpenBLAS/archive/${PN}-${PV}.tar.gz"
+SRC_DIR="OpenBLAS-${PV}"
+
+PATCH_URI="openblas-dllbuild.patch"
+
+# PKG_NAMES="openblas libopenblas libopenblas-devel"
+PKG_NAMES="openblas libopenblas"
+
+openblas_SUMMARY="OpenBLAS is an optimized BLAS library (source only)"
+openblas_CONTENTS=""
+
+libopenb_SUMMARY="OpenBLAS is an optimized BLAS library (dynamic library)"
+libopenblas_CONTENTS="usr/bin/*.dll"
+
+# libopenblas_devel_SUMMARY="OpenBLAS is an optimized BLAS library (development)"
+# libopenblas_devel_CONTENTS="
+#  usr/include/
+#  usr/lib/
+#  usr/share/doc/
+# "
+
+
+src_compile() {
+        cd ${S}
+        lndirs
+        cd ${B}
+        make NO_LAPACK=1 DYNAMIC_ARCH=1 NUM_THREADS=16
+	chmod +x ${B}/build.sh
+	./build.sh
+}
+
+src_install() {
+	cd ${B}
+# Installing only dll
+#	cyginstall NO_LAPACK=1 PREFIX=/usr
+#	dodir /usr/include/openblas
+#	mv ${D}/usr/include/*h ${D}/usr/include/openblas
+#	rm ${D}/usr/lib/*
+#	rm ${D}/usr/cmake/OpenBLASConfig.cmake
+#	insinto /usr/lib/openblas
+#	doins ${B}/libblas.dll.a
+	insinto /usr/bin
+	doins ${B}/cygblas-0.dll
+}

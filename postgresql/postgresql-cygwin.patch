@@ -1,0 +1,219 @@
+--- origsrc/postgresql-9.3.3/CYGWIN-PATCHES/README	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/README	2014-03-13 17:13:11.085294200 +0100
+@@ -0,0 +1,45 @@
++postgresql-9.3.x
++------------------------------------------
++PostgreSQL is an advanced Object-Relational database management system
++(DBMS) that supports almost all SQL constructs (including transactions,
++subselects and user-defined types and functions).
++
++Admin binaries are now in 
++  /usr/sbin/
++
++Contrib binaries in 
++  /usr/lib/postgreql/bin
++
++cygserver must run as service (usually by cygrunsrv -S cygserver)
++
++Build via cygport.
++
++
++Canonical homepage:
++  http://www.postgresql.org
++
++Canonical download:
++  ftp://ftp.postgresql.org
++
++======================================================================
++
++Installation:
++
++For the impatient: install as service (hard)
++
++    # save old database (optional)
++    pg_dumpall -g /tmp/$$pgdump-globals.sql
++    pg_dumpall > /tmp/$$pgdump.sql
++    # adjust the settings in /etc/rc.d/init.d/postgresql
++    nano /etc/rc.d/init.d/postgresql	
++    sysbash # /etc/rc.d/init.d/postgresql initdb
++    /etc/rc.d/init.d/postgresql install
++    /etc/rc.d/init.d/postgresql start
++
++For the impatient: install as user (easy)
++
++    cygrunsrv -S cygserver
++    initdb -D /usr/share/postgresql/data
++    pg_ctl start -D /usr/share/postgresql/data -l /var/log/postgresql.log
++    createdb
++    psql
+--- origsrc/postgresql-9.3.3/CYGWIN-PATCHES/postgresql.initd	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/postgresql.initd	2014-02-24 23:06:15.262726400 +0100
+@@ -0,0 +1,168 @@
++#! /bin/bash
++#
++# crond   Start/Stop/Install the PostgreSQL postmaster daemon.
++# v1.0 2005-09-21 20:28:39 rurban@x-ray.at
++#
++# chkconfig: 2345 90 60
++# description: PostgreSQL is an advanced Object-Relational database management system.
++# processname: postmaster
++# config: /usr/share/postgresql/data/postgresql.conf
++# pidfile: /usr/share/postgresql/data/postgresql.pid
++
++PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
++PREFIX=/usr
++PGDATA=/usr/share/postgresql/data
++CONFIG=$PGDATA/postgresql.conf
++PIDFILE=$PGDATA/postgresql.pid
++LOGFILE=/var/log/postgresql.log
++SOCKETDIR=/tmp
++
++# Source function library.
++if [ -f /etc/init.d/functions ] ; then
++  . /etc/init.d/functions
++fi
++
++RETVAL=0
++
++# See how we were called.
++
++name="PostgreSQL"
++prog="postmaster"
++progdir="/usr/sbin"
++DAEMON="$progdir/$prog.exe"
++POSTMASTER_ARGS="-D $PGDATA -k $SOCKETDIR -i"
++INITDB_ARGS="-E SQL_ASCII --locale=C -D $PGDATA"
++
++test -f $DAEMON || exit 0
++
++# Source configuration
++if [ -f /etc/sysconfig/$prog ] ; then
++    . /etc/sysconfig/$prog
++fi
++
++start() {
++        echo -n $"Starting $name: "
++        check_cygserver
++	# check if cygrunsrv process
++        cygrunsrv --start $name
++        RETVAL=$?
++        [ $RETVAL -eq 0 ] && touch $PIDFILE  && echo "done."
++	if [ $RETVAL -ne 0 ]; then 
++	    echo "ERROR service start FAILED"; 
++	    tail $LOGFILE; 
++	fi
++        return $RETVAL
++}
++
++startlocal() {
++	echo -n $"Starting $DAEMON locally: "
++	chmod u+rw $LOGFILE $PIDFILE
++	pg_ctl start -D $PGDATA -o "-i" -l $LOGFILE
++	RETVAL=$?
++	[ $RETVAL -eq 0 ] && touch $PIDFILE  && echo "done."
++        return $RETVAL
++}
++
++stop() {
++        echo -n $"Stopping $name: "
++	cygrunsrv --stop $name
++        if test -r $PIDFILE; then
++            kill `cat $PIDFILE` 2> /dev/null || echo -n " failed"
++        else
++            echo -n " no PID file"
++        fi
++	# this really needs a long time to stop.
++        RETVAL=$?
++        echo "."
++        [ $RETVAL -eq 0 ] && rm -f $PIDFILE && echo "done."
++        return $RETVAL
++}
++
++rhstatus() {
++        # service status
++        cygrunsrv -Q $name
++}
++
++restart() {
++        echo -n $"Restarting $name: "
++        $0 stop
++        sleep 1
++        $0 start
++        echo "done."
++}
++
++initdb() {
++	/usr/sbin/initdb -U SYSTEM ${INITDB_ARGS} && echo "done."
++	#mkdir ${SOCKETDIR}
++	chmod -R g+rw $PGDATA
++	chgrp -R 18 $PGDATA
++}
++
++install() {
++        check_cygserver
++        echo -n $"Installing $name daemon: "
++	touch $LOGFILE $PIDFILE
++	chmod g+rw $LOGFILE $PIDFILE
++	chgrp 18 $LOGFILE $PIDFILE
++	cygrunsrv --install $name --path $DAEMON \
++	    --args "${POSTMASTER_ARGS}" -e CYGWIN=server \
++	    --disp "CYGWIN `$DAEMON --version`" \
++	    --dep cygserver --termsig INT --shutdown
++        echo "done."
++}
++uninstall() {
++        echo -n $"Uninstalling $prog daemon: "
++	stop
++	cygrunsrv --remove $prog
++        echo "done."
++}
++reload() {
++        echo -n $"Reloading $prog daemon configuration: "
++	echo "unsupported. Try $0 restart"
++	return 1
++
++	/usr/bin/kill -HUP `cat $PIDFILE`
++        RETVAL=$?
++        [ $RETVAL -eq 0 ] && echo "done."
++        RETVAL=$?
++        return $RETVAL
++}
++
++check_cygserver() {
++    # Check for running cygserver processes first. 
++    if ps -ef | grep -v grep | grep -q cygserver
++    then
++        echo -n "- cygserver OK - " 
++        # echo "OK cygserver running"
++    else
++  	echo "ERROR cygserver must be started"
++  	echo cygrunsrv -S cygserver
++	exit 1
++    fi
++    # check for CYGWIN containing server
++    if [ -n "${CYGWIN%server}" ] 
++    then
++  	echo "ERROR CYGWIN must contain server for cygserver to work properly"
++	exit 1
++    fi
++}
++
++case "$1" in
++  start) 	start  ;;
++  startlocal)   startlocal ;;
++  stop)         stop  ;;
++  restart)      restart  ;;
++  reload)       reload   ;;
++  initdb)       initdb   ;;
++  install)      install  ;;
++  uninstall)    uninstall ;;
++  status)       rhstatus  ;;
++  condrestart)
++        [ -f $PIDFILE ] && restart || :
++        ;;
++  *)
++        echo $"Usage: $0 {start|stop|status|initdb|install|uninstall|startlocal|restart|condrestart}"
++        exit 1
++esac
++
++exit $?

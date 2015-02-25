@@ -1,0 +1,15 @@
+--- /dev/null	2014-10-05 22:12:03.000000000 +0200
++++ CYGWIN-PATCHES/postinstall.sh	2014-10-05 22:09:49.922371100 +0200
+@@ -0,0 +1,12 @@
++#!/bin/sh
++backup_maybe() {
++    if ! [ -e $1 ] || ! diff -q $1 $1.setupnew >/dev/null 2>&1; then
++        mv -f $1 $1.old 2>/dev/null
++        mv -f $1.setupnew $1 2>/dev/null
++    else
++        rm -f $1.setupnew
++    fi
++}
++backup_maybe /etc/Muttrc
++backup_maybe /etc/mime.types
++

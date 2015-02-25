@@ -1,0 +1,72 @@
+NAME="hdf5"
+VERSION=1.8.14
+RELEASE=1
+
+DESCRIPTION="HDF5 API interface"
+HOMEPAGE="http://www.hdfgroup.org/HDF5/"
+SRC_DIR=${PN}-${PV}
+SRC_URI="ftp://ftp.hdfgroup.org/HDF5/current18/src/${SRC_DIR}.tar.bz2"
+
+abi=9
+PKG_NAMES="hdf5 libhdf5_${abi} libhdf5-devel"
+hdf5_CONTENTS='--exclude=usr/bin/*.dll usr/bin usr/share/'
+libhdf5_9_CONTENTS="usr/bin/*-${abi}.dll"
+libhdf5_devel_CONTENTS='usr/include/ usr/lib/'
+
+hdf5_CATEGORY="Archive Utils"
+hdf5_SUMMARY="HDF5 Hierarchical Data Format"
+libhdf5_9_CATEGORY="Devel Libs Archive Utils"
+libhdf5_9_SUMMARY="HDF5 Hierarchical Data Format - (runtime)"
+libhdf5_devel_CATEGORY="Devel Archive Utils"
+libhdf5_devel_SUMMARY="HDF5 Hierarchical Data Format - (development)"
+
+
+DIFF_EXCLUDES="Makefile"
+KEEP_LA_FILES="none"
+PKG_IGNORE="usr/bin/cygdynlib*"
+
+src_compile() {
+        cd ${S}
+        cygautoreconf 
+        cd ${B}
+        cygconf --with-zlib             \
+                --with-gnu-ld           \
+                --enable-shared --enable-unsupported        \
+		--with-pthread		\
+		--enable-cxx		\
+		FC=gfortran 		
+
+
+# hack to bypass wrong libtool detection
+	sed -e "1,100s/^build_libtool_libs=no/build_libtool_libs=yes/" -i libtool
+        cygmake 
+}
+
+src_install() {
+	cd ${S}
+	dodoc COPYING README.txt
+
+	dodir  /usr/share/doc/${PN}/release_docs
+	cp -r release_docs/* ${D}/usr/share/doc/${PN}/release_docs
+
+    	cd ${B}
+    	USE_DESTDIR=0
+	cyginstall -j1 install-all    			\
+		prefix=${D} exec-prefix=${D}  	        \
+		bindir=${D}/usr/bin			\
+		includedir=${D}/usr/include  		\
+		docdir=${D}/usr/share/doc/${PN}		\
+		datarootdir=${D}/usr/share
+
+#  Test lib incorrectly installed 
+	rm ${D}/usr/bin/cygdynlib*-0.dll
+}
+
+src_test() {
+       cd ${B}
+# hack to skip big file test
+       touch test/big.chkexe test/big.chklog
+       touch test/big.log
+       make -i check
+}
+

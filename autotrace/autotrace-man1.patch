@@ -1,0 +1,11 @@
+--- origsrc/autotrace-0.31.1/autotrace.1	2002-10-10 22:44:39.000000000 +0200
++++ src/autotrace-0.31.1/autotrace.1	2013-04-27 18:42:31.793669100 +0200
+@@ -244,7 +244,7 @@ Print the version number of the program
+ Weight factor for fitting the linewidth.
+ .SH FILES
+ .TP 2.2i
+-/depot/bin/autotrace
++/usr/bin/autotrace
+ binary
+ .SH "SEE ALSO"
+ gimp(1),

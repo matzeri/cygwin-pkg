@@ -1,0 +1,50 @@
+NAME="glpk"
+VERSION=4.55
+RELEASE=1
+
+
+DESCRIPTION="The GNU Linear Programming Kit package is intended for solving large-scale linear programming problems"
+HOMEPAGE="http://www.gnu.org/software/glpk/"
+SRC_URI="ftp://ftp.gnu.org/gnu/glpk/${PN}-${PV}.tar.gz" 
+
+PATCH_URI="glpk-undefined.patch"
+
+abi="36"
+
+CATEGORY="Math"
+PKG_NAMES="glpk libglpk${abi} libglpk-devel"
+
+glpk_SUMMARY="GLPK (GNU Linear Programming Kit)"
+libglpk36_SUMMARY="GLPK (GNU Linear Programming Kit) shared library"
+libglpk_devel_SUMMARY="GLPK (GNU Linear Programming Kit) development"
+
+glpk_CONTENTS="usr/bin/*.exe usr/share/doc/"
+libglpk36_CONTENTS="usr/bin/*-${abi}.dll"
+libglpk_devel_CONTENTS="usr/include/ usr/lib/"
+
+KEEP_LA_FILES="none"
+
+
+src_compile() {
+        cd ${S}
+	cygautoreconf	
+        cd ${B}
+        cygconf 
+        cygmake
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	
+	dodir /usr/share/doc/${PN}
+	cp -r ${S}/doc  ${D}/usr/share/doc/${PN}
+	cp -r ${S}/examples ${D}/usr/share/doc/${PN}
+	rm ${D}/usr/share/doc/${PN}/examples/Makefile.*
+}
+
+src_test() {
+       cd ${B}
+       cygmake check
+}
+

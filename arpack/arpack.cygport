@@ -1,0 +1,54 @@
+NAME="arpack"
+VERSION=3.1.5
+RELEASE=1
+
+CATEGORY="Math Libs"
+DESCRIPTION="ARPACK is a collection to solve large scale eigenvalue problems." 
+SUMMARY="ARPACK libs (large scale eigenvalue problems )." 
+HOMEPAGE="http://www.gnu.org/software/octave/"
+SRC_URI="http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/${PN}-ng-${PV}.tar.gz" 
+SRC_DIR="arpack-ng-${PV}"
+
+PKG_NAMES="arpack libarpack-devel libarpack0 libparpack-devel libparpack0"
+
+arpack_CONTENTS=''
+arpack_SUMMARY="${SUMMARY} - empty"  
+
+libarpack_devel_CONTENTS='usr/lib/libarpack.dll.a usr/lib/pkgconfig usr/share'
+libarpack_devel_SUMMARY="${SUMMARY} - development libraries"
+
+libarpack0_CONTENTS='usr/bin/cygarpack*'
+libarpack0_SUMMARY="${SUMMARY} - shared libraries"
+
+libparpack_devel_CONTENTS='usr/lib/libparpack.dll.a'
+libparpack_devel_SUMMARY="${SUMMARY} - parallel development libraries"
+
+libparpack0_CONTENTS='usr/bin/cygparpack*'
+libparpack0_SUMMARY="${SUMMARY} - parallel shared libraries"
+
+DIFF_EXCLUDES="Makefile"
+KEEP_LA_FILES="none"
+
+src_compile() {
+	cd ${S}
+    	cygautoreconf
+	cd ${B}
+	cygconf --enable-shared \
+		 --enable-mpi \
+		MPILIBS="-lmpi_mpifh -lmpi" F77=gfortran  
+	cygmake 
+}
+
+src_test() {
+	cd ${B}
+	cp ${S}/TESTS/testA.mtx ${B}/TESTS/testA.mtx
+	cygmake -i check
+	cd ${B}/EXAMPLES
+	cygmake -i check
+}
+
+src_install() {
+	cd ${B}
+	cyginstall 
+	
+}

@@ -1,0 +1,68 @@
+NAME="openmpi"
+VERSION=1.8.4
+RELEASE=1
+
+CATEGORY="Libs"
+SUMMARY="Open Message Passing Interface API"
+DESCRIPTION="MPI stands for the Message Passing Interface, a standardized API
+typically used for parallel and/or distributed computing. Open MPI is an open
+source, freely available, high performance implementation of the MPI spec."
+HOMEPAGE="http://www.open-mpi.org"
+SRC_URI="http://www.open-mpi.org/software/ompi/v1.8/downloads/${P}.tar.bz2"
+
+PATCH_URI="pre-install.patch
+"
+
+
+PKG_NAMES="${PN} libopenmpi libopenmpicxx1 libopenmpifh2 libopenmpiuse1 libopenmpi-devel"
+
+openmpi_CONTENTS="usr/bin/cygopen* usr/bin/[smo]* usr/share/doc usr/share/man/man[17]/"
+libopenmpi_SUMMARY="${SUMMARY} (C runtime)"
+libopenmpi_CONTENTS="usr/bin/cygmpi-1.dll  
+usr/lib/openmpi/ etc/ usr/share/openmpi/"
+libopenmpicxx1_SUMMARY="${SUMMARY} (C++ runtime)"
+libopenmpicxx1_CONTENTS="usr/bin/cygmpi_cxx-1.dll"
+libopenmpifh2_SUMMARY="${SUMMARY} (Fortran runtime)"
+libopenmpifh2_CONTENTS="usr/bin/cygmpi_mpifh-2.dll"
+libopenmpiuse1_SUMMARY="${SUMMARY} (Fortran use  runtime)"
+libopenmpiuse1_CONTENTS="usr/bin/cygmpi_usempi-1.dll"
+libopenmpi_devel_SUMMARY="${SUMMARY} (development)"
+libopenmpi_devel_CONTENTS="usr/include/ usr/lib/libmpi* usr/lib/mpi.mod
+                           usr/lib/pkgconfig/ompi* usr/share/man/man3/ 
+			   usr/lib/libopen* "
+
+# opal, orte libraries for internal use only, headers not installed by default
+PKG_IGNORE="usr/lib/pkgconfig/orte.pc"
+
+DIFF_EXCLUDES="configure Makefile.in *.guess *.sub *sh *m4 *libltdl* compile depcomp ylwrap py-compile"
+KEEP_LA_FILES="none"
+
+src_compile() {
+        cd ${S}
+	./autogen.sh
+        cd ${B}
+	cygconf \
+                LDFLAGS="-Wl,--export-all-symbols"  \
+                --disable-mca-dso \
+		--disable-sysv-shmem \
+		--enable-cxx-exceptions \
+                --with-threads=posix \
+                --without-cs-fs \
+                --with-mpi-param_check=always \
+		--enable-contrib-no-build=vt,libompitrace \
+		--enable-mca-no-build=paffinity,installdirs-windows,timer-windows,shmem-sysv 
+
+        cygmake 
+}
+
+src_test() {
+        cd ${B}
+        cygmake -i check      
+}
+
+src_install() {
+	cd ${B}
+        cyginstall
+}
+
+

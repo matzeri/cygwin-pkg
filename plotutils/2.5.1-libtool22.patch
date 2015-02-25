@@ -1,0 +1,11 @@
+--- origsrc/plotutils-2.5.1/configure.ac	2008-07-15 19:00:33.000000000 -0500
++++ src/plotutils-2.5.1/configure.ac	2008-11-16 23:58:19.425698100 -0600
+@@ -63,6 +63,8 @@
+ # AC_PROG_MAKE_SET, or equivalents, so we don't perform them explicitly.
+ # Note: this can apparently alter CFLAGS, on a few platforms, e.g., on
+ # SCO OpenServer 5 (i.e. *-*-sco3.2v5*), "-belf" is added.
++AC_PROG_CC
++AC_PROG_CXX
+ AC_PROG_LIBTOOL
+ 
+ # Determine extension (e.g. ".exe") on executables, if any.

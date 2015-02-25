@@ -1,0 +1,60 @@
+NAME="octave-bim"
+VERSION=1.1.4
+OV=1.1.4
+RELEASE=1
+
+
+CATEGORY="Math"
+DESCRIPTION="Octave-Forge package : bim"
+SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+HOMEPAGE="http://octave.sourceforge.net/"
+
+
+SRC_URI="http://matzeri.altervista.org/octave-forge/bim-${PV}.tar"
+SRC_DIR="bim-${PV}"
+
+PKG_NAMES="${PN}"
+octave_bim_CONTENTS='usr/'
+octave_bim_REQUIRES="octave octave-fpl octave-msh"
+
+
+src_compile() {
+        cd ${D}
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/bim-${PV}.tar.gz
+"
+}
+
+src_test() {
+	: 
+}
+
+src_install() {
+        cd ${D}
+
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+
+	octave-cli --eval "
+	echo on 
+        diary ../log/diary 
+	more off 
+	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg install -nodeps -noauto -global -verbose  ${B}/bim-${OV}.tar.gz 
+	pkg list
+" 
+
+}

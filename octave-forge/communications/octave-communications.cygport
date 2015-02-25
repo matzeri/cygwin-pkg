@@ -1,0 +1,60 @@
+NAME="octave-communications"
+VERSION=1.2.0
+OV=1.2.0
+RELEASE=1
+
+
+CATEGORY="Math"
+DESCRIPTION="Octave-Forge package : communications"
+SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+HOMEPAGE="http://octave.sourceforge.net/"
+
+
+SRC_URI="http://matzeri.altervista.org/octave-forge/communications-${PV}.tar"
+SRC_DIR="communications-${PV}"
+
+PKG_NAMES="${PN}"
+octave_communications_CONTENTS='usr/'
+octave_communications_REQUIRES="octave octave-signal"
+
+
+src_compile() {
+        cd ${D}
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/communications-${PV}.tar.gz
+"
+}
+
+src_test() {
+	: 
+}
+
+src_install() {
+        cd ${D}
+
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+
+	octave-cli --eval "
+	echo on 
+        diary ../log/diary 
+	more off 
+	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg install -nodeps -noauto -global -verbose  ${B}/communications-${OV}.tar.gz 
+	pkg list
+" 
+
+}

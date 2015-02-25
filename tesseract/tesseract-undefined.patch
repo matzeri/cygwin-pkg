@@ -1,0 +1,11 @@
+--- api/Makefile.am	2012-10-09 19:18:39.000000000 +0200
++++ api/Makefile.am	2015-01-02 22:59:50.338867400 +0100
+@@ -59,7 +59,7 @@ libtesseract_la_LIBADD = \
+     ../viewer/libtesseract_viewer.la \
+     ../ccutil/libtesseract_ccutil.la
+ 
+-libtesseract_la_LDFLAGS += -version-info $(GENERIC_LIBRARY_VERSION)
++libtesseract_la_LDFLAGS += -version-info $(GENERIC_LIBRARY_VERSION) -no-undefined
+ 
+ bin_PROGRAMS = tesseract
+ tesseract_SOURCES = $(top_srcdir)/api/tesseractmain.cpp

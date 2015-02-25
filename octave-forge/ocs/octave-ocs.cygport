@@ -1,0 +1,60 @@
+NAME="octave-ocs"
+VERSION=0.1.3r12205
+OV=0.1.3
+RELEASE=1
+
+
+CATEGORY="Math"
+DESCRIPTION="Octave-Forge package : ocs"
+SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+HOMEPAGE="http://octave.sourceforge.net/"
+
+
+SRC_URI="http://matzeri.altervista.org/octave-forge/ocs-${PV}.tar"
+SRC_DIR="ocs-${PV}"
+
+PKG_NAMES="${PN}"
+octave_ocs_CONTENTS='usr/'
+octave_ocs_REQUIRES="octave octave-odepkg"
+
+
+src_compile() {
+        cd ${D}
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/ocs-${PV}.tar.gz
+"
+}
+
+src_test() {
+	: 
+}
+
+src_install() {
+        cd ${D}
+
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+
+	octave-cli --eval "
+	echo on 
+        diary ../log/diary 
+	more off 
+	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg install -nodeps -noauto -global -verbose  ${B}/ocs-${OV}.tar.gz 
+	pkg list
+" 
+
+}

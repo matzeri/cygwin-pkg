@@ -1,0 +1,139 @@
+--- origsrc/autotrace-0.31.1/configure.in	2002-11-08 18:49:23.000000000 +0100
++++ src/autotrace-0.31.1/configure.in	2013-04-27 18:42:31.801669500 +0200
+@@ -37,7 +37,6 @@ AM_MAINTAINER_MODE
+ AM_CONFIG_HEADER(config.h)
+ 
+ AC_PROG_CPP
+-AC_PROG_RANLIB
+ dnl AC_CANONICAL_HOST
+ dnl AC_ARG_PROGRAM
+ AM_SANITY_CHECK
+@@ -263,65 +262,70 @@ if test "x${with_pstoedit}" = xyes; then
+ dnl
+ dnl 
+ dnl
+-AC_PROG_CXX
+-dnl Standard C++ library and C++ Runtime
+-dnl --- WORKAROUND for pstoedit 3.32.0
+-CXX_RUNTIME_LIB=
+-CXX_STD_LIB=
+-if test x"$GXX" = xyes; then
+-   AC_CHECK_LIB(g++,main,CXX_RUNTIME_LIB=-lg++)
+-   AC_CHECK_LIB(stdc++,main,CXX_STD_LIB=-lstdc++,,${CXX_RUNTIME_LIB})
+-fi
+-AC_MSG_CHECKING([for C++ runtime])
+-LIBPSTOEDIT_EXTRA_LIBS="${CXX_STD_LIB} ${CXX_RUNTIME_LIB}"
+-AC_MSG_RESULT([${CXX_STD_LIB} ${CXX_RUNTIME_LIB}])
+-dnl dl library
+-dnl --- WORKAROUND for pstoedit 3.32.0
+-LIBLD_LDFLAGS=
+-AC_CHECK_LIB(dl,main,[LIBLD_LDFLAGS=-ldl])
+-if test "x${LIBLD_LDFLAGS}" != x; then
+-   LIBPSTOEDIT_EXTRA_LIBS="${LIBPSTOEDIT_EXTRA_LIBS} ${LIBLD_LDFLAGS}"
+-fi
+-
+-echo '*** Checking pstoedit existence TWICE(if needed) ***'
+-echo '*** This is the 1st check                        ***'
+-AM_PATH_PSTOEDIT(3.32.1,HAVE_LIBPSTOEDIT_321=yes)
+-if test ${HAVE_LIBPSTOEDIT_321} != yes; then
+-   echo '*** The 1st check is failed.                     ***'
+-   LIBS_BAKCUP=$LIBS
+-   LIBS="$LIBS ${LIBPSTOEDIT_EXTRA_LIBS}"
+-   echo '*** This is the 2nd check                        ***'
+-   AM_PATH_PSTOEDIT(3.32.0,HAVE_LIBPSTOEDIT_320=yes)
+-   LIBS=${LIBS_BAKCUP}
+-
+-   if test ${HAVE_LIBPSTOEDIT_320} = yes; then
+-	echo '*** The 2nd check is passed.                     ***'
+-        HAVE_LIBPSTOEDIT=yes
+-	AC_DEFINE(HAVE_LIBPSTOEDIT)
+-	LIBPSTOEDIT_LIBS="${PSTOEDIT_LIBS} ${LIBPSTOEDIT_EXTRA_LIBS}"
+-	LIBPSTOEDIT_CFLAGS="${PSTOEDIT_CFLAGS}"
+-   else
+-        echo '*** The 2nd check is failed.                     ***'
+-   fi
+-else
+-	echo '*** The 1st check is passed.                     ***'
+-	HAVE_LIBPSTOEDIT=yes
+-	AC_DEFINE(HAVE_LIBPSTOEDIT)
+-	LIBPSTOEDIT_LIBS="${PSTOEDIT_LIBS} ${LIBPSTOEDIT_EXTRA_LIBS}"	
+-	LIBPSTOEDIT_CFLAGS="${PSTOEDIT_CFLAGS}"
+-fi
++dnl AC_PROG_CXX
++dnl dnl Standard C++ library and C++ Runtime
++dnl dnl --- WORKAROUND for pstoedit 3.32.0
++dnl CXX_RUNTIME_LIB=
++dnl CXX_STD_LIB=
++dnl if test x"$GXX" = xyes; then
++dnl    AC_CHECK_LIB(g++,main,CXX_RUNTIME_LIB=-lg++)
++dnl    AC_CHECK_LIB(stdc++,main,CXX_STD_LIB=-lstdc++,,${CXX_RUNTIME_LIB})
++dnl fi
++dnl AC_MSG_CHECKING([for C++ runtime])
++dnl LIBPSTOEDIT_EXTRA_LIBS="${CXX_STD_LIB} ${CXX_RUNTIME_LIB}"
++dnl AC_MSG_RESULT([${CXX_STD_LIB} ${CXX_RUNTIME_LIB}])
++dnl dnl dl library
++dnl dnl --- WORKAROUND for pstoedit 3.32.0
++dnl LIBLD_LDFLAGS=
++dnl AC_CHECK_LIB(dl,main,[LIBLD_LDFLAGS=-ldl])
++dnl if test "x${LIBLD_LDFLAGS}" != x; then
++dnl    LIBPSTOEDIT_EXTRA_LIBS="${LIBPSTOEDIT_EXTRA_LIBS} ${LIBLD_LDFLAGS}"
++dnl fi
++
++dnl echo '*** Checking pstoedit existence TWICE(if needed) ***'
++dnl echo '*** This is the 1st check                        ***'
++dnl AM_PATH_PSTOEDIT(3.32.1,HAVE_LIBPSTOEDIT_321=yes)
++dnl if test ${HAVE_LIBPSTOEDIT_321} != yes; then
++dnl    echo '*** The 1st check is failed.                     ***'
++dnl    LIBS_BAKCUP=$LIBS
++dnl    LIBS="$LIBS ${LIBPSTOEDIT_EXTRA_LIBS}"
++dnl    echo '*** This is the 2nd check                        ***'
++dnl    AM_PATH_PSTOEDIT(3.32.0,HAVE_LIBPSTOEDIT_320=yes)
++dnl    LIBS=${LIBS_BAKCUP}
++dnl 
++dnl    if test ${HAVE_LIBPSTOEDIT_320} = yes; then
++dnl 	echo '*** The 2nd check is passed.                     ***'
++dnl         HAVE_LIBPSTOEDIT=yes
++dnl 	AC_DEFINE(HAVE_LIBPSTOEDIT)
++dnl 	LIBPSTOEDIT_LIBS="${PSTOEDIT_LIBS} ${LIBPSTOEDIT_EXTRA_LIBS}"
++dnl 	LIBPSTOEDIT_CFLAGS="${PSTOEDIT_CFLAGS}"
++dnl    else
++dnl         echo '*** The 2nd check is failed.                     ***'
++dnl    fi
++dnl else
++dnl 	echo '*** The 1st check is passed.                     ***'
++dnl 	HAVE_LIBPSTOEDIT=yes
++dnl 	AC_DEFINE(HAVE_LIBPSTOEDIT)
++dnl 	LIBPSTOEDIT_LIBS="${PSTOEDIT_LIBS} ${LIBPSTOEDIT_EXTRA_LIBS}"	
++dnl 	LIBPSTOEDIT_CFLAGS="${PSTOEDIT_CFLAGS}"
++dnl fi
++dnl 
++dnl if test ${HAVE_LIBPSTOEDIT} = yes; then
++dnl 	AC_CHECK_FUNCS([mkstemp])
++dnl 	echo '*** pstoedit output functions are enabled.                      ***'
++dnl 	echo '*** However, these are experimental functions in autotrace.     ***'
++dnl 	echo '*** If you get an error in building time about pstoedit,        ***'
++dnl 	echo '*** you can run configure with --without-pstoedit option again. ***'
++dnl else
++dnl 	AC_MSG_WARN([
++dnl *** Cannot find libpstoedit. ***
++dnl *** Output functions using libpstoedit are disabled ***])
++dnl fi
++
++AC_MSG_CHECKING(pstoedit flags through pkg-config)
++PKG_CHECK_MODULES(LIBPSTOEDIT, pstoedit >= 3.32.1, 
++	HAVE_LIBPSTOEDIT=yes)
+ 
+-if test ${HAVE_LIBPSTOEDIT} = yes; then
+-	AC_CHECK_FUNCS([mkstemp])
+-	echo '*** pstoedit output functions are enabled.                      ***'
+-	echo '*** However, these are experimental functions in autotrace.     ***'
+-	echo '*** If you get an error in building time about pstoedit,        ***'
+-	echo '*** you can run configure with --without-pstoedit option again. ***'
+-else
+-	AC_MSG_WARN([
+-*** Cannot find libpstoedit. ***
+-*** Output functions using libpstoedit are disabled ***])
+-fi
+ dnl
+ dnl
+ dnl

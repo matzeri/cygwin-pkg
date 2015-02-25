@@ -1,0 +1,15 @@
+--- origsrc/autotrace-0.31.1/Makefile.am	2002-10-30 17:51:46.000000000 +0100
++++ src/autotrace-0.31.1/Makefile.am	2013-04-27 18:42:31.790668900 +0200
+@@ -104,7 +104,11 @@ autotraceinclude_HEADERS=\
+ 		output.h 			\
+ 		exception.h
+ 
+-libautotrace_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
++libautotrace_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -no-undefined
++libautotrace_la_LIBADD = $(MAGICK_LDFLAGS)	\
++			$(LIBPNG_LDFLAGS)	\
++			$(LIBSWF_LDFLAGS)	\
++			$(LIBPSTOEDIT_LIBS)
+ 
+ #
+ # noinst_HEADERS: headers shared between lib and bin.

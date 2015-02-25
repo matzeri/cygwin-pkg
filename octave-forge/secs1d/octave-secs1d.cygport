@@ -1,0 +1,60 @@
+NAME="octave-secs1d"
+VERSION=0.1.0r12375
+OV=0.1.0
+RELEASE=1
+
+
+CATEGORY="Math"
+DESCRIPTION="Octave-Forge package : secs1d"
+SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+HOMEPAGE="http://octave.sourceforge.net/"
+
+
+SRC_URI="http://matzeri.altervista.org/octave-forge/secs1d-${PV}.tar"
+SRC_DIR="secs1d-${PV}"
+
+PKG_NAMES="${PN}"
+octave_secs1d_CONTENTS='usr/'
+octave_secs1d_REQUIRES="octave octave-bim"
+
+
+src_compile() {
+        cd ${D}
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/secs1d-${PV}.tar.gz
+"
+}
+
+src_test() {
+	: 
+}
+
+src_install() {
+        cd ${D}
+
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+
+	octave-cli --eval "
+	echo on 
+        diary ../log/diary 
+	more off 
+	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg install -nodeps -noauto -global -verbose  ${B}/secs1d-${OV}.tar.gz 
+	pkg list
+" 
+
+}

@@ -1,0 +1,38 @@
+NAME="slrn"
+VERSION=1.0.2
+RELEASE=1
+
+CATEGORY="Mail"
+SUMMARY="slrn ('S-Lang read news') is a newsreader"
+DESCRIPTION="slrn ('S-Lang read news') is a newsreader. It runs in console mode ; beside the usual features of a newsreader slrn supports scoring rules to highlight, sort or kill articles based on information from their header. It is highly customizable, allows free key-bindings and can easily be extended using the sophisticated S-Lang macro language. Offline reading is possible by using either slrnpull (shipped with slrn) or a local newsserver (like leafnode or INN)."
+
+HOMEPAGE="http://www.slrn.org/"
+SRC_URI="ftp://space.mit.edu/pub/davis/slrn/slrn-${PV}.tar.bz2" 
+
+PATCH_URI="slrn-1.0.2-configure.diff
+slrn-0.9.9p1-hardcode-inews-path.diff"
+
+DIFF_EXCLUDES="configure.ac configure acinclude.m4 aclocal.m4" 
+
+src_compile() {
+        cd ${S}
+	lndirs
+#	rsync -a * ${B}
+        cd ${B}
+	autoconf -I autoconf autoconf/configure.ac > configure
+        ./configure --prefix=/usr \
+           --with-ssl --with-slrnpull LDFLAGS=-Wl,-no-undefined
+        cygmake
+}
+
+src_install() {
+	cd ${B}
+	cyginstall -j1
+	
+}
+
+src_test() {
+       cd ${B}
+       make check
+}
+

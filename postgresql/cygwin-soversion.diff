@@ -1,0 +1,38 @@
+diff -uNr postgresql_orig/src/interfaces/libpq/Makefile postgresql/src/interfaces/libpq/Makefile
+--- postgresql_orig/src/interfaces/libpq/Makefile	2014-03-18 16:25:43.932092600 +0100
++++ postgresql/src/interfaces/libpq/Makefile	2014-03-18 22:37:08.054181600 +0100
+@@ -45,7 +45,7 @@
+ OBJS += encnames.o wchar.o
+ 
+ ifeq ($(PORTNAME), cygwin)
+-override shlib = cyg$(NAME)$(DLSUFFIX)
++override shlib = cyg$(NAME)-$(SO_MAJOR_VERSION)$(DLSUFFIX)
+ endif
+ 
+ ifeq ($(PORTNAME), win32)
+diff -uNr postgresql_orig/src/Makefile.shlib postgresql/src/Makefile.shlib
+--- postgresql_orig/src/Makefile.shlib	2014-03-18 16:25:19.459692900 +0100
++++ postgresql/src/Makefile.shlib	2014-03-19 17:26:02.853485100 +0100
+@@ -267,7 +267,7 @@
+ ifeq ($(PORTNAME), cygwin)
+   LINK.shared		= $(CC) -shared
+   ifdef SO_MAJOR_VERSION
+-    shlib		= cyg$(NAME)$(DLSUFFIX)
++    shlib		= cyg$(NAME)-$(SO_MAJOR_VERSION)$(DLSUFFIX)
+   endif
+   haslibarule   = yes
+ endif
+@@ -357,11 +357,9 @@
+ # Cygwin case
+ 
+ $(shlib): $(OBJS) | $(SHLIB_PREREQS)
+-	$(CC) $(CFLAGS)  -shared -o $@  $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) $(LDAP_LIBS_BE)
++	$(CC) $(CFLAGS)  -shared -o $@  -Wl,--out-implib=$(stlib) $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) $(LDAP_LIBS_BE)
+ 
+-$(stlib): $(OBJS) | $(SHLIB_PREREQS)
+-	$(LINK.static) $@ $^
+-	$(RANLIB) $@
++$(stlib): $(shlib) ;
+ 
+ else
+ 

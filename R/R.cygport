@@ -1,0 +1,81 @@
+NAME="R"
+VERSION=3.1.2
+RELEASE=1
+
+inherit tcl
+
+CATEGORY="Math Science"
+DESCRIPTION="GNU statistical computing language"
+SUMMARY="GNU statistical computing language"
+HOMEPAGE="http://www.r-project.org/"
+SRC_URI="mirror://cran/src/base/R-${PV_MAJ}/${P}.tar.gz"
+PATCH_URI="
+2.7-implib.patch
+2.12-install-arch.patch
+makefile-nojava.patch"
+
+PKG_NAMES="R libRmath libRmath-devel"
+
+R_CONTENTS="--exclude=libRmath* usr/bin/ usr/lib/ usr/share/"
+R_SUMMARY="R Statistical computing language"
+R_REQUIRES="R_autorebase"
+
+libRmath_CONTENTS="usr/bin/libRmath.dll"
+libRmath_SUMMARY="R stand-alone math library (runtime)"
+
+libRmath_devel_CONTENTS="usr/include/ usr/lib/libRmath.* usr/lib/pkgconfig/libRmath.pc"
+libRmath_devel_SUMMARY="R stand-alone math library (libdevel)"
+
+DISTCLEANFILES="m4/codeset.m4 m4/gettext*.m4 m4/libtool.m4"
+
+ACLOCAL_FLAGS='-I m4'
+NO_AUTOHEADER=1
+CFLAGS+=" -std=gnu99"
+MAKEOPTS+=" -j1"
+
+export PATH="${B}/src/main:/usr/bin:/usr/local/bin"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+
+	cd ${B}
+	cygconf \
+		--enable-R-shlib \
+		--with-cairo \
+		--with-jpeglib \
+		--with-libpng \
+		--with-readline \
+		--with-recommended-packages \
+		--with-system-bzlib \
+		--with-system-pcre \
+		--with-system-xz \
+		--with-system-zlib \
+		--with-tcltk \
+		--with-tcl-config=/usr/lib/tclConfig.sh \
+		--with-tk-config=/usr/lib/tkConfig.sh \
+		--with-x \
+		--without-aqua
+
+	cygmake all info
+
+	cd ${B}/src/nmath/standalone
+	cygmake
+}
+
+src_test() {
+        cd ${B}
+        make -i check
+}
+
+src_install() {
+	cd ${B}
+	cyginstall install-info
+
+	cd ${B}/src/nmath/standalone
+	cyginstall
+
+	rm -f ${D}/usr/share/info/dir.old
+
+	keepdir /usr/lib/R/site-library
+}

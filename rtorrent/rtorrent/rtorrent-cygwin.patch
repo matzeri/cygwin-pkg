@@ -1,0 +1,28 @@
+--- src/utils/directory.cc	2014-05-09 11:05:30.000000000 +0200
++++ src/utils/directory.cc	2014-09-20 12:56:41.755654400 +0200
+@@ -44,6 +44,10 @@
+ #include <rak/path.h>
+ #include <torrent/exceptions.h>
+ 
++#ifdef __CYGWIN__
++#include <string.h>
++#endif
++
+ #include "directory.h"
+ 
+ namespace utils {
+@@ -87,8 +91,13 @@ Directory::update(int flags) {
+     itr->d_reclen = 0;
+     itr->d_type = s.st_mode;
+ #else
+-    itr->d_fileno = entry->d_fileno;
++#ifdef __CYGWIN__
++    itr->d_reclen = __builtin_offsetof (struct dirent, d_name)
++      + strlen (entry->d_name) + 1;
++#else
+     itr->d_reclen = entry->d_reclen;
++#endif
++    itr->d_fileno = entry->d_fileno;
+     itr->d_type   = entry->d_type;
+ #endif
+ 

@@ -1,0 +1,42 @@
+NAME="umfpack"
+VERSION=5.7.0
+RELEASE=1
+
+CATEGORY="Libs Math"
+SUMMARY="SuiteSparse UMFPACK: sparse multifrontal LU factorization"
+DESCRIPTION="SuiteSparse a collection of sparse matrix algorithms"
+HOMEPAGE="http://www.cise.ufl.edu/research/sparse/SuiteSparse/"
+#SRC_URI="http://www.cise.ufl.edu/research/sparse/SuiteSparse/${PN}-${PV}.tar.gz"
+SRC_URI="http://dev.gentoo.org/~bicatali/distfiles/${PN}-${PV}.tar.bz2"
+
+PKG_NAMES="umfpack libumfpack0 libumfpack-devel"
+
+umfpack_CONTENTS=''
+umfpack_SUMMARY="${SUMMARY} - empty source only"
+libumfpack0_CONTENTS='usr/bin/'
+libumfpack0_SUMMARY="${SUMMARY} - runtime"
+libumfpack_devel_CONTENTS='usr/include/ usr/lib/ usr/share'
+libumfpack_devel_SUMMARY="${SUMMARY} - development"
+
+KEEP_LA_FILES="none"
+
+src_compile() {
+    cd ${S}
+    cygautoreconf
+    cd ${B}
+    cygconf  --includedir="/usr/include/suitesparse" \
+             --with-doc 
+    cygmake       
+
+}
+
+
+src_test() {
+    cd ${B}
+    make check
+}
+
+src_install() {
+    cd ${B}
+    cyginstall       
+	}

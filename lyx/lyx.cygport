@@ -1,0 +1,44 @@
+NAME="lyx"
+VERSION=2.1.3
+RELEASE=1
+
+CATEGORY="Publishing Editors Graphics"
+DESCRIPTION="A document processor that encourages an approach to writing based
+on the structure of your documents, not their appearance. It is designed
+for people that write and want their writing to look great, right out of
+the box. No more endless tinkering with formatting details, 'finger
+painting' font attributes or futzing around with page boundaries. You just
+write. In the background, Prof. Knuth's legendary TeX typesetting engine
+makes you look good."
+SUMMARY="A latex-based WYSIWYM word processor"
+HOMEPAGE="http://www.lyx.org/"
+
+SRC_URI="ftp://ftp.lyx.org/pub/lyx/stable/2.1.x/${PN}-${PV}.tar.xz" 
+SRC_DIR="${PN}-${PV}"
+PATCH_URI="lyx-postinstall.patch"
+
+PKG_NAMES="lyx"
+
+lyx_CONTENTS='usr etc'
+
+DIFF_EXCLUDES="Makefile"
+KEEP_LA_FILES="none"
+
+src_compile() {
+	cd ${S}
+    	cygautoreconf
+	cd ${B}
+	cygconf 
+	cygmake 
+}
+
+src_test() {
+	cd ${B}
+	cygmake -i check
+}
+
+src_install() {
+	cd ${B}
+	cyginstall 
+	
+}

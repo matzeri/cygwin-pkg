@@ -1,0 +1,60 @@
+NAME="octave-database"
+VERSION=2.3.0
+OV=2.3.0
+RELEASE=1
+
+
+CATEGORY="Math"
+DESCRIPTION="Octave-Forge package : database"
+SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+HOMEPAGE="http://octave.sourceforge.net/"
+
+
+SRC_URI="http://matzeri.altervista.org/octave-forge/database-${PV}.tar"
+SRC_DIR="database-${PV}"
+
+PKG_NAMES="${PN}"
+octave_database_CONTENTS='usr/'
+octave_database_REQUIRES="octave"
+
+
+src_compile() {
+        cd ${D}
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/database-${PV}.tar.gz
+"
+}
+
+src_test() {
+	: 
+}
+
+src_install() {
+        cd ${D}
+
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+
+	octave-cli --eval "
+	echo on 
+        diary ../log/diary 
+	more off 
+	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg install -nodeps -noauto -global -verbose  ${B}/database-${OV}.tar.gz 
+	pkg list
+" 
+
+}

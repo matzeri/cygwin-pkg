@@ -1,0 +1,93 @@
+NAME="proj"
+VERSION=4.8.0
+RELEASE=1
+
+CATEGORY="Graphics Libs"
+DESCRIPTION="Cartographic projection library and utilities"
+HOMEPAGE="http://trac.osgeo.org/proj/"
+
+SRC_URI="http://download.osgeo.org/proj/proj-4.8.0.tar.gz 
+http://download.osgeo.org/proj/proj-datumgrid-1.5.zip"
+SRC_DIR="${PN}-${PV}"
+
+
+abi=1
+PKG_NAMES="proj libproj-devel libproj${abi}"
+
+proj_SUMMARY='"The PROJ Cartographic Projections Software (utilities)'
+proj_CONTENTS='--exclude=usr/bin/*.dll usr/bin usr/share'
+
+libproj_devel_SUMMARY='"The PROJ Cartographic Projections Software (devel)'
+libproj_devel_CONTENTS='usr/include usr/lib'
+
+libproj1_SUMMARY='"The PROJ Cartographic Projections Software (runtime)'
+libproj1_CONTENTS='usr/bin/*.dll'
+
+CYGPORT_USE_UNSTABLE_API=1
+src_unpack_hook () {
+        local fn;
+
+        inform "INSTALLING extra grid shift files"
+        for fn in alaska.lla conus.lla FL.lla hawaii.lla \
+                MD.lla ntf_r93.gsb ntv1_can.dat null.lla \
+                nzgd2kgrid0005.gsb prvi.lla README.NADUS \
+                stgeorge.lla stlrnc.lla stpaul.lla TN.lla \
+                WI.lla WO.lla
+        do
+                mv ${origsrcdir}/$fn nad/
+        done
+
+}
+
+
+src_compile() {
+	cd ${S}
+	export WANT_AUTOMAKE=1.10
+	cygautoreconf
+
+	cd ${B}
+	cygconf --without-jni --enable-shared --enable-static
+	cygmake -j1
+}
+
+src_install() {
+
+	cd ${B}
+	cyginstall -j1
+	
+	cd ${S}/nad
+	for i in *.lla
+	do
+		${B}/src/nad2bin.exe < ${i} ${D}/usr/share/proj/${i/\.lla/}
+	done
+	cp *.gsb ${D}/usr/share/proj
+	
+}
+
+src_test() {
+	cd ${S}/nad
+
+	./test27 ${B}/src/proj.exe
+	./test83 ${B}/src/proj.exe
+
+	if [ -f ${D}/usr/share/proj/nad27 ]
+	then
+		export PROJ_LIB=${D}/usr/share/proj
+		./testvarious ${B}/src/cs2cs.exe
+		unset PROJ_LIB
+	else
+		warning "Can't run 'testvarious' test until after install step"
+	fi
+
+	if [ -f ${D}/usr/share/proj/null -a -f ${D}/usr/share/proj/IGNF ] 
+	then
+		export PROJ_LIB=${D}/usr/share/proj
+		./testIGNF ${B}/src/cs2cs.exe
+		unset PROJ_LIB
+	else
+		warning "Can't run 'testIGNF' test until after install step"
+	fi
+
+	warning "Can't run testntv2 because required files are not part of this package"
+}
+

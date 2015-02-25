@@ -1,0 +1,101 @@
+--- CYGWIN-PATCHES/lapack0.csh	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/lapack0.csh	2015-02-10 16:21:02.277000000 +0100
+@@ -0,0 +1,13 @@
++set LA_PREFIX=/usr
++set LA_LIBDIR=${LA_PREFIX}/lib
++set LA_BINDIR=${LA_LIBDIR}/lapack
++
++set newpath=($path:q $LA_BINDIR:q)
++foreach f ($path:q)
++    if ( "$f" == "$LA_BINDIR" ) then
++        set newpath=($path:q)
++        break
++    endif
++end
++set path=($newpath:q)
++
+--- CYGWIN-PATCHES/lapack0.sh	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/lapack0.sh	2015-02-10 16:21:02.318002300 +0100
+@@ -0,0 +1,23 @@
++LA_PREFIX=/usr
++LA_LIBDIR=${LA_PREFIX}/lib
++LA_BINDIR=${LA_LIBDIR}/lapack
++
++# Check if the PATH variable is empty or not
++
++
++if test -n "${PATH}"; then
++  # PATH is not empty
++
++  # Check if path is already in PATH
++  if ! /bin/echo ${PATH} | /bin/grep -q "${LA_BINDIR}" ; then
++    # Path is not already in PATH, append it to PATH
++    export PATH="${PATH}:${LA_BINDIR}"
++  fi
++else
++  # PATH is empty
++  export PATH="${LA_BINDIR}"
++fi
++
++unset LA_PREFIX
++unset LA_LIBDIR
++unset LA_BINDIR
+--- CYGWIN-PATCHES/README	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/README	2015-02-10 16:21:02.263999200 +0100
+@@ -0,0 +1,14 @@
++
++Binary archive includes a reference implementation blas library.
++
++The unusual ddl directory 
++  /usr/lib/lapack/cygblas-0.dll
++  /usr/lib/lapack/cyglapack-0.dll
++
++is to allow to create locally optimized lapack and blas libraries,
++ATLAS (http://math-atlas.sourceforge.net/).
++
++  /usr/bin/cygblas-0.dll
++  /usr/bin/cyglapack-0.dll
++and to have them in precedence on the PATH
++
+--- CYGWIN-PATCHES/repack_lapack.sh	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/repack_lapack.sh	2015-02-10 16:44:31.647611400 +0100
+@@ -0,0 +1,39 @@
++#!/bin/bash
++
++# before cygport 0.9.85 this was possible
++# now we need to make manually after packaging
++# -----------------------------------------------
++#        dodir /usr/lib/lapack/
++#        mv ${D}/usr/bin/cygblas-0.dll ${D}/usr/lib/lapack/cygblas-0.dll
++#        mv ${D}/usr/bin/cyglapack-0.dll ${D}/usr/lib/lapack/cyglapack-0.dll
++
++
++if [ $(basename $(pwd)) != "CYGWIN-PATCHES" ]
++  then 
++    echo "runme inside CYGWIN-PATCHES" 
++    echo "to repack lapack"
++  exit 1
++fi
++
++cd ..
++
++if [ -d dist_new ]; then rm -r dist_new; fi
++
++mkdir dist_new
++cp -a dist/lapack dist_new
++cd dist_new/lapack
++
++echo "repacking liblapack0"
++cd liblapack0
++PKG=$(find $(PWD) -name "*tar.xz" | xargs basename)
++tar -xf ${PKG}
++mkdir -p usr/lib/lapack
++mv usr/bin/cygblas-0.dll usr/lib/lapack/cygblas-0.dll
++mv usr/bin/cyglapack-0.dll usr/lib/lapack/cyglapack-0.dll
++rmdir usr/bin
++tar -cJf ${PKG} etc usr
++rm -r etc usr
++
++echo "old version in ../dist"
++echo "new version in ../dist_new"
++

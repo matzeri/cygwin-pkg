@@ -1,0 +1,22 @@
+--- configure.ac	2014-04-30 22:45:19.000000000 +0200
++++ configure.ac	2014-05-04 22:30:42.586040700 +0200
+@@ -125,6 +125,19 @@ AC_CHECK_FUNCS([floor memmove memset mod
+ 
+ AC_PROG_LIBTOOL
+ 
++AC_MSG_CHECKING([if libtool needs -no-undefined flag to build shared libraries])
++case "`uname`" in
++  CYGWIN*|MINGW*|AIX*)
++    ## Add in the -no-undefined flag to LDFLAGS for libtool.
++    AC_MSG_RESULT([yes])
++    LDFLAGS="$LDFLAGS -no-undefined"
++    ;;
++  *)
++    ## Don't add in anything.
++    AC_MSG_RESULT([no])
++    ;;
++esac
++
+ AC_CONFIG_FILES([Makefile
+                  lib/Makefile
+                  lib/xmlFailures/Makefile

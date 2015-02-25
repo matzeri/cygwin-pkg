@@ -1,0 +1,120 @@
+NAME="lapack"
+VERSION=3.5.0r1524
+RELEASE=1
+
+CATEGORY="Libs Math"
+
+SUMMARY="LAPACK library for linear algebra operations"
+DESCRIPTION="Comprehensive FORTRAN library for linear algebra operations."
+HOMEPAGE="http://www.netlib.org/lapack/"
+SRC_URI="http://www.netlib.org/lapack/${PN}-${PV}.tgz \
+http://www.netlib.org/lapack/manpages-3.5.0.tgz"
+
+PATCH_URI="
+lapack-CYGWIN.patch
+lapack-dll.patch"
+
+abi=0
+PKG_NAMES="${PN} lib${PN}-devel lib${PN}${abi} lib${PN}-doc"
+
+PKG_CONTENTS[0]=''
+PKG_SUMMARY[0]="${SUMMARY} - source only"
+
+PKG_CONTENTS[1]='usr/share/doc usr/include/ usr/lib/*a usr/lib/pkgconfig/'
+PKG_SUMMARY[1]="${SUMMARY} - development"
+
+# before cygport 0.9.85 this was possible
+# PKG_CONTENTS[2]='etc/ usr/lib/lapack/cyg*'
+
+PKG_CONTENTS[2]='etc/ usr/bin/cyg*'
+PKG_SUMMARY[1]="${SUMMARY} - runtime"
+
+PKG_CONTENTS[3]='usr/share/man'
+PKG_SUMMARY[3]="${SUMMARY} - documentation"
+
+DIFF_EXCLUDES="Makefile build.sh cblas_mangling.h"
+inherit cmake
+
+src_compile() {
+	cd ${B}
+	cygcmake 
+	cygmake
+
+# building cygwin dll
+	cd ${B}
+	mkdir -p ${B}/lib_cygwin
+	cp lib/libcblas.a lib_cygwin
+	cp lib/libblas.a lib_cygwin/libf77blas.a
+	cp lib/liblapack.a lib_cygwin
+	cd ${B}/lib_cygwin
+        chmod +x ${S}/lib_cygwin/build.sh
+        ${S}/lib_cygwin/build.sh
+
+	
+}
+
+src_test() {
+	cd ${B}
+	make test
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	cd ${B}/CBLAS
+	cyginstall
+	cd ${B}
+
+
+# no need of config-version.cmake
+	rm -r ${D}/usr/lib/cmake
+
+# cblas merged in blas, so removing 
+	rm ${D}/usr/lib/libcblas.a
+	rm ${D}/usr/lib/libblas.a
+
+# installing  DLL
+	insinto /usr/bin 
+	doins ${B}/lib_cygwin/cygblas-0.dll
+	doins ${B}/lib_cygwin/cyglapack-0.dll
+
+# installing merged libblas.a 
+	insinto /usr/lib
+	doins ${B}/lib_cygwin/libblas.a
+	doins ${B}/lib_cygwin/libblas.dll.a
+	doins ${B}/lib_cygwin/liblapack.dll.a
+
+# right place for pkgconfig files
+	dodir /usr/lib/pkgconfig
+        mv ${D}/usr/lib/*.pc ${D}/usr/lib/pkgconfig
+
+# to add "/usr/lib/lapack" on PATH
+# so ATLAS can stay in /usr/bin
+	insinto /etc/profile.d/
+	doins ${C}/lapack0.csh
+	doins ${C}/lapack0.sh
+
+
+# to add libtool file in "/usr/lib/" 
+# as needed by previous library
+	cp ${C}/libblas.la ${D}/usr/lib
+	cp ${C}/liblapack.la ${D}/usr/lib
+
+# before cygport 0.9.85 this was possible
+# now we need to make manually after packaging
+# -----------------------------------------------
+#        dodir /usr/lib/lapack/
+#        mv ${D}/usr/bin/cygblas-0.dll ${D}/usr/lib/lapack/cygblas-0.dll
+#        mv ${D}/usr/bin/cyglapack-0.dll ${D}/usr/lib/lapack/cyglapack-0.dll
+#        sed -i -e "s/dlname='..\/bin/dlname='..\/lib\/lapack/" ${D}/usr/lib/libblas.la
+#        sed -i -e "s/dlname='..\/bin/dlname='..\/lib\/lapack/" ${D}/usr/lib/liblapack.la
+# ----------------------------------------------
+
+	insinto /usr/share/man/man3
+	doins ${S}/../man/man3/*
+        rm ${D}/usr/share/man/man3/_Users*
+
+
+	inform " *** REMEBER to repack after package      ****"
+	inform " *** see CYGWIN-PATCHES/repack_lapack.sh  ****"
+}

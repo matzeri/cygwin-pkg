@@ -1,0 +1,57 @@
+NAME="udunits"
+VERSION=2.2.17
+RELEASE=1
+
+DESCRIPTION="The UDUNITS-2 package provides support for units of physical quantities "
+HOMEPAGE="http://www.unidata.ucar.edu/software/udunits/"
+SRC_URI="http://www.unidata.ucar.edu/downloads/udunits/${PN}-${PV}.tar.gz" 
+PATCH_URI="udunits-cygwin.patch"
+
+abi=0
+
+PKG_NAMES="udunits libudunits${abi} libudunits-devel"
+
+udunits_CONTENTS="
+  usr/bin/*.exe
+  usr/share/doc/
+  usr/share/info/
+"
+libudunits0_CONTENTS="
+  usr/bin/*-${abi}.dll
+  usr/share/udunits/
+"
+libudunits_devel_CONTENTS="
+  usr/include/
+  usr/lib/
+"
+udunits_CATEGORY="Math"
+udunits_SUMMARY="UDUNITS-2 package provides support for units of physical quantities"
+libudunits0_CATEGORY="Math Libs"
+libudunits0_SUMMARY="UDUNITS-2 - (runtime)"
+libudunits_devel_CATEGORY="Math Devel Libs"
+libudunits_devel_SUMMARY="UDUNITS-2 - (development)"
+
+DIFF_EXCLUDES="udunits2.info version.texi stamp-vti"
+KEEP_LA_FILES="none"
+
+
+src_compile() {
+        cd ${S}
+	cygautoreconf	
+        cd ${B}
+        cygconf
+        cygmake
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+#	removing stale link
+	rm ${D}/usr/share/doc/udunits/html/*.xml
+}
+
+src_test() {
+       cd ${B}
+       make check
+}
+

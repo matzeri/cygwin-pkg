@@ -1,0 +1,28 @@
+NAME="tesseract-ocr"
+VERSION=3.02.02
+RELEASE=1
+
+CATEGORY="Text"
+SUMMARY="Tesseract Open Source OCR Engine"
+DESCRIPTION="The Tesseract OCR engine was originally developed at HP between 1985 and 1995. It was open-sourced by HP and UNLV in 2005 and Google has lead further development.
+The Tesseract OCR engine was one of the top 3 engines in the 1995 UNLV Accuracy test. Between 1995 and 2006 it had little work done on it, but it is probably one of the most accurate open source OCR engines available. It will read a binary, grey or color image and output text."
+HOMEPAGE="https://code.google.com/p/tesseract-ocr/"
+SRC_URI="https://tesseract-ocr.googlecode.com/files/${PN}-${PV}.tar.gz"
+SRC_DIR="tesseract-ocr"
+PATCH_URI="tesseract-undefined.patch"
+
+
+PKG_NAMES="tesseract-ocr libtesseract-ocr_3 tesseract-ocr-devel"
+
+tesseract_ocr_CONTENTS="usr/bin/*.exe usr/share"
+tesseract_ocr_REQUIRES="tesseract-ocr-eng"
+libtesseract_ocr_3_SUMMARY="${SUMMARY} (C runtime)"
+libtesseract_ocr_3_CONTENTS="usr/bin/cyg*"  
+tesseract_ocr_devel_SUMMARY="${SUMMARY} (development)"
+tesseract_ocr_devel_CONTENTS="usr/include/ usr/lib/"
+
+
+DIFF_EXCLUDES=""
+
+KEEP_LA_FILES="none"
+

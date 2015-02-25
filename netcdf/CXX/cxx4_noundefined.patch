@@ -1,0 +1,22 @@
+--- origsrc/netcdf-cxx4-4.2/configure.ac	2011-09-30 16:36:36.000000000 +0200
++++ src/netcdf-cxx4-4.2/configure.ac	2013-10-04 10:57:51.686073400 +0200
+@@ -175,6 +175,19 @@ AC_SUBST(HAS_DAP,[$nc_has_dap])
+ AC_SUBST(HAS_NC2,[$nc_build_v2])
+ AC_SUBST(HAS_NC4,[$nc_build_v4])
+ 
++AC_MSG_CHECKING([if libtool needs -no-undefined flag to build shared libraries])
++case "`uname`" in
++  CYGWIN*|MINGW*|AIX*)
++    ## Add in the -no-undefined flag to LDFLAGS for libtool.
++    AC_MSG_RESULT([yes])
++    LDFLAGS="$LDFLAGS -no-undefined"
++    ;;
++  *)
++    ## Don't add in anything.
++    AC_MSG_RESULT([no])
++    ;;
++esac
++
+ AC_MSG_NOTICE([generating header files and makefiles])
+ AC_CONFIG_FILES([Makefile
+                  cxx4/Makefile

@@ -1,0 +1,33 @@
+--- origsrc/plotutils-2.6/libplot/Makefile.am	2009-07-28 21:16:02.000000000 -0500
++++ src/plotutils-2.6/libplot/Makefile.am	2010-01-20 22:33:30.226205000 -0600
+@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libplot.la
+ 
+ EXTRA_DIST = DEDICATION HUMOR README-cgm README-gif README-hpgl README-tek VERSION
+ 
+-libplot_la_LDFLAGS = -version-info 4:4:2
++libplot_la_LDFLAGS = -version-info 4:4:2 -no-undefined
+ 
+ INCLUDES = $(X_CFLAGS) -I$(srcdir)/../include -DLIBPLOT
+ 
+--- origsrc/plotutils-2.6/libplotter/Makefile.am	2009-07-28 21:16:18.000000000 -0500
++++ src/plotutils-2.6/libplotter/Makefile.am	2010-01-20 22:33:34.603455400 -0600
+@@ -2,7 +2,7 @@
+ 
+ lib_LTLIBRARIES = libplotter.la
+ 
+-libplotter_la_LDFLAGS = -version-info 4:4:2
++libplotter_la_LDFLAGS = -version-info 4:4:2 -no-undefined
+ 
+ INCLUDES = $(X_CFLAGS) -I$(srcdir)/../include -DLIBPLOT -DLIBPLOTTER
+ 
+--- origsrc/plotutils-2.6/libxmi/Makefile.am	2005-11-27 16:22:05.000000000 -0600
++++ src/plotutils-2.6/libxmi/Makefile.am	2010-01-20 22:33:39.641743600 -0600
+@@ -8,7 +8,7 @@ noinst_HEADERS = mi_api.h mi_arc.h mi_fl
+ mi_ply.h mi_scanfill.h mi_spans.h mi_widelin.h mi_zerarc.h extern.h \
+ sys-defines.h
+ 
+-libxmi_la_LDFLAGS = -version-info 1:3:1
++libxmi_la_LDFLAGS = -version-info 1:3:1 -no-undefined
+ 
+ libxmi_la_SOURCES = mi_alloc.c mi_api.c mi_arc.c mi_canvas.c mi_fllarc.c \
+ mi_fllrct.c mi_fplycon.c mi_gc.c mi_ply.c mi_plycon.c mi_plygen.c \

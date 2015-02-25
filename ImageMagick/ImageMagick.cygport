@@ -1,0 +1,77 @@
+inherit perl
+
+NAME="ImageMagick"
+VERSION="6.9.0.0"
+RELEASE=3
+
+CATEGORY="Graphics"
+SUMMARY="ImageMagick image processing suite"
+DESCRIPTION="ImageMagick is a software suite to create, edit, and compose bitmap
+images. It can read, convert and write images in a large variety of
+formats. Use ImageMagick to translate, flip, mirror, rotate, scale,
+shear and transform images, adjust image colors, apply various special
+effects, or draw text, lines, polygons, ellipses and Bezier curves."
+
+HOMEPAGE="http://www.imagemagick.org/"
+
+SRC_URI="http://www.imagemagick.org/download/${PN}-${PV%.${PV[4]}}-${PV[4]}.tar.xz"
+SRC_DIR=${P%.${PV[4]}}-${PV[4]}
+
+PKG_NAMES="${PN} ${PN}-doc libMagickCore6 libMagick-devel perl-Image-Magick"
+
+ImageMagick_SUMMARY="${SUMMARY} (utilities)"
+ImageMagick_CONTENTS="--exclude=*-config.* --exclude=index.html --exclude=www
+                      --exclude=images --exclude=man3 --exclude=perl
+                      etc/ usr/bin/*.exe usr/share/doc/ usr/share/man/"
+
+ImageMagick_doc_SUMMARY="${SUMMARY} (documentation)"
+ImageMagick_doc_CONTENTS="usr/share/doc/${PN}-6/index.html usr/share/doc/${PN}-6/*/"
+
+libMagickCore6_SUMMARY="${SUMMARY} (runtime)"
+libMagickCore6_CONTENTS="usr/bin/*.dll usr/lib/${P%.${PV[4]}}/ usr/share/${PN}-6/"
+
+libMagick_devel_SUMMARY="${SUMMARY} (development)"
+libMagick_devel_CONTENTS="usr/bin/*-config usr/include/ usr/lib/lib* usr/lib/pkgconfig/
+                          usr/share/man/man1/*-config.*"
+
+perl_Image_Magick_SUMMARY="${SUMMARY} ((Perl bindings)"
+perl_Image_Magick_CONTENTS="${PERL_VENDORLIB#/} usr/share/man/man3/"
+
+DIFF_EXCLUDES="Makefile.PL *-config.h version.h ltdl m4"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+
+	cd ${B}
+	cygconf \
+		--disable-static --without-modules --with-quantum-depth=16 \
+		--with-autotrace --with-bzlib --with-dps \
+		--with-fftw --with-fontconfig --with-fpx --with-freetype \
+		--with-gslib --with-gvc --with-jbig --with-jpeg --with-jp2 \
+		--without-lcms --with-lcms2  --with-lzma \
+		--with-pango --with-png --with-rsvg --with-tiff \
+		--without-wmf --with-x --with-xml --with-zlib \
+		--without-included-ltdl --with-ltdl-include=/usr/include --with-ltdl-lib=/usr/lib \
+		--with-fontpath=/usr/share/fonts \
+		--with-gs-font-dir=/usr/share/ghostscript/fonts \
+		--with-windows-font-dir=/usr/share/fonts/TTF \
+		--with-perl --with-perl-options=INSTALLDIRS=vendor
+	cygmake
+}
+
+src_test() {
+	cd ${B}
+	make -i check
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	perl_postinst
+
+	mv ${D}/etc/${PN}/* ${D}/usr/lib/${PN}-${PV%.*}/config/
+	keepdir /etc/${PN}
+}
+
+KEEP_LA_FILES="none"

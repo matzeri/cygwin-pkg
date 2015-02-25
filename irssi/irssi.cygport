@@ -1,0 +1,29 @@
+# irssi.cygport - directions for packaging irssi
+inherit perl
+
+NAME="irssi"
+VERSION="0.8.17"
+RELEASE=2
+CATEGORY="Net"
+SUMMARY="Modular text mode IRC client with Perl scripting"
+DESCRIPTION="Irssi is a modular IRC client with Perl scripting. Only text-mode
+frontend is currently supported. The GTK/GNOME frontend is no
+longer being maintained."
+HOMEPAGE="http://irssi.org/"
+SRC_URI="http://irssi.org/files/irssi-${PV}.tar.bz2"
+CFLAGS="-DUSEIMPORTLIB"
+CYGCONF_ARGS="--with-perl-staticlib"
+
+src_compile() {
+        cd ${S}
+        cygautoreconf
+        cd ${B}
+        cygconf
+        cygmake CFLAGS="-g ${CFLAGS}"
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	make_etc_defaults /etc/irssi.conf
+}

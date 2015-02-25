@@ -1,0 +1,24 @@
+NAME="rtorrent"
+VERSION=0.9.4
+RELEASE=1
+
+CATEGORY="Net"
+SUMMARY="ncurses based bittorrent client"
+DESCRIPTION="rtorrent uses ncurses and is ideal for use with  screen or dtach. 
+It supports saving of sessions and allows the user to add and remove torrents."
+
+
+HOMEPAGE="https://github.com/rakshasa/rtorrent"
+SRC_URI="https://github.com/rakshasa/rtorrent/archive/${P}.tar.gz"
+PATCH_URI="rtorrent-cygwin.patch"
+
+DIFF_EXCLUDES="tags"
+CPPFLAGS+=" -I/usr/include/ncursesw"
+
+src_install() {
+  cd ${B}
+  cygmake install DESTDIR=${D}
+  cd ${S}
+  doman doc/old/rtorrent.1
+  dodoc doc/rtorrent.rc
+}
