@@ -5,7 +5,7 @@ CUnit
 fftw3
 metis
 ngspice
-octave-forge (after financial)
+octave-forge
 onig
 ping
 pure-ftpd (+64 bit version)
