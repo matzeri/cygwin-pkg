@@ -1,0 +1,22 @@
+--- origsrc/pbzip2-1.1.12/Makefile	2014-12-21 11:26:26.000000000 +0100
++++ src/pbzip2-1.1.12/Makefile	2015-03-05 21:54:34.650758700 +0100
+@@ -27,7 +27,7 @@ CXXFLAGS = -O2
+ # Comment out CXXFLAGS line below for compatability mode for 32bit file sizes
+ # (less than 2GB) and systems that have compilers that treat int as 64bit
+ # natively (ie: modern AIX)
+-CXXFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
++# CXXFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ 
+ # Uncomment CXXFLAGS line below if you want to compile pbzip2 without load
+ # average support for systems that do not support it
+--- origsrc/pbzip2-1.1.12/pbzip2.h	2014-12-21 11:26:26.000000000 +0100
++++ src/pbzip2-1.1.12/pbzip2.h	2015-03-04 22:59:19.181833600 +0100
+@@ -68,7 +68,7 @@ extern "C"
+ //#define PBZIP_NO_LOADAVG
+ 
+ // detect systems that are known not to support load average code
+-#if defined (WIN32) || defined (__CYGWIN32__) || defined (__MINGW32__) || defined (__BORLANDC__) || defined (__hpux) || defined (__osf__) || defined(__UCLIBC__)
++#if defined (WIN32) || defined (__CYGWIN__) || defined (__MINGW32__) || defined (__BORLANDC__) || defined (__hpux) || defined (__osf__) || defined(__UCLIBC__)
+ 	#define PBZIP_NO_LOADAVG
+ #endif
+ 
