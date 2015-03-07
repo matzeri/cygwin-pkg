@@ -1,7 +1,7 @@
 inherit perl
 NAME="GraphicsMagick"
 VERSION="1.3.20"
-RELEASE=2
+RELEASE=3
 
 DESCRIPTION="GraphicsMagick is the swiss army knife of image processing"
 HOMEPAGE="http://www.graphicsmagick.org/"
@@ -9,19 +9,23 @@ SRC_URI="http://garr.dl.sourceforge.net/sourceforge/graphicsmagick/${NAME}-${PV}
 SRC_DIR="${NAME}-${PV}"
 
 CATEGORY="Graphics"
-PKG_NAMES="${PN} lib${PN}-devel lib${PN}3 perl-Graphics-Magick"
+PKG_NAMES="${PN} lib${PN}-devel lib${PN}3 lib${PN}++3 lib${PN}Wand2 perl-Graphics-Magick"
 
 GraphicsMagick_SUMMARY="GraphicsMagick library"
 libGraphicsMagick_devel_SUMMARY="GraphicsMagick library (devel)"
 libGraphicsMagick3_SUMMARY="GraphicsMagick library (runtime)"
+libGraphicsMagick__3_SUMMARY="GraphicsMagick library (C++ runtime)"
+libGraphicsMagickWand2_SUMMARY="GraphicsMagick Wand library (runtime)"
 perl_Graphics_Magick_SUMMARY="GraphicsMagick Perl bind (PerlMagick)"
 
 GraphicsMagick_CONTENTS="--exclude=man3 --exclude=*-config* usr/bin/g* usr/share/[dm]*"
 libGraphicsMagick_devel_CONTENTS="usr/bin/G* usr/lib/lib* usr/lib/pkgconfig usr/include usr/share/man/man1/*-config.*"
-libGraphicsMagick3_CONTENTS="usr/bin/cyg* usr/lib/${NAME}-${PV}/ usr/share/${NAME}-${PV}/"
+libGraphicsMagick3_CONTENTS="usr/bin/cygGraphicsMagick-3.dll usr/lib/${NAME}-${PV}/ usr/share/${NAME}-${PV}/"
+libGraphicsMagick__3_CONTENTS="usr/bin/cygGraphicsMagick++-3.dll"
+libGraphicsMagickWand2_CONTENTS="usr/bin/cygGraphicsMagickWand-2.dll"
 perl_Graphics_Magick_CONTENTS="${PERL_VENDORLIB:1}/ usr/share/man/man3/"
 
-DIFF_EXCLUDES="Makefile ltdl magick_config.h* Makefile.PL Magick.pm magick_types.h"
+DIFF_EXCLUDES="Makefile ltdl magick_config.h* Makefile.PL Magick.pm magick_types.h tap-driver.sh"
 
 KEEP_LA_FILES="none"
 
