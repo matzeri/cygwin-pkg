@@ -1,0 +1,52 @@
+NAME="onig"
+VERSION=5.9.6
+RELEASE=1
+
+DESCRIPTION="Onigurama: Regular expressions library for different character encoding" 
+SUMMARY="Onigurama: Regular expressions library" 
+CATEGORY="Libs"
+
+HOMEPAGE="http://www.geocities.jp/kosako3/oniguruma"
+SRC_URI="http://www.geocities.jp/kosako3/oniguruma/archive/onig-${PV}.tar.gz" 
+PATCH_URI="onig-autoconf.patch"
+
+abi=2
+
+PKG_NAMES="onig libonig${abi} libonig-devel"
+
+onig_SUMMARY="Oniguruma regular expressions library (source only)"
+libonig2_SUMMARY="Oniguruma regular expressions library (runtime)"
+libonig_devel_SUMMARY="Oniguruma regular expressions library (development)"
+
+PKG_CONTENTS[0]=""
+
+PKG_CONTENTS[1]="usr/bin/*-${abi}.dll"
+
+PKG_CONTENTS[2]="
+  usr/bin/onig-config
+  usr/include/
+  usr/lib/
+  usr/share/
+"
+KEEP_LA_FILES="none"
+
+
+src_compile() {
+        cd ${S}
+	cygautoreconf	
+        cd ${B}
+        cygconf 
+        cygmake
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	
+}
+
+src_test() {
+       cd ${B}
+       make check
+}
+
