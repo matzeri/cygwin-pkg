@@ -1,0 +1,44 @@
+NAME="ngspice"
+VERSION=26
+RELEASE=2
+
+CATEGORY="Math"
+SUMMARY="Ngspice is a mixed-level/mixed-signal circuit simulator"
+DESCRIPTION="Ngspice is a general-purpose circuit simulation program
+for nonlinear and linear analyses.
+Ngspice is an update of Spice3f5, the last Berkeley's release
+of Spice3 simulator family. Ngspice is being developed to
+include new features to existing Spice3f5 and to its bugs"
+
+HOMEPAGE="http://ngspice.sourceforge.net"
+SRC_URI="http://sourceforge.net/projects/ngspice/files/ng-spice-rework/26/ngspice-26.tar.gz"
+SRC_DIR="${PN}-${PV}"
+
+PKG_NAMES="${PN}"
+PKG_HINTS="setup"
+PKG_CONTENTS[0]='usr'
+
+DIFF_EXCLUDES="Makefile makedefs autoconf.h.in *.idx"
+
+src_compile() {
+	cd ${S}
+    	cygautoreconf
+	cd ${B}
+	cygconf --prefix=/usr \
+                --enable-xgraph --enable-x \
+		--enable-xspice --enable-cider \
+		--enable-openmp \
+		--with-editline=yes 
+	cygmake 
+}
+
+src_test() {
+	cd ${B}
+	make -i check	
+}
+
+src_install() {
+	cd ${B}
+	cyginstall 
+	
+}
