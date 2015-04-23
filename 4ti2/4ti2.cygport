@@ -1,0 +1,48 @@
+NAME="4ti2"
+VERSION="1.6.2"
+RELEASE=1
+
+CATEGORY="Libs Math"
+DESCRIPTION="library for algebraic, geometric and combinatorial problems on linear spaces"
+SUMMARY="library for algebraic, geometric and combinatorial problems on linear spaces"
+
+HOMEPAGE="http://www.4ti2.de/"
+SRC_URI="http://www.4ti2.de/version_${PN}/${PN}-${PV}.tar.gz"
+PATCH_URI="conf-ac-LTINIT.patch"
+
+PKG_NAMES="lib4ti2-util lib4ti2_0  lib4ti2-devel"
+
+DIFF_EXCLUDES="4ti2_config.h"
+KEEP_LA_FILES="none"
+
+lib4ti2_util_CONTENTS="--exclude=*.dll usr/bin/ usr/share/"
+lib4ti2_util_SUMMARY="${SUMMARY} - binary"
+
+lib4ti2_0_CONTENTS="usr/bin/*.dll"
+lib4ti2_0_SUMMARY="${SUMMARY} - runtime"
+
+lib4ti2_devel_CONTENTS="usr/lib usr/include"
+lib4ti2_devel_SUMMARY="${SUMMARY} - devel"
+
+src_compile()
+{
+  cd ${S}
+  cygautoreconf
+  cd ${B}
+  cygconf
+  cygmake
+}
+
+src_install()
+{
+  cd ${B}
+  cyginstall
+}
+
+
+src_test() {
+  cd ${B}
+  cygmake -i check
+}
+
+

@@ -1,0 +1,57 @@
+--- origsrc/cddlib-094g/lib-src/Makefile.am	2012-03-23 09:43:56.000000000 +0100
++++ lib-src/Makefile.am	2015-03-14 14:24:31.074865400 +0100
+@@ -16,4 +16,4 @@ cddtypes.h \
+ setoper.h
+ 
+ AM_CPPFLAGS = -UGMPRATIONAL
+-AM_LDFLAGS = -version-info 0:0:0
++AM_LDFLAGS = -version-info 0:0:0 -no-undefined
+--- origsrc/cddlib-094g/lib-src-gmp/Makefile.am	2012-03-23 09:44:20.000000000 +0100
++++ lib-src-gmp/Makefile.am	2015-03-14 14:24:31.084865400 +0100
+@@ -25,4 +25,4 @@ cddtypes_f.h \
+ setoper.h
+ 
+ AM_CPPFLAGS = -I$(gmpincludedir) -DGMPRATIONAL
+-AM_LDFLAGS = -version-info 0:0:0
++AM_LDFLAGS = -version-info 0:0:0 -no-undefined
+--- origsrc/cddlib-094g/src/Makefile.am	2012-03-23 09:51:13.000000000 +0100
++++ src/Makefile.am	2015-03-14 14:24:31.094865400 +0100
+@@ -5,7 +5,9 @@ redcheck \
+ fourier \
+ projection \
+ adjacency \
+-allfaces \
++allfaces 
++
++check_PROGRAMS = \
+ testcdd1 \
+ testshoot \
+ testcdd2 \
+@@ -30,5 +32,5 @@ testlp3_SOURCES                = testlp3
+ # cddmathlink_SOURCES                = cddmathlink.c cddmlio.h cddmlio.c
+ 
+ LDADD        = ../lib-src/libcdd.la
+-INCLUDES     = -I../lib-src
++INCLUDES     = -I$(top_srcdir)/lib-src
+ AM_CPPFLAGS  = -UGMPRATIONAL
+--- origsrc/cddlib-094g/src-gmp/Makefile.am	2012-03-23 09:51:35.000000000 +0100
++++ src-gmp/Makefile.am	2015-03-14 14:24:31.104865400 +0100
+@@ -5,7 +5,9 @@ redcheck_gmp \
+ fourier_gmp \
+ projection_gmp \
+ adjacency_gmp \
+-allfaces_gmp \
++allfaces_gmp 
++
++check_PROGRAMS = \
+ testshoot_gmp \
+ testcdd1_gmp \
+ testcdd2_gmp \
+@@ -31,6 +33,6 @@ testlp3_gmp_SOURCES                = tes
+ 
+ LDADD        = ../lib-src-gmp/libcddgmp.la
+ AM_LDFLAGS   = -L$(gmplibdir)
+-INCLUDES     = -I../lib-src-gmp
++INCLUDES     = -I$(top_srcdir)/lib-src-gmp
+ INCLUDES    += -I$(gmpincludedir)
+ AM_CPPFLAGS  = -DGMPRATIONAL

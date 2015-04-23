@@ -1,0 +1,18 @@
+--- origsrc/4ti2-1.6.2/configure.ac	2014-01-15 02:30:06.000000000 +0100
++++ configure.ac	2015-04-23 11:29:36.049642000 +0200
+@@ -5,6 +5,7 @@ AC_PREREQ(2.59)
+ AC_INIT(4ti2, 1.6.2)
+ AC_CONFIG_MACRO_DIR([m4])
+ AM_INIT_AUTOMAKE(foreign)
++LT_INIT
+ AM_MAINTAINER_MODE
+ AC_CONFIG_FILES([Makefile src/Makefile src/4ti2/Makefile
+ 		 src/groebner/Makefile src/util/Makefile 
+@@ -64,6 +65,7 @@ AM_CONDITIONAL([ENABLE_FIBER], [ test x$
+ 
+ ## Using the C compiler
+ AC_PROG_CC
++AC_LANG(C)
+ gl_EARLY
+ gl_INIT
+ 

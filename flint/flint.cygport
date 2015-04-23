@@ -1,0 +1,43 @@
+NAME="flint"
+VERSION=2.4.5
+RELEASE=1
+
+CATEGORY="Math"
+SUMMARY="FLINT: Fast Library for Number Theory"
+DESCRIPTION="FLINT: Fast Library for Number Theory"
+
+HOMEPAGE="http://flintlib.org/"
+SRC_URI="http://flintlib.org/${PN}-${PV}.tar.gz"
+
+PATCH_URI="
+flint-cygwin.patch
+NTL-interface.patch"
+
+PKG_NAMES="libflint libflint-devel"
+
+libflint_CONTENTS="usr/bin"
+libflint_SUMMARY="${SUMMARY} - runtime"
+
+libflint_devel_CONTENTS="usr/lib usr/include usr/share"
+libflint_devel_SUMMARY="${SUMMARY} - devel"
+
+DIFF_EXCLUDES=""
+KEEP_LA_FILES="none"
+
+
+src_compile() {
+        cd ${S}
+	lndirs
+        cd ${B}
+        ${S}/configure  --disable-static \
+	--with-gmp \
+	--with-mpfr \
+	--with-blas \
+	--with-ntl
+        cygmake
+}
+
+src_test() {
+	cd ${B}
+	cygmake -i check
+}

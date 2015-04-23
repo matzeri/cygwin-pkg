@@ -1,0 +1,12 @@
+--- origsrc/flint-2.4.5/interfaces/NTL-interface.cpp	2015-02-17 15:56:55.000000000 +0100
++++ interfaces/NTL-interface.cpp	2015-04-23 00:12:00.657050400 +0200
+@@ -32,9 +32,7 @@
+ #include <NTL/ZZ.h>
+ #include <NTL/ZZX.h>
+ #include <NTL/mat_ZZ.h>
+-#include <NTL/lip.h>
+ #include <NTL/ctools.h>
+-#include <NTL/g_lip.h>
+ #include <gmp.h>
+ 
+ #include "flint.h"

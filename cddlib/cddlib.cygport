@@ -1,0 +1,62 @@
+NAME="cddlib"
+VERSION="094g"
+RELEASE=1
+
+CATEGORY="Libs Math"
+DESCRIPTION="cddlib: general convex polyhedron library"
+SUMMARY="cddlib: general convex polyhedron library"
+
+HOMEPAGE="http://www.inf.ethz.ch/personal/fukudak/cdd_home/cdd.html"
+SRC_URI="ftp://ftp.ifor.math.ethz.ch/pub/fukuda/cdd/${PN}-${PV}.tar.gz"
+PATCH_URI="cddlib-undefined.patch"
+
+PKG_NAMES="cddlib-tools cddlib0 cddlibgmp0 cddlib-devel"
+
+cddlib_tools_CONTENTS="usr/bin/*.exe usr/share/"
+cddlib_tools_SUMMARY="${SUMMARY} - binary"
+
+cddlib0_CONTENTS="usr/bin/cygcdd-0.dll"
+cddlib0_SUMMARY="${SUMMARY} - runtime"
+
+cddlibgmp0_CONTENTS="usr/bin/cygcddgmp-0.dll"
+cddlibgmp0_SUMMARY="${SUMMARY} - gmp runtime"
+
+cddlib_devel_CONTENTS="usr/lib usr/include"
+cddlib_devel_SUMMARY="${SUMMARY} - devel"
+
+DEPEND="gmp"
+
+src_compile()
+{
+  cd ${S}
+  cygautoreconf
+  cd ${B}
+  cygconf
+  cygmake
+}
+
+src_install()
+{
+  cd ${B}
+  cyginstall
+  insinto /usr/share/doc/cddlib/examples
+  doins ${S}/examples/*
+  insinto /usr/share/doc/cddlib/examples-ine
+  doins ${S}/examples-ine/*
+  insinto /usr/share/doc/cddlib/examples-ine3d
+  doins ${S}/examples-ine3d/*
+}
+
+
+src_test() {
+  cd ${B}
+  cygmake check
+# to test the version linked to the dll
+  cd ${B}/src/.libs
+  export PATH=${B}/lib-src/.libs:${PATH}
+  echo ${S}/examples/sample.ine | ./testcdd1.exe
+  echo ${S}/examples/sampleh1.ine | ./testcdd1.exe
+  
+}
+
+
