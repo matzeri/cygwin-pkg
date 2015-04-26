@@ -1,0 +1,109 @@
+--- origsrc/singular-4.0.2a/Singular/Makefile.am	2015-04-26 06:06:38.110384300 +0200
++++ src/singular-4.0.2a/Singular/Makefile.am	2015-04-26 07:16:33.311336000 +0200
+@@ -6,7 +6,7 @@ AM_CPPFLAGS = -I${top_srcdir} -I${top_bu
+ 
+ all-local: feOpt.inc feOptTS.inc feOptES.inc iparith.inc all.lib gftables MOD ${abs_builddir}/LIB Singular$(EXEEXT) ESingular$(EXEEXT) TSingular$(EXEEXT)
+ 
+-SUBDIRS = dyn_modules
++SUBDIRS = . dyn_modules
+ 
+ ########################### Possible builtin modules... #########################
+ BUILTIN_FLAGS = ${BUILTIN_LIBS}
+--- origsrc/singular-4.0.2a/Singular/dyn_modules/Order/Makefile.am	2015-04-26 06:06:37.585354200 +0200
++++ src/singular-4.0.2a/Singular/dyn_modules/Order/Makefile.am	2015-04-26 07:36:59.479468800 +0200
+@@ -25,6 +25,7 @@ endif
+ Order_la_SOURCES   = $(SOURCES)
+ Order_la_CPPFLAGS  = ${MYINCLUDES} ${P_PROCS_CPPFLAGS_COMMON}
+ Order_la_LDFLAGS   = ${AM_LDFLAGS} ${P_PROCS_MODULE_LDFLAGS} ${GOOGLE_PERFTOOL_LDFLAGS} -no-undefined
++Order_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ 
+ # AM_COLOR_TESTS=always
+ #
+--- origsrc/singular-4.0.2a/Singular/dyn_modules/Order/singular.cc	2015-04-24 14:06:33.000000000 +0200
++++ src/singular-4.0.2a/Singular/dyn_modules/Order/singular.cc	2015-04-26 06:12:40.629119200 +0200
+@@ -11,9 +11,9 @@
+ #include "nforder_ideal.h"
+ #include <coeffs/bigintmat.h>
+ 
+-#ifdef SINGULAR_4_1
+ static int nforder_type_id=0;
+ n_coeffType nforder_type =n_unknown;
++#ifdef SINGULAR_4_1
+ 
+ // coeffs stuff: -----------------------------------------------------------
+ static coeffs nforder_AE=NULL;
+--- origsrc/singular-4.0.2a/Singular/dyn_modules/bigintm/Makefile.am	2015-04-26 06:06:37.567353200 +0200
++++ src/singular-4.0.2a/Singular/dyn_modules/bigintm/Makefile.am	2015-04-26 06:13:58.166554000 +0200
+@@ -21,6 +21,7 @@ $(FLINT_CFLAGS) $(NTL_CFLAGS) $(GMP_CFLA
+ bigintm_la_SOURCES  = mod_main.cc bigintm.cc bigintm.h
+ bigintm_la_CPPFLAGS = ${MYINCLUDES} ${P_PROCS_CPPFLAGS_COMMON}
+ bigintm_la_LDFLAGS  = ${P_PROCS_MODULE_LDFLAGS} -no-undefined
++bigintm_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ 
+ # AM_COLOR_TESTS=always
+ #
+--- origsrc/singular-4.0.2a/Singular/dyn_modules/gfanlib/Makefile.am	2015-04-26 06:06:37.577353800 +0200
++++ src/singular-4.0.2a/Singular/dyn_modules/gfanlib/Makefile.am	2015-04-26 07:34:15.682100200 +0200
+@@ -33,7 +33,10 @@ gfanlib_la_LDFLAGS  = ${P_PROCS_MODULE_L
+ CXXFLAGS+= $(FEXCEPTIONSFRTTI_CXXFLAGS)
+ 
+ if HAVE_GFANLIB
+- gfanlib_la_LIBADD   = ${abs_top_builddir}/gfanlib/libgfan.la ${CDDGMPLDFLAGS}
++ gfanlib_la_LIBADD  = ${abs_top_builddir}/Singular/libSingular.la \
++                      ${abs_top_builddir}/gfanlib/libgfan.la ${CDDGMPLDFLAGS}
++else
++ gfanlib_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ endif
+ 
+ #AM_COLOR_TESTS=always
+--- origsrc/singular-4.0.2a/Singular/dyn_modules/polymake/Makefile.am	2015-04-26 06:06:37.596354900 +0200
++++ src/singular-4.0.2a/Singular/dyn_modules/polymake/Makefile.am	2015-04-26 06:18:34.614365900 +0200
+@@ -25,7 +25,9 @@ if SING_HAVE_POLYMAKE
+  CXXFLAGS+= $(FEXCEPTIONSFRTTI_CXXFLAGS)
+  PM_CXXFLAGS= ${FEXCEPTIONSFRTTI_CXXFLAGS}
+  P_PROCS_MODULE_LDFLAGS+= ${PM_LDFLAGS}
+- polymake_la_LIBADD= ${PM_LIBS}
++ polymake_la_LIBADD= ${PM_LIBS} ${abs_top_builddir}/Singular/libSingular.la
++else
++ polymake_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ endif
+ 
+ SOURCES = polymake_conversion.cc polymake_documentation.cc polymake_wrapper.cc
+--- origsrc/singular-4.0.2a/Singular/dyn_modules/pyobject/Makefile.am	2015-04-26 06:06:37.605355400 +0200
++++ src/singular-4.0.2a/Singular/dyn_modules/pyobject/Makefile.am	2015-04-26 06:19:30.330552700 +0200
+@@ -24,4 +24,4 @@ pyobject_la_CXXFLAGS = $(PYTHON_CSPEC)
+ pyobject_la_CPPFLAGS = $(PYTHON_CPPFLAGS)  ${AM_CPPFLAGS} ${P_PROCS_CPPFLAGS_COMMON}
+ 
+ pyobject_la_LDFLAGS = $(PYTHON_EXTRA_LIBS)  $(PYTHON_LSPEC) ${AM_LDFLAGS} $(PYTHON_EXTRA_LDFLAGS) $(PYTHON_LDFLAGS) ${P_PROCS_MODULE_LDFLAGS}  -no-undefined
+-pyobject_la_LIBADD = $(PYTHON_EXTRA_LIBS) $(PYTHON_LSPEC) $(PYTHON_EXTRA_LDFLAGS) $(PYTHON_LDFLAGS)
++pyobject_la_LIBADD = $(PYTHON_EXTRA_LIBS) $(PYTHON_LSPEC) $(PYTHON_EXTRA_LDFLAGS) $(PYTHON_LDFLAGS) ${abs_top_builddir}/Singular/libSingular.la
+--- origsrc/singular-4.0.2a/Singular/dyn_modules/singmathic/Makefile.am	2015-04-26 06:06:37.614355900 +0200
++++ src/singular-4.0.2a/Singular/dyn_modules/singmathic/Makefile.am	2015-04-26 06:20:39.746523100 +0200
+@@ -20,6 +20,7 @@ $(FLINT_CFLAGS) $(NTL_CFLAGS) $(GMP_CFLA
+ singmathic_la_SOURCES  = singmathic.cc
+ singmathic_la_CPPFLAGS = ${MYINCLUDES} ${P_PROCS_CPPFLAGS_COMMON}
+ singmathic_la_LDFLAGS  = ${P_PROCS_MODULE_LDFLAGS}  -no-undefined
++singmathic_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ 
+ # AM_COLOR_TESTS=always
+ #
+--- origsrc/singular-4.0.2a/Singular/dyn_modules/syzextra/Makefile.am	2015-04-26 06:06:37.628356700 +0200
++++ src/singular-4.0.2a/Singular/dyn_modules/syzextra/Makefile.am	2015-04-26 06:21:25.631147500 +0200
+@@ -21,6 +21,7 @@ SOURCES = mod_main.cc DebugPrint.cc Debu
+ syzextra_la_SOURCES   = $(SOURCES)
+ syzextra_la_CPPFLAGS  = ${MYINCLUDES} ${P_PROCS_CPPFLAGS_COMMON}
+ syzextra_la_LDFLAGS   = ${AM_LDFLAGS} ${P_PROCS_MODULE_LDFLAGS} ${GOOGLE_PERFTOOL_LDFLAGS} -no-undefined
++syzextra_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ 
+ AM_COLOR_TESTS=always
+ 
+--- origsrc/singular-4.0.2a/libpolys/coeffs/Makefile.am	2015-04-26 06:06:37.522350600 +0200
++++ src/singular-4.0.2a/libpolys/coeffs/Makefile.am	2015-04-26 06:23:12.675270100 +0200
+@@ -1,6 +1,6 @@
+ ACLOCAL_AMFLAGS = -I ../../m4
+ 
+-AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir} \
++AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir} -I${top_builddir}/libpolys/ \
+ $(FACTORY_INCLUDES) $(OMALLOC_INCLUDES) $(RESOURCES_INCLUDES) \
+ ${NTL_CFLAGS} $(FLINT_CFLAGS) ${GMP_CFLAGS}
+ 

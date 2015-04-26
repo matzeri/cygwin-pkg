@@ -1,0 +1,54 @@
+NAME="singular"
+VERSION="4.0.2a"
+RELEASE=1
+
+CATEGORY="Libs Math"
+DESCRIPTION="Singular: a computer algebra system for polynomial computations"
+SUMMARY="Singular is a computer algebra system for polynomial computations, with special emphasis on commutative and non-commutative algebra, algebraic geometry, and singularity theory."
+
+HOMEPAGE="http://www.singular.uni-kl.de/"
+#SRC_URI="http://www.mathematik.uni-kl.de/~hannes/${PN}-${PV}.tar.gz"
+# using extract of git source 
+SRC_URI="${PN}-${PV}.tar.xz ${PN}-doc-${PV}.tar.xz"
+
+PATCH_URI="singular-undefined.patch 
+           singular-undefined2.patch 
+           EXEEXT.patch"
+
+PKG_NAMES="singular"
+
+DEPEND="gmp"
+KEEP_LA_FILES="none"
+
+src_compile()
+{
+  cd ${S}
+  cygautoreconf
+  cd ${B}
+  cygconf --enable-shared \
+          --disable-static \
+          --with-pic \
+          --enable-syzextra \
+          --enable-gfanlib \
+          --disable-python \
+          --with-ntl=/usr/ \
+          --with-flint=/usr/ \
+          LDFLAGS="-L/usr/lib -L/usr/local/bin" \
+          --disable-silent-rules
+  cygmake
+}
+
+src_install()
+{
+  cd ${B}
+  cyginstall
+}
+
+
+src_test()
+{
+  cd ${B}
+  cygmake -i check
+}
+
+
