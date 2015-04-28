@@ -31,10 +31,10 @@ src_compile()
           --enable-syzextra \
           --enable-gfanlib \
           --disable-python \
+          --with-builtinmodules=syzextra,gfanlib \
           --with-ntl=/usr/ \
           --with-flint=/usr/ \
-          LDFLAGS="-L/usr/lib -L/usr/local/bin" \
-          --disable-silent-rules
+          LDFLAGS="-L/usr/lib -L/usr/local/bin"
   cygmake
 }
 
