@@ -1,0 +1,49 @@
+NAME="cfitsio"
+VERSION=3.37
+RELEASE=1
+
+CATEGORY="Graphics"
+SUMMARY="FITS (Flexible Image Transport System)"
+DESCRIPTION="CFITSIO is a library of C and Fortran subroutines for reading and writing data files in FITS (Flexible Image Transport System) data format. CFITSIO provides simple high-level routines for reading and writing FITS files that insulate the programmer from the internal complexities of the FITS format."
+
+
+HOMEPAGE="https://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html"
+SRC_URI="http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio3370.tar.gz"
+SRC_DIR="cfitsio"
+
+PATCH_URI="cmake.patch"
+
+abi=3
+
+PKG_NAMES="cfitsio-util libcfitsio-devel libcfitsio${abi}"
+
+cfitsio_util_CONTENTS='usr/bin/*.exe'
+cfitsio_util_SUMMARY="${SUMMARY} - utility"
+
+libcfitsio_devel_CONTENTS='usr/include/ usr/lib/ usr/share/'
+libcfitsio_devel_SUMMARY="${SUMMARY} - devel"
+
+libcfitsio3_CONTENTS='usr/bin/cyg*'
+libcfitsio3_SUMMARY="${SUMMARY} - runtime"
+
+DIFF_EXCLUDES="Makefile"
+inherit cmake
+
+src_compile() {
+        cd ${B}
+	cygcmake
+        cygmake 
+}
+
+
+src_test() {
+	cd ${B}
+	cygmake test
+}
+
+src_install() {
+        cd ${B}
+	cyginstall
+	insinto /usr/share/doc/cfitsio
+	doins ${S}/docs/*.pdf
+}
