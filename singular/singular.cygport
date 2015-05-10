@@ -1,5 +1,5 @@
 NAME="singular"
-VERSION="4.0.2a"
+VERSION="4.0.2b"
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -8,16 +8,30 @@ SUMMARY="Singular is a computer algebra system for polynomial computations, with
 
 HOMEPAGE="http://www.singular.uni-kl.de/"
 #SRC_URI="http://www.mathematik.uni-kl.de/~hannes/${PN}-${PV}.tar.gz"
-# using extract of git source 
-SRC_URI="${PN}-${PV}.tar.xz ${PN}-doc-${PV}.tar.xz"
+# using extract of git source and 4.0 help and html
+SRC_URI="
+${PN}-${PV}.tar.xz 
+${PN}-doc-${PV}.tar.xz 
+singular-4.0.2-share.tar.gz"
 
-PATCH_URI="singular-undefined.patch 
-           singular-undefined2.patch 
-           EXEEXT.patch"
+PATCH_URI="EXEEXT_undefined.patch
+	CYGWIN_module-enable.patch
+	si_signals.patch"
 
-PKG_NAMES="singular"
+PKG_NAMES="singular singular-help singular-devel"
 
-DEPEND="gmp"
+singular_CONTENTS="usr/bin usr/libexec usr/share/applications usr/share/factory 
+	usr/share/icons usr/share/man usr/share/singular/LIB usr/share/singular/emacs
+	usr/share/singular/doc usr/share/singular/info"
+
+# singular_REQUIRES="singular-help"
+
+singular_help_CONTENTS="usr/share/singular/html"
+singular_help_SUMMARY="Singular - help files in HTML"
+
+singular_devel_CONTENTS="usr/include usr/lib"
+singular_devel_SUMMARY="Singular - development header"
+
 KEEP_LA_FILES="none"
 
 src_compile()
@@ -33,21 +47,36 @@ src_compile()
           --disable-python \
           --with-ntl=/usr/ \
           --with-flint=/usr/ \
-          LDFLAGS="-L/usr/lib -L/usr/local/bin" \
-          --disable-silent-rules
+          LDFLAGS="-L/usr/lib -L/usr/local/bin" 
   cygmake
 }
 
 src_install()
 {
+  cd ${S}/..
+  mkdir -p ${D}/usr
+  cp -vr share ${D}/usr
   cd ${B}
   cyginstall
+
+  inform " updating LIBs from .so -> .dll"
+  cd ${D}/usr/share/singular/LIB
+  sed -i -e "s/gfanlib.so/gfanlib.dll/g" -i divisors.lib gitfan.lib polymake.lib
+  sed -i -e "s/polymake.so/polymake.dll/g" -i divisors.lib polymake.lib oldpolymake.lib
+  sed -i -e "s/loctriv.so/loctriv.dll/g" -i KVequiv.lib
+  sed -i -e "s/pyobject.so/pyobject.dll/g" -i polybori.lib
+  sed -i -e "s/syzextra.so/syzextra.dll/g" -i schreyer.lib
+  grep "\.so\"" *.lib 
+
+
 }
 
 
 src_test()
 {
+  inform "run tests after install"
   cd ${B}
+  export PATH=${D}/usr/bin:${D}/usr/libexec/singular/MOD:${D}/usr/share/singular/LIB:${PATH}
   cygmake -i check
 }
 

@@ -1,0 +1,10 @@
+--- origsrc/singular-4.0.2b/libpolys/reporter/si_signals.h	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/libpolys/reporter/si_signals.h	2015-05-10 09:00:01.360789800 +0200
+@@ -17,6 +17,7 @@
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <sys/socket.h>
++#include <sys/select.h>
+ #include <time.h>
+ #include <stdio.h>
+ #include <semaphore.h>

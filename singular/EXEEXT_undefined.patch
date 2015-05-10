@@ -1,0 +1,263 @@
+--- origsrc/singular-4.0.2b/Singular/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/Makefile.am	2015-05-10 08:58:57.623700200 +0200
+@@ -4,9 +4,9 @@ GIT_VERSION := $(shell $(top_srcdir)/git
+ 
+ AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir} -I${top_srcdir}/kernel -I${top_builddir}/kernel -I${top_srcdir}/libpolys -I${top_builddir}/libpolys $(FACTORY_INCLUDES)  $(GMP_CFLAGS) $(NTL_CFLAGS) $(FLINT_CFLAGS) -DGIT_VERSION='"$(GIT_VERSION)"'
+ 
+-all-local: feOpt.inc feOptTS.inc feOptES.inc iparith.inc all.lib gftables MOD ${abs_builddir}/LIB Singular ESingular TSingular
++all-local: feOpt.inc feOptTS.inc feOptES.inc iparith.inc all.lib gftables MOD ${abs_builddir}/LIB Singular$(EXEEXT) ESingular$(EXEEXT) TSingular$(EXEEXT)
+ 
+-SUBDIRS = dyn_modules
++SUBDIRS = . dyn_modules
+ 
+ ########################### Possible builtin modules... #########################
+ BUILTIN_FLAGS = ${BUILTIN_LIBS}
+@@ -124,7 +124,7 @@ SingularHEADERS = \
+ # plural_cmd.inc
+ nodist_libSingular_la_SOURCES = feOpt.inc iparith.inc
+ 
+-libSingular_la_LDFLAGS    =${USEPPROCSDYNAMICLDFLAGS} ${USEPPROCSDYNAMICLD} -release ${PACKAGE_VERSION} ${PTHREAD_LDFLAGS}
++libSingular_la_LDFLAGS    =${USEPPROCSDYNAMICLDFLAGS} ${USEPPROCSDYNAMICLD} -release ${PACKAGE_VERSION} ${PTHREAD_LDFLAGS} -no-undefined
+ libSingular_la_LIBADD     =${USEPPROCSDYNAMICLDFLAGS} ${USEPPROCSDYNAMICLD} ${BUILTIN_FLAGS} ${top_builddir}/kernel/libkernel.la ${PTHREAD_LIBS}
+ 
+ libSingular_includedir = ${includedir}/singular/Singular
+--- origsrc/singular-4.0.2b/Singular/dyn_modules/Order/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/dyn_modules/Order/Makefile.am	2015-05-10 08:58:57.633700200 +0200
+@@ -24,7 +24,8 @@ endif
+ 
+ Order_la_SOURCES   = $(SOURCES)
+ Order_la_CPPFLAGS  = ${MYINCLUDES} ${P_PROCS_CPPFLAGS_COMMON}
+-Order_la_LDFLAGS   = ${AM_LDFLAGS} ${P_PROCS_MODULE_LDFLAGS} ${GOOGLE_PERFTOOL_LDFLAGS}
++Order_la_LDFLAGS   = ${AM_LDFLAGS} ${P_PROCS_MODULE_LDFLAGS} ${GOOGLE_PERFTOOL_LDFLAGS} -no-undefined
++Order_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ 
+ # AM_COLOR_TESTS=always
+ #
+--- origsrc/singular-4.0.2b/Singular/dyn_modules/Order/singular.cc	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/dyn_modules/Order/singular.cc	2015-05-10 08:58:57.643700200 +0200
+@@ -11,9 +11,9 @@
+ #include "nforder_ideal.h"
+ #include <coeffs/bigintmat.h>
+ 
+-#ifdef SINGULAR_4_1
+ static int nforder_type_id=0;
+ n_coeffType nforder_type =n_unknown;
++#ifdef SINGULAR_4_1
+ 
+ // coeffs stuff: -----------------------------------------------------------
+ static coeffs nforder_AE=NULL;
+--- origsrc/singular-4.0.2b/Singular/dyn_modules/bigintm/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/dyn_modules/bigintm/Makefile.am	2015-05-10 08:58:57.653700200 +0200
+@@ -20,7 +20,8 @@ $(FLINT_CFLAGS) $(NTL_CFLAGS) $(GMP_CFLA
+ 
+ bigintm_la_SOURCES  = mod_main.cc bigintm.cc bigintm.h
+ bigintm_la_CPPFLAGS = ${MYINCLUDES} ${P_PROCS_CPPFLAGS_COMMON}
+-bigintm_la_LDFLAGS  = ${P_PROCS_MODULE_LDFLAGS}
++bigintm_la_LDFLAGS  = ${P_PROCS_MODULE_LDFLAGS} -no-undefined
++bigintm_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ 
+ # AM_COLOR_TESTS=always
+ #
+--- origsrc/singular-4.0.2b/Singular/dyn_modules/gfanlib/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/dyn_modules/gfanlib/Makefile.am	2015-05-10 08:58:57.663700200 +0200
+@@ -27,13 +27,16 @@ endif
+ gfanlib_la_SOURCES  = $(SOURCES)
+ 
+ gfanlib_la_CPPFLAGS = ${MY_CPPFLAGS} ${P_PROCS_CPPFLAGS_COMMON} ${CDDGMPCPPFLAGS}
+-gfanlib_la_LDFLAGS  = ${P_PROCS_MODULE_LDFLAGS}
++gfanlib_la_LDFLAGS  = ${P_PROCS_MODULE_LDFLAGS} -no-undefined
+ 
+ # forcefully enable exceptions for polymake
+ CXXFLAGS+= $(FEXCEPTIONSFRTTI_CXXFLAGS)
+ 
+ if HAVE_GFANLIB
+- gfanlib_la_LIBADD   = ${abs_top_builddir}/gfanlib/libgfan.la ${CDDGMPLDFLAGS}
++ gfanlib_la_LIBADD  = ${abs_top_builddir}/Singular/libSingular.la \
++                      ${abs_top_builddir}/gfanlib/libgfan.la ${CDDGMPLDFLAGS}
++else
++ gfanlib_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ endif
+ 
+ #AM_COLOR_TESTS=always
+--- origsrc/singular-4.0.2b/Singular/dyn_modules/polymake/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/dyn_modules/polymake/Makefile.am	2015-05-10 08:58:57.673700300 +0200
+@@ -25,7 +25,9 @@ if SING_HAVE_POLYMAKE
+  CXXFLAGS+= $(FEXCEPTIONSFRTTI_CXXFLAGS)
+  PM_CXXFLAGS= ${FEXCEPTIONSFRTTI_CXXFLAGS}
+  P_PROCS_MODULE_LDFLAGS+= ${PM_LDFLAGS}
+- polymake_la_LIBADD= ${PM_LIBS}
++ polymake_la_LIBADD= ${PM_LIBS} ${abs_top_builddir}/Singular/libSingular.la
++else
++ polymake_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ endif
+ 
+ SOURCES = polymake_conversion.cc polymake_documentation.cc polymake_wrapper.cc
+@@ -36,4 +38,4 @@ polymake_la_CPPFLAGS = ${AM_CPPFLAGS} ${
+ polymake_la_CXXFLAGS = ${PM_CXXFLAGS}
+ polymake_la_CFLAGS   = ${PM_CXXFLAGS}
+ 
+-polymake_la_LDFLAGS = ${P_PROCS_MODULE_LDFLAGS}
++polymake_la_LDFLAGS = ${P_PROCS_MODULE_LDFLAGS}  -no-undefined
+--- origsrc/singular-4.0.2b/Singular/dyn_modules/pyobject/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/dyn_modules/pyobject/Makefile.am	2015-05-10 08:58:57.683700300 +0200
+@@ -23,5 +23,5 @@ pyobject_la_SOURCES = pyobject.cc
+ pyobject_la_CXXFLAGS = $(PYTHON_CSPEC)
+ pyobject_la_CPPFLAGS = $(PYTHON_CPPFLAGS)  ${AM_CPPFLAGS} ${P_PROCS_CPPFLAGS_COMMON}
+ 
+-pyobject_la_LDFLAGS = $(PYTHON_EXTRA_LIBS)  $(PYTHON_LSPEC) ${AM_LDFLAGS} $(PYTHON_EXTRA_LDFLAGS) $(PYTHON_LDFLAGS) ${P_PROCS_MODULE_LDFLAGS}
+-pyobject_la_LIBADD = $(PYTHON_EXTRA_LIBS) $(PYTHON_LSPEC) $(PYTHON_EXTRA_LDFLAGS) $(PYTHON_LDFLAGS)
++pyobject_la_LDFLAGS = $(PYTHON_EXTRA_LIBS)  $(PYTHON_LSPEC) ${AM_LDFLAGS} $(PYTHON_EXTRA_LDFLAGS) $(PYTHON_LDFLAGS) ${P_PROCS_MODULE_LDFLAGS}  -no-undefined
++pyobject_la_LIBADD = $(PYTHON_EXTRA_LIBS) $(PYTHON_LSPEC) $(PYTHON_EXTRA_LDFLAGS) $(PYTHON_LDFLAGS) ${abs_top_builddir}/Singular/libSingular.la
+--- origsrc/singular-4.0.2b/Singular/dyn_modules/singmathic/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/dyn_modules/singmathic/Makefile.am	2015-05-10 08:58:57.693700300 +0200
+@@ -19,7 +19,8 @@ $(FLINT_CFLAGS) $(NTL_CFLAGS) $(GMP_CFLA
+ 
+ singmathic_la_SOURCES  = singmathic.cc
+ singmathic_la_CPPFLAGS = ${MYINCLUDES} ${P_PROCS_CPPFLAGS_COMMON}
+-singmathic_la_LDFLAGS  = ${P_PROCS_MODULE_LDFLAGS}
++singmathic_la_LDFLAGS  = ${P_PROCS_MODULE_LDFLAGS}  -no-undefined
++singmathic_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ 
+ # AM_COLOR_TESTS=always
+ #
+@@ -30,4 +31,3 @@ singmathic_la_LDFLAGS  = ${P_PROCS_MODUL
+ # TESTS=test_release.sh
+ #
+ # EXTRA_DIST = test.sh $(TESTS)
+-
+--- origsrc/singular-4.0.2b/Singular/dyn_modules/syzextra/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/dyn_modules/syzextra/Makefile.am	2015-05-10 08:58:57.703700300 +0200
+@@ -20,7 +20,8 @@ endif
+ SOURCES = mod_main.cc DebugPrint.cc DebugPrint.h myNF.cc myNF.h singularxx_defs.h syzextra.cc syzextra.h
+ syzextra_la_SOURCES   = $(SOURCES)
+ syzextra_la_CPPFLAGS  = ${MYINCLUDES} ${P_PROCS_CPPFLAGS_COMMON}
+-syzextra_la_LDFLAGS   = ${AM_LDFLAGS} ${P_PROCS_MODULE_LDFLAGS} ${GOOGLE_PERFTOOL_LDFLAGS}
++syzextra_la_LDFLAGS   = ${AM_LDFLAGS} ${P_PROCS_MODULE_LDFLAGS} ${GOOGLE_PERFTOOL_LDFLAGS} -no-undefined
++syzextra_la_LIBADD = ${abs_top_builddir}/Singular/libSingular.la
+ 
+ AM_COLOR_TESTS=always
+ 
+--- origsrc/singular-4.0.2b/factory/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/factory/Makefile.am	2015-05-10 08:58:49.772689100 +0200
+@@ -11,7 +11,7 @@ lib_LTLIBRARIES = libfactory.la
+ libfactory_la_LIBADD     =$(RESOURCES_LIBS) $(OMALLOC_LIBS) \
+ $(FLINT_LIBS) $(NTL_LIBS) $(GMP_LIBS)
+ 
+-libfactory_la_LDFLAGS    = -release ${PACKAGE_VERSION}
++libfactory_la_LDFLAGS    = -release ${PACKAGE_VERSION} -no-undefined
+ 
+ # factory source files
+ SOURCES = \
+--- origsrc/singular-4.0.2b/gfanlib/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/gfanlib/Makefile.am	2015-05-10 08:58:49.782689200 +0200
+@@ -11,6 +11,8 @@ AM_CPPFLAGS = -I${top_srcdir} -I${top_bu
+ SOURCES  = gfanlib_zcone.cpp gfanlib_symmetry.cpp gfanlib_symmetriccomplex.cpp gfanlib_polyhedralfan.cpp gfanlib_zfan.cpp gfanlib_polymakefile.cpp
+ libgfan_la_SOURCES   = $(SOURCES)
+ 
++libgfan_la_LDFLAGS  = ${CDDGMPLDFLAGS} -no-undefined
++
+ libgfan_includedir  =$(includedir)/gfanlib
+ 
+ libgfan_include_HEADERS = gfanlib_z.h gfanlib_q.h gfanlib_vector.h gfanlib_matrix.h gfanlib_zcone.h gfanlib.h gfanlib_polyhedralfan.h gfanlib_polymakefile.h gfanlib_symmetriccomplex.h gfanlib_symmetry.h gfanlib_zfan.h
+--- origsrc/singular-4.0.2b/libpolys/coeffs/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/libpolys/coeffs/Makefile.am	2015-05-10 09:00:01.330789800 +0200
+@@ -1,6 +1,6 @@
+ ACLOCAL_AMFLAGS = -I ../../m4
+ 
+-AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir} \
++AM_CPPFLAGS = -I${top_srcdir} -I${top_builddir} -I${top_builddir}/libpolys/ \
+ $(FACTORY_INCLUDES) $(OMALLOC_INCLUDES) $(RESOURCES_INCLUDES) \
+ ${NTL_CFLAGS} $(FLINT_CFLAGS) ${GMP_CFLAGS}
+ 
+@@ -26,7 +26,9 @@ libcoeffs_la_include_HEADERS = \
+   shortfl.h mpr_complex.h mpr_global.h numstats.h \
+   bigintmat.h Enumerator.h AE.h OPAE.h AEp.h OPAEp.h AEQ.h OPAEQ.h
+ 
+-libcoeffs_la_LIBADD = ${top_builddir}/reporter/libreporter.la ${top_builddir}/misc/libmisc.la \
++libcoeffs_la_LDFLAGS    = -no-undefined
++
++libcoeffs_la_LIBADD = ${top_builddir}/misc/libmisc.la \
+ $(FACTORY_LIBS) $(RESOURCES_LIBS) $(OMALLOC_LIBS) \
+ $(FLINT_LIBS) $(GMP_LIBS) $(NTL_LIBS)
+ 
+@@ -37,4 +39,4 @@ TESTS = test
+ check_PROGRAMS = $(TESTS)
+ 
+ test_SOURCES = test.cc
+-test_LDADD   = libcoeffs.la $(libcoeffs_la_LIBADD)
++test_LDADD   = libcoeffs.la  ${top_builddir}/reporter/libreporter.la $(libcoeffs_la_LIBADD)
+--- origsrc/singular-4.0.2b/libpolys/polys/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/libpolys/polys/Makefile.am	2015-05-10 09:00:01.330789800 +0200
+@@ -65,13 +65,18 @@ p_Procs_FieldIndep_la_CPPFLAGS = -Dp_Pro
+ p_Procs_FieldQ_la_CPPFLAGS = -Dp_Procs_FieldQ ${P_PROCS_CPPFLAGS_COMMON}
+ p_Procs_FieldZp_la_CPPFLAGS = -Dp_Procs_FieldZp ${P_PROCS_CPPFLAGS_COMMON}
+ 
+-P_PROCS_MODULE_LDFLAGS = -shared -module -dynamic -export-dynamic -avoid-version -weak_reference_mismatches weak -undefined dynamic_lookup -Wl,-undefined -Wl,dynamic_lookup -flat_namespace
++P_PROCS_MODULE_LDFLAGS = -shared -module -dynamic -export-dynamic -avoid-version -weak_reference_mismatches weak -undefined dynamic_lookup -Wl,-undefined -Wl,dynamic_lookup -flat_namespace -no-undefined
+ 
+ p_Procs_FieldGeneral_la_LDFLAGS = ${P_PROCS_MODULE_LDFLAGS}
+ p_Procs_FieldIndep_la_LDFLAGS = ${P_PROCS_MODULE_LDFLAGS}
+ p_Procs_FieldQ_la_LDFLAGS = ${P_PROCS_MODULE_LDFLAGS}
+ p_Procs_FieldZp_la_LDFLAGS = ${P_PROCS_MODULE_LDFLAGS}
+ 
++p_Procs_FieldGeneral_la_LIBADD =  libpolys.la $(OMALLOC_LIBS)
++p_Procs_FieldIndep_la_LIBADD =  libpolys.la $(OMALLOC_LIBS)
++p_Procs_FieldQ_la_LIBADD =  libpolys.la $(OMALLOC_LIBS)
++p_Procs_FieldZp_la_LIBADD = libpolys.la $(OMALLOC_LIBS)
++
+ P_PROCS = templates/p_Procs_Lib.cc
+ 
+ p_Procs_FieldGeneral_la_SOURCES = ${P_PROCS}
+@@ -94,8 +99,8 @@ libpolys_la_SOURCES = ${SOURCES}
+ 
+ EXTRA_libpolys_la_SOURCES = templates/p_Procs_Static.cc templates/p_Procs_Dynamic.cc
+ 
+-libpolys_la_LDFLAGS= ${USEPPROCSDYNAMICLDFLAGS} ${USEPPROCSDYNAMICLD} -release ${PACKAGE_VERSION}
+-libpolys_la_LIBADD = ${USEPPROCSDYNAMICLDFLAGS} ${USEPPROCSDYNAMICLD} ${top_builddir}/coeffs/libcoeffs.la
++libpolys_la_LDFLAGS= ${USEPPROCSDYNAMICLDFLAGS} ${USEPPROCSDYNAMICLD} -release ${PACKAGE_VERSION} -no-undefined
++libpolys_la_LIBADD = ${USEPPROCSDYNAMICLDFLAGS} ${USEPPROCSDYNAMICLD} ${top_builddir}/coeffs/libcoeffs.la ${top_builddir}/reporter/libreporter.la 
+ 
+ 
+ #################################################
+@@ -107,7 +112,8 @@ noinst_PROGRAMS = templates/p_Procs_Gene
+ templates_p_Procs_Generate_SOURCES = templates/p_Procs_Generate.cc
+ templates_p_Procs_Generate_CPPFLAGS = ${USE_P_PROCS_STATIC} ${AM_CPPFLAGS}
+ templates_p_Procs_Generate_LDADD    = \
+-${top_builddir}/reporter/libreporter.la ${top_builddir}/misc/libmisc.la
++$(FACTORY_LIBS) $(RESOURCES_LIBS) $(OMALLOC_LIBS) \
++$(FLINT_LIBS) $(GMP_LIBS) $(NTL_LIBS)
+ 
+ templates/p_Procs.inc: templates/p_Procs_Generate$(EXEEXT)
+ 	${builddir}/templates/p_Procs_Generate$(EXEEXT) > ${builddir}/templates/p_Procs.inc
+@@ -122,8 +128,7 @@ CLEANFILES = $(BUILT_SOURCES)
+ TESTS = test
+ check_PROGRAMS = $(TESTS)
+ 
+-test_LDADD=libpolys.la \
+-${top_builddir}/reporter/libreporter.la ${top_builddir}/misc/libmisc.la \
++test_LDADD= ${top_builddir}/polys/libpolys.la \
+ $(FACTORY_LIBS) $(RESOURCES_LIBS) $(OMALLOC_LIBS) \
+ $(FLINT_LIBS) $(GMP_LIBS) $(NTL_LIBS)
+ 
+--- origsrc/singular-4.0.2b/omalloc/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/omalloc/Makefile.am	2015-05-10 08:58:49.812689200 +0200
+@@ -30,7 +30,7 @@ AM_CPPFLAGS =-I${top_srcdir}/.. -I${top_
+ 
+ libomalloc_la_SOURCES=$(SOURCES) $(noinst_HEADERS)
+ 
+-libomalloc_la_LDFLAGS    = -release ${PACKAGE_VERSION}
++libomalloc_la_LDFLAGS    = -release ${PACKAGE_VERSION} -no-undefined
+ if WANT_DEBUG
+ libomalloc_la_CFLAGS    = -g
+ else !WANT_DEBUG
+--- origsrc/singular-4.0.2b/resources/Makefile.am	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/resources/Makefile.am	2015-05-10 08:58:49.832689200 +0200
+@@ -11,7 +11,7 @@ AM_CPPFLAGS = -I${top_srcdir} -I${top_bu
+ SOURCES  = omFindExec.c feResource.cc feFopen.cc
+ libresources_la_SOURCES   = $(SOURCES)
+ 
+-libresources_la_LDFLAGS   = -release ${PACKAGE_VERSION}
++libresources_la_LDFLAGS   = -release ${PACKAGE_VERSION} -no-undefined
+ 
+ libresources_includedir  =$(includedir)/resources
+ 

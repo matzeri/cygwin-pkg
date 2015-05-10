@@ -1,0 +1,128 @@
+--- origsrc/singular-4.0.2b/Singular/iparith.cc	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/iparith.cc	2015-05-10 09:00:01.280789700 +0200
+@@ -5317,6 +5317,7 @@ BOOLEAN jjLOAD(const char *s, BOOLEAN au
+         return load_builtin(s,autoexport, iiGetBuiltinModInit(s));
+       case LT_MACH_O:
+       case LT_ELF:
++      case LT_CYG:
+       case LT_HPUX:
+ #ifdef HAVE_DYNAMIC_LOADING
+         return load_modules(s, libnamebuf, autoexport);
+--- origsrc/singular-4.0.2b/Singular/iplib.cc	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/iplib.cc	2015-05-10 09:00:01.300789700 +0200
+@@ -761,7 +761,7 @@ BOOLEAN iiTryLoadLib(leftv v, const char
+       if (LT==LT_SINGULAR)
+         LoadResult = iiLibCmd(s, FALSE, FALSE,TRUE);
+       #ifdef HAVE_DYNAMIC_LOADING
+-      else if ((LT==LT_ELF) || (LT==LT_HPUX))
++      else if ((LT==LT_ELF) || (LT==LT_HPUX) || (LT==LT_CYG))
+         LoadResult = load_modules(s,libnamebuf,FALSE);
+       #endif
+       else if (LT==LT_BUILTIN)
+--- origsrc/singular-4.0.2b/Singular/mod_lib.cc	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/Singular/mod_lib.cc	2015-05-10 09:00:01.320789800 +0200
+@@ -81,6 +81,14 @@ lib_types type_of_LIB(const char *newlib
+     goto lib_type_end;
+   }
+ 
++  if( (strncmp(buf, "MZ", 2)==0)) /* generic MZ aka windows */
++  {
++    LT = LT_CYG;
++    //omFree(newlib);
++    //newlib = omStrDup(libnamebuf);
++    goto lib_type_end;
++  }
++
+   if( (strncmp(buf, (const char *)mach_o, 4)==0) || (strncmp(buf, (const char *)mach_O, 4)==0)) /* generic Mach-O module */
+   {
+     LT = LT_MACH_O;
+--- origsrc/singular-4.0.2b/libpolys/polys/mod_raw.cc	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/libpolys/polys/mod_raw.cc	2015-05-10 09:00:01.350789800 +0200
+@@ -48,6 +48,10 @@
+  *****************************************************************************/
+ static BOOLEAN warn_handle = FALSE;
+ static BOOLEAN warn_proc = FALSE;
++#if defined(_CYGWIN__)
++#define DL_TAIL ".dll"
++#endif
++
+ #ifndef DL_TAIL
+ #ifdef SING_NDEBUG
+ #define DL_TAIL ".so"
+@@ -190,6 +194,55 @@ const char *dynl_error()
+ }
+ #endif /* ELF_SYSTEM */
+ 
++#if defined(__CYGWIN__) 
++#include <dlfcn.h>
++#define DL_IMPLEMENTED
++
++static void* kernel_handle = NULL;
++int dynl_check_opened(
++  char *filename    /* I: filename to check */
++  )
++{
++  return dlopen(filename,RTLD_NOW|RTLD_NOLOAD) != NULL;
++}
++
++void *dynl_open(
++  char *filename    /* I: filename to load */
++  )
++{
++// work on cygwin ? was glibc 2.2:
++  if ((filename==NULL) || (dlopen(filename,RTLD_NOW|RTLD_NOLOAD)==NULL))
++    return(dlopen(filename, RTLD_NOW|RTLD_GLOBAL));
++  else
++    Werror("module %s already loaded",filename);
++  return NULL;
++// alternative
++//    return(dlopen(filename, RTLD_NOW|RTLD_GLOBAL));
++}
++
++void *dynl_sym(void *handle, const char *symbol)
++{
++  if (handle == DYNL_KERNEL_HANDLE)
++  {
++    if (kernel_handle == NULL)
++      kernel_handle = dynl_open(NULL);
++    handle = kernel_handle;
++  }
++  return(dlsym(handle, symbol));
++}
++
++int dynl_close (void *handle)
++{
++  return(dlclose (handle));
++}
++
++const char *dynl_error()
++{
++  return(dlerror());
++}
++#endif /* CYGWIN */
++
++
+ /*****************************************************************************
+  * SECTION HPUX-9/10                                                         *
+  *****************************************************************************/
+--- origsrc/singular-4.0.2b/libpolys/polys/mod_raw.h	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/libpolys/polys/mod_raw.h	2015-05-10 09:00:01.360789800 +0200
+@@ -13,7 +13,7 @@
+  *           dunl_close()
+ */
+ 
+-typedef enum { LT_NONE, LT_NOTFOUND, LT_SINGULAR, LT_ELF, LT_HPUX, LT_MACH_O, LT_BUILTIN} lib_types;
++typedef enum { LT_NONE, LT_NOTFOUND, LT_SINGULAR, LT_ELF, LT_HPUX, LT_MACH_O, LT_CYG, LT_BUILTIN} lib_types;
+ 
+ 
+ #if defined(HAVE_DL)
+--- origsrc/singular-4.0.2b/m4/p-procs.m4	2015-05-09 14:32:13.000000000 +0200
++++ src/singular-4.0.2b/m4/p-procs.m4	2015-05-10 09:00:01.610790200 +0200
+@@ -13,6 +13,7 @@ AS_CASE([$host],
+   [*freebsd*], [SUPPORTS_DYNAMIC_MODULES=yes],
+   [*-sun-solaris2*], [SUPPORTS_DYNAMIC_MODULES=yes],
+   [*-apple-darwin*], [SUPPORTS_DYNAMIC_MODULES=yes],
++  [*cygwin*], [SUPPORTS_DYNAMIC_MODULES=yes],
+   [SUPPORTS_DYNAMIC_MODULES=no]
+ )
+ AC_MSG_RESULT($SUPPORTS_DYNAMIC_MODULES)
