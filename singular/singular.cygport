@@ -22,7 +22,7 @@ PKG_NAMES="singular singular-help singular-devel"
 
 singular_CONTENTS="usr/bin usr/libexec usr/share/applications usr/share/factory 
 	usr/share/icons usr/share/man usr/share/singular/LIB usr/share/singular/emacs
-	usr/share/singular/doc usr/share/singular/info"
+	usr/share/doc/ usr/share/singular/doc usr/share/singular/info"
 
 # singular_REQUIRES="singular-help"
 
@@ -67,8 +67,7 @@ src_install()
   sed -i -e "s/pyobject.so/pyobject.dll/g" -i polybori.lib
   sed -i -e "s/syzextra.so/syzextra.dll/g" -i schreyer.lib
   grep "\.so\"" *.lib 
-
-
+  cd ${B}
 }
 
 
