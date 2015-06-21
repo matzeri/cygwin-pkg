@@ -1,22 +1,22 @@
 NAME="hdf5"
-VERSION=1.8.14
+VERSION=1.8.15
 RELEASE=1
 
 DESCRIPTION="HDF5 API interface"
 HOMEPAGE="http://www.hdfgroup.org/HDF5/"
 SRC_DIR=${PN}-${PV}
-SRC_URI="ftp://ftp.hdfgroup.org/HDF5/current18/src/${SRC_DIR}.tar.bz2"
+SRC_URI="ftp://ftp.hdfgroup.org/HDF5/current/src/${SRC_DIR}.tar.bz2"
 
-abi=9
+abi=10
 PKG_NAMES="hdf5 libhdf5_${abi} libhdf5-devel"
 hdf5_CONTENTS='--exclude=usr/bin/*.dll usr/bin usr/share/'
-libhdf5_9_CONTENTS="usr/bin/*-${abi}.dll"
+libhdf5_10_CONTENTS="usr/bin/*-${abi}.dll"
 libhdf5_devel_CONTENTS='usr/include/ usr/lib/'
 
 hdf5_CATEGORY="Archive Utils"
 hdf5_SUMMARY="HDF5 Hierarchical Data Format"
-libhdf5_9_CATEGORY="Devel Libs Archive Utils"
-libhdf5_9_SUMMARY="HDF5 Hierarchical Data Format - (runtime)"
+libhdf5_10_CATEGORY="Devel Libs Archive Utils"
+libhdf5_10_SUMMARY="HDF5 Hierarchical Data Format - (runtime)"
 libhdf5_devel_CATEGORY="Devel Archive Utils"
 libhdf5_devel_SUMMARY="HDF5 Hierarchical Data Format - (development)"
 
@@ -31,7 +31,8 @@ src_compile() {
         cd ${B}
         cygconf --with-zlib             \
                 --with-gnu-ld           \
-                --enable-shared --enable-unsupported        \
+                --enable-shared 	\
+		--enable-unsupported    \
 		--with-pthread		\
 		--enable-cxx		\
 		FC=gfortran 		
@@ -57,9 +58,6 @@ src_install() {
 		includedir=${D}/usr/include  		\
 		docdir=${D}/usr/share/doc/${PN}		\
 		datarootdir=${D}/usr/share
-
-#  Test lib incorrectly installed 
-	rm ${D}/usr/bin/cygdynlib*-0.dll
 }
 
 src_test() {
