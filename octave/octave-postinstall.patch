@@ -1,0 +1,41 @@
+--- origsrc/octave-4.0.0/CYGWIN-PATCHES/postinstall.sh	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/postinstall.sh	2015-05-31 22:32:05.501058300 +0200
+@@ -0,0 +1,4 @@
++if [ ! -f /var/lib/octave/update.flag ]
++then
++    touch /var/lib/octave/update.flag
++fi
+--- origsrc/octave-4.0.0/CYGWIN-PATCHES/update_packages_list	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/update_packages_list	2015-05-31 22:49:05.809416600 +0200
+@@ -0,0 +1,18 @@
++##  to updated automatically the package database every time a package is 
++##  added or removed.
++##  preinstall and postremove for every forge package should create the flag
++
++# global package directory
++packages_dir=stat("/usr/share/octave/packages");
++
++# if no package directory, we remove database 
++# otherwise we rebuild
++if (isempty(packages_dir))
++	unlink("/usr/share/octave/octave_packages");	
++else
++	pkg rebuild -noauto -global
++	pkg list
++endif
++
++# removing package list rebuild flag
++unlink("/var/lib/octave/update.flag")
+--- origsrc/octave-4.0.0/CYGWIN-PATCHES/zp_octave_finish.dash	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/zp_octave_finish.dash	2015-06-01 22:37:28.000000000 +0200
+@@ -0,0 +1,10 @@
++#!/bin/dash
++# only update if flag exists
++# PATH must include lapack directory
++# octave doesn't like a closed input stream so we use "< /dev/null" 
++
++if [ -f /var/lib/octave/update.flag ]
++then
++  export PATH=/usr/bin:/bin:/usr/lib/lapack
++  /usr/bin/octave-cli  /var/lib/octave/update_packages_list < /dev/null > /var/lib/octave/update.log  2>&1
++fi

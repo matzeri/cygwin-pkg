@@ -1,19 +1,16 @@
 NAME="octave"
-VERSION=3.8.2
+VERSION="4.0.0"
 RELEASE=1
 
 CATEGORY="Math"
 DESCRIPTION="GNU Octave is a high-level language for numerical computations"
 HOMEPAGE="http://www.gnu.org/software/octave/"
 
-SRC_URI="ftp://ftp.octave.org/pub/octave/${PN}-${PV}.tar.bz2"
-
-DR="${PN}-${PV}"
 OR="${PV}"
-
+SRC_URI="ftp://ftp.octave.org/gnu/octave/${PN}-${PV}.tar.xz"
 SRC_DIR="${PN}-${PV}"
 
-PATCH_URI="rcfile.patch"
+PATCH_URI="octave-postinstall.patch"
 
 PKG_NAMES="octave octave-devel octave-doc"
 
@@ -21,7 +18,7 @@ octave_SUMMARY="GNU Octave language for numerical computations"
 octave_devel_SUMMARY="GNU Octave (development)"
 octave_doc_SUMMARY="GNU Octave:  additional docs in html and pdf"
 
-octave_CONTENTS=' usr/bin/cyg* usr/bin/oct* usr/lib/octave/'${OR}'/[eos]* usr/lib/octave/[as]*  usr/share/[aimos]* usr/share/doc/octave/[ABCINPRTe]*'
+octave_CONTENTS='etc var usr/bin/cyg* usr/bin/oct* usr/lib/octave/'${OR}'/[eos]* usr/lib/octave/[as]*  usr/share/[aimos]* usr/share/doc/octave/[ABCINPRTe]*'
 
 octave_devel_CONTENTS=' usr/bin/mk* usr/include/ usr/lib/octave/'${OR}'/lib*'
 
@@ -55,37 +52,36 @@ src_test() {
 
 src_install() {
 	cd ${B}
-	ARC=$(./libtool --features | grep "host:" |sed -e "s/host://")
+	ARC=$(./libtool --features | grep "host:" |sed -e "s/host: //")
 
 	keepdir /usr/lib/octave/${OR}/site/exec/${ARC}
 	keepdir /usr/lib/octave/${OR}/site/oct/${ARC}
-	keepdir /usr/lib/octave/api-v49+/site/exec/${ARC}
- 	keepdir /usr/lib/octave/site/oct/api-v49+/${ARC} 
+	keepdir /usr/lib/octave/api-v50+/site/exec/${ARC}
+ 	keepdir /usr/lib/octave/site/oct/api-v50+/${ARC} 
         keepdir /usr/lib/octave/${OR}/site/exec
         keepdir /usr/lib/octave/${OR}/site/oct
-        keepdir /usr/lib/octave/api-v49+/site/exec
+        keepdir /usr/lib/octave/api-v50+/site/exec
         keepdir /usr/lib/octave/site/exec/${ARC}
-        keepdir /usr/lib/octave/site/oct/api-v49+
+        keepdir /usr/lib/octave/site/oct/api-v50+
         keepdir /usr/lib/octave/site/oct/${ARC}
         keepdir /usr/share/octave/${OR}/site/m
-        keepdir /usr/share/octave/site/api-v49+/m
+        keepdir /usr/share/octave/site/api-v50+/m
         keepdir /usr/lib/octave/${OR}/site
-        keepdir /usr/lib/octave/api-v49+/site
+        keepdir /usr/lib/octave/api-v50+/site
         keepdir /usr/lib/octave/site/exec
         keepdir /usr/lib/octave/site/oct
         keepdir /usr/share/octave/${OR}/site
-        keepdir /usr/share/octave/site/api-v49+
-        keepdir /usr/lib/octave/api-v49+
+        keepdir /usr/share/octave/site/api-v50+
+        keepdir /usr/lib/octave/api-v50+
         keepdir /usr/lib/octave/site
-
 
 	cyginstall 
 	
 	insinto /usr/share/doc/${PN}/etc
-	doins ${S}/etc/README.Cygwin 
+	doins ${S}/etc/README.Cygwin
 	doins ${S}/etc/PROJECTS
 	insinto /usr/share/doc/${PN}
-	doins ${S}/NEWS 
+	doins ${S}/NEWS
 	doins ${S}/ChangeLog
 
 	dodir /usr/share/doc/${PN}/pdf
@@ -99,7 +95,7 @@ src_install() {
  
 	dodir /usr/share/doc/${PN}/html/interpreter
 	insinto /usr/share/doc/${PN}/html/interpreter
-	doins ${S}/doc/interpreter/octave.html/* 
+	doins ${S}/doc/interpreter/octave.html/*.html
 	doins ${S}/doc/interpreter/octave.html/*.png 
 
 	dodir /usr/share/doc/${PN}/html/liboctave
@@ -111,4 +107,10 @@ src_install() {
 	doins ${S}/doc/interpreter/octave.info* 
 	doins ${S}/doc/liboctave/liboctave.info
 #	doins ${S}/doc/faq/OctaveFAQ.info
+
+# 	postinstall script
+	insinto /var/lib/octave
+	doins ${S}/CYGWIN-PATCHES/update_packages_list
+	insinto /etc/postinstall
+	doins ${S}/CYGWIN-PATCHES/zp_octave_finish.dash
 }
