@@ -1,22 +1,21 @@
 NAME="octave-instrument-control"
-VERSION=0.2.0
-OV=0.2.0
-RELEASE=2
-
+VERSION=0.2.1r68
+OV=0.2.1
+RELEASE=1
 
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : instrumen-control"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge instrument-control: Low level I/O functions for interfaces. "
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/instrument-control-${PV}.tar"
 SRC_DIR="instrument-control-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_instrument_control_CONTENTS='usr/'
+octave_instrument_control_CONTENTS='etc/ usr/'
 octave_instrument_control_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}

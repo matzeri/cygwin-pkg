@@ -1,20 +1,20 @@
 NAME="octave-generate_html"
-VERSION=0.1.6
-OV=0.1.6
+VERSION=0.1.8
+OV=0.1.8
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : generate_html"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge generate_html : functions for generating HTML pages from help"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/generate_html-${PV}.tar"
 SRC_DIR="generate_html-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_generate_html_CONTENTS='usr/'
+octave_generate_html_CONTENTS='etc/ usr/'
 octave_generate_html_REQUIRES="octave"
 
 

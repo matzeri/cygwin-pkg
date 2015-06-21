@@ -1,22 +1,21 @@
 NAME="octave-specfun"
-VERSION=1.1.0r147
+VERSION=1.1.0r153
 OV=1.1.0
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : specfun"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge specfun: Special functions including ellipitic"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/specfun-${PV}.tar"
 SRC_DIR="specfun-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_specfun_CONTENTS='usr/'
-octave_specfun_REQUIRES=""
-
+octave_specfun_CONTENTS='etc/ usr/'
+octave_specfun_REQUIRES="octave"
 
 src_compile() {
         cd ${D}

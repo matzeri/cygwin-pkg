@@ -1,22 +1,21 @@
 NAME="octave-ocs"
 VERSION=0.1.3r12205
 OV=0.1.3
-RELEASE=1
-
+RELEASE=2
 
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : ocs"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge ocs: solving DC and transient electrical circuit"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/ocs-${PV}.tar"
 SRC_DIR="ocs-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_ocs_CONTENTS='usr/'
+octave_ocs_CONTENTS='etc/ usr/'
 octave_ocs_REQUIRES="octave octave-odepkg"
-
 
 src_compile() {
         cd ${D}

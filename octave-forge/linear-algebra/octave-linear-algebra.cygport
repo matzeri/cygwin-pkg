@@ -1,22 +1,21 @@
 NAME="octave-linear-algebra"
-VERSION=2.2.0r164
-OV=2.2.0
+VERSION=2.2.2
+OV=2.2.2
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : linear-algebra"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge linear-algebra: linear algebra code, SVD and matrix "
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/linear-algebra-${PV}.tar"
 SRC_DIR="linear-algebra-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_linear_algebra_CONTENTS='usr/lib/octave usr/share'
+octave_linear_algebra_CONTENTS='etc/ usr'
 octave_linear_algebra_REQUIRES="octave-general"
-
 
 src_compile() {
         cd ${D}

@@ -1,22 +1,22 @@
 NAME="octave-control"
-VERSION=2.6.5
-OV=2.6.5
+VERSION=2.8.2
+OV=2.8.2
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : control"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
-HOMEPAGE="http://octave.sourceforge.net/"
+SUMMARY="Octave-Forge control: Control System Design (CACSD) Tools for Octave"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 
+HOMEPAGE="http://octave.sourceforge.net/"
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/control-${PV}.tar"
 SRC_DIR="control-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_control_CONTENTS='usr/'
+octave_control_CONTENTS='etc/ usr/'
 octave_control_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}

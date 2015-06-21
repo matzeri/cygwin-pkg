@@ -1,22 +1,21 @@
 NAME="octave-miscellaneous"
 VERSION=1.2.1
 OV=1.2.1
-RELEASE=1
-
+RELEASE=2
 
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : miscellaneous"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge miscellaneous: Miscellaneous tools"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/miscellaneous-${PV}.tar"
 SRC_DIR="miscellaneous-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_miscellaneous_CONTENTS='usr/lib/octave usr/share'
+octave_miscellaneous_CONTENTS='etc/ usr/'
 octave_miscellaneous_REQUIRES="octave-general"
-
 
 src_compile() {
         cd ${D}

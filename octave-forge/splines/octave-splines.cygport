@@ -1,22 +1,21 @@
 NAME="octave-splines"
-VERSION=1.2.7
-OV=1.2.7
+VERSION=1.2.8
+OV=1.2.8
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : splines"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge splines: Additional spline functions."
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/splines-${PV}.tar"
 SRC_DIR="splines-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_splines_CONTENTS='usr/'
+octave_splines_CONTENTS='etc/ usr/'
 octave_splines_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}

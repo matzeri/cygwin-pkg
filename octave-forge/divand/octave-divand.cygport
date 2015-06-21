@@ -1,21 +1,22 @@
 NAME="octave-divand"
 VERSION=1.1.2
 OV=1.1.2
-RELEASE=1
+RELEASE=2
 
 
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : divand "
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge divand: n-dimensional variational analysis"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/divand-${PV}.tar"
 SRC_DIR="divand-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_control_CONTENTS='usr/'
-octave_control_REQUIRES="octave"
+octave_divand_CONTENTS='etc/ usr/'
+octave_divand_REQUIRES="octave"
 
 
 src_compile() {

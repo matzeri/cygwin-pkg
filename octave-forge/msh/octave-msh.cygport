@@ -1,22 +1,21 @@
 NAME="octave-msh"
 VERSION=1.0.10
 OV=1.0.10
-RELEASE=1
-
+RELEASE=2
 
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : msh"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge msh: meshes for Finite Element or Finite Volume"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/msh-${PV}.tar"
 SRC_DIR="msh-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_msh_CONTENTS='usr/'
+octave_msh_CONTENTS='etc/ usr/'
 octave_msh_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}

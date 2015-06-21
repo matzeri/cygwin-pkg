@@ -1,22 +1,21 @@
 NAME="octave-geometry"
-VERSION=1.7.0r314
-OV=1.7.0
+VERSION=2.0.0
+OV=2.0.0
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : geometry"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge geometry: Library for geometric computing"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/geometry-${PV}.tar"
 SRC_DIR="geometry-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_geometry_CONTENTS='usr/lib/octave usr/share'
-octave_geometry_REQUIRES="octave-general"
-
+octave_geometry_CONTENTS='etc usr'
+octave_geometry_REQUIRES="octave"
 
 src_compile() {
         cd ${D}

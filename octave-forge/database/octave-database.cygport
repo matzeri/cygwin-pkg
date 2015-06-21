@@ -1,20 +1,21 @@
 NAME="octave-database"
-VERSION=2.3.0
-OV=2.3.0
+VERSION=2.3.2
+OV=2.3.2
 RELEASE=1
 
 
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : database"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge database: Interface to SQL databases"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/database-${PV}.tar"
 SRC_DIR="database-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_database_CONTENTS='usr/'
+octave_database_CONTENTS='etc/ usr/'
 octave_database_REQUIRES="octave"
 
 

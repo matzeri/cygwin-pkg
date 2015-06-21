@@ -1,22 +1,21 @@
 NAME="octave-parallel"
-VERSION=2.2.0
-OV=2.2.0
+VERSION=2.2.1
+OV=2.2.1
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : parallel"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge parallel: Parallel execution package"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/parallel-${PV}.tar"
 SRC_DIR="parallel-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_parallel_CONTENTS='usr/'
-octave_parallel_REQUIRES=""
-
+octave_parallel_CONTENTS='etc/ usr/'
+octave_parallel_REQUIRES="octave"
 
 src_compile() {
         cd ${D}

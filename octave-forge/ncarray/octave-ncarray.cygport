@@ -1,22 +1,21 @@
 NAME="octave-ncarray"
-VERSION=1.0.2
-OV=1.0.2
+VERSION=1.0.3
+OV=1.0.3
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : ncarray"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge ncarray: Access a single or a collection of NetCDF files"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/ncarray-${PV}.tar"
 SRC_DIR="ncarray-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_ncarray_CONTENTS='usr/'
-octave_ncarray_REQUIRES="octave octave-netcdf"
-
+octave_ncarray_CONTENTS='etc/ usr/'
+octave_ncarray_REQUIRES="octave octave-netcdf octave-statistics"
 
 src_compile() {
         cd ${D}

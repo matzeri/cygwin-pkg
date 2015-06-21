@@ -1,22 +1,21 @@
 NAME="octave-secs3d"
 VERSION=0.0.1r11495
 OV=0.0.1
-RELEASE=1
-
+RELEASE=2
 
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : secs3d"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge secs3d: 3D Drift-Diffusion simulator for semiconductor"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/secs3d-${PV}.tar"
 SRC_DIR="secs3d-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_secs3d_CONTENTS='usr/'
+octave_secs3d_CONTENTS='etc/ usr/'
 octave_secs3d_REQUIRES="octave octave-bim octave-fpl"
-
 
 src_compile() {
         cd ${D}

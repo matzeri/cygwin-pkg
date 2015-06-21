@@ -1,22 +1,21 @@
 NAME="octave-secs2d"
-VERSION=0.0.9r12205
+VERSION=0.0.9r12205a
 OV=0.0.9
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : secs2d"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge secs2D: 2D Drift-Diffusion simulator for semiconductor"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/secs2d-${PV}.tar"
 SRC_DIR="secs2d-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_secs2d_CONTENTS='usr/'
-octave_secs2d_REQUIRES="octave"
-
+octave_secs2d_CONTENTS='etc usr/'
+octave_secs2d_REQUIRES="octave octave-bim"
 
 src_compile() {
         cd ${D}

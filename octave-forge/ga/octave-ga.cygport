@@ -1,22 +1,21 @@
 NAME="octave-ga"
 VERSION=0.10.0r147
 OV=0.10.0
-RELEASE=1
-
+RELEASE=2
 
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : ga"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge ga: Genetic optimization code "
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/ga-${PV}.tar"
 SRC_DIR="ga-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_ga_CONTENTS='usr/'
+octave_ga_CONTENTS='etc/ usr/'
 octave_ga_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}

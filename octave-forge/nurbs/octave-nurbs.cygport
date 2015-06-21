@@ -1,28 +1,28 @@
 NAME="octave-nurbs"
-VERSION=1.3.8r12287
-OV=1.3.8
+VERSION=1.3.10r12827
+OV=1.3.10
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : nurbs"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge nurbs: manipulation of Non-Uniform Rational B-Splines"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/nurbs-${PV}.tar"
 SRC_DIR="nurbs-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_nurbs_CONTENTS='usr/'
+octave_nurbs_CONTENTS='etc/ usr/'
 octave_nurbs_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}
         F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
+	export DL_LDFLAGS="-shared -fopenmp"
 
         octave-cli --eval "
         echo on
@@ -45,6 +45,7 @@ src_install() {
         F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
+	export DL_LDFLAGS="-shared -fopenmp"
 
 	octave-cli --eval "
 	echo on 

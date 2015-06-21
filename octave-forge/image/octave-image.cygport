@@ -1,22 +1,21 @@
 NAME="octave-image"
-VERSION=2.2.1
-OV=2.2.1
+VERSION=2.4.0
+OV=2.4.0
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : image"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge image: provides functions for processing images"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/image-${PV}.tar"
 SRC_DIR="image-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_image_CONTENTS='usr/'
-octave_image_REQUIRES="octave octave-signal octave-general"
-
+octave_image_CONTENTS='etc/ usr/'
+octave_image_REQUIRES="octave"
 
 src_compile() {
         cd ${D}

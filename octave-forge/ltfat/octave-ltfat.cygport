@@ -1,22 +1,21 @@
 NAME="octave-ltfat"
-VERSION=1.4.3a
-OV=1.4.3
+VERSION=2.1.0
+OV=2.1.0
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : ltfat"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge ltfat: Large Time/Frequency Analysis Toolbox"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/ltfat-${PV}.tar"
 SRC_DIR="ltfat-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_ltfat_CONTENTS='usr/'
+octave_ltfat_CONTENTS='etc/ usr/'
 octave_ltfat_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}

@@ -1,22 +1,21 @@
 NAME="octave-optim"
-VERSION=1.4.0
-OV=1.4.0
+VERSION=1.4.1
+OV=1.4.1
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : optim"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge optim: Non-linear optimization toolkit. "
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/optim-${PV}.tar"
 SRC_DIR="optim-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_optim_CONTENTS='usr/'
-octave_optim_REQUIRES="octave-miscellaneous octave-struct  octave-parallel"
-
+octave_optim_CONTENTS='etc/ usr/'
+octave_optim_REQUIRES="octave-miscellaneous octave-struct"
 
 src_compile() {
         cd ${D}

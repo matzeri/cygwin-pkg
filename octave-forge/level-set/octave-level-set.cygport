@@ -1,22 +1,21 @@
-NAME="octave-physicalconstants"
-VERSION=2.0.0
-OV=2.0.0
+NAME="octave-level-set"
+VERSION=0.3.0r189
+OV=0.3.0
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : physicalconstants"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge level-set: time-evolution of the level-set equation"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-
-SRC_URI="http://matzeri.altervista.org/octave-forge/physicalconstants-${PV}.tar"
-SRC_DIR="physicalconstants-${PV}"
+SRC_URI="http://matzeri.altervista.org/octave-forge/level-set-${PV}.tar"
+SRC_DIR="level-set-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_physicalconstants_CONTENTS='usr/'
-octave_physicalconstants_REQUIRES="octave"
-
+octave_level_set_CONTENTS='etc/ usr/'
+octave_level_set_REQUIRES="octave"
 
 src_compile() {
         cd ${D}
@@ -31,7 +30,7 @@ src_compile() {
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
 	pkg local_list  ${B}/octave_packages	
 	pkg global_list  ${B}/octave_packages	
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/physicalconstants-${PV}.tar.gz
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/level-set-${PV}.tar.gz
 "
 }
 
@@ -53,7 +52,7 @@ src_install() {
 	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
 	pkg local_list  ${B}/octave_packages	
 	pkg global_list  ${B}/octave_packages	
-        pkg install -nodeps -noauto -global -verbose  ${B}/physicalconstants-${OV}.tar.gz 
+        pkg install -nodeps -noauto -global -verbose  ${B}/level-set-${OV}.tar.gz 
 	pkg list
 " 
 

@@ -1,28 +1,29 @@
-NAME="octave-nan"
-VERSION=2.7.6r12813
-OV=2.7.6
+NAME="octave-octproj"
+VERSION=1.1.2a
+OV=1.1.2
 RELEASE=1
 
 CATEGORY="Math"
-SUMMARY="Octave-Forge nan: statistics and machine learning toolbox"
+SUMMARY="Octave-Forge octproj: cartographic projections transformations PROJ.4." 
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/nan-${PV}.tar"
-SRC_DIR="nan-${PV}"
+SRC_URI="http://matzeri.altervista.org/octave-forge/octproj-${PV}.tar"
+SRC_DIR="octproj-${PV}"
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_nan_CONTENTS='etc/ usr/'
-octave_nan_REQUIRES="octave"
+octave_octproj_CONTENTS='etc/ usr/'
+octave_octproj_REQUIRES="octave"
 
 src_compile() {
         cd ${D}
         F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        export DL_LDFLAGS="-shared -fopenmp"
+        export DL_LDFLAGS="-shared -fopenmp  -Wl,--allow-multiple-definition"
+
 
         octave-cli --eval "
         echo on
@@ -31,7 +32,7 @@ src_compile() {
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
 	pkg local_list  ${B}/octave_packages	
 	pkg global_list  ${B}/octave_packages	
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/nan-${PV}.tar.gz
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/octproj-${PV}.tar.gz
 "
 }
 
@@ -45,7 +46,8 @@ src_install() {
         F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        export DL_LDFLAGS="-shared -fopenmp"
+	export DL_LDFLAGS="-shared -fopenmp  -Wl,--allow-multiple-definition"
+
 
 	octave-cli --eval "
 	echo on 
@@ -54,7 +56,7 @@ src_install() {
 	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
 	pkg local_list  ${B}/octave_packages	
 	pkg global_list  ${B}/octave_packages	
-        pkg install -nodeps -noauto -global -verbose  ${B}/nan-${OV}.tar.gz 
+        pkg install -nodeps -noauto -global -verbose  ${B}/octproj-${OV}.tar.gz 
 	pkg list
 " 
 

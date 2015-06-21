@@ -1,20 +1,20 @@
 NAME="octave-io"
-VERSION=2.2.3
-OV=2.2.3
+VERSION=2.2.7r879
+OV=2.2.7
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : io"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge io: Input/Output in external formats."  
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/io-${PV}.tar"
 SRC_DIR="io-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_io_CONTENTS='usr/'
+octave_io_CONTENTS='etc/ usr/'
 octave_io_REQUIRES="octave"
 
 

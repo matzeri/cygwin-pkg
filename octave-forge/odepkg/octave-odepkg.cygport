@@ -1,22 +1,21 @@
 NAME="octave-odepkg"
-VERSION=0.8.4r354
-OV=0.8.4
+VERSION=0.8.5
+OV=0.8.5
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : odepkg"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge odepkg: solving ordinary differential equations"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/odepkg-${PV}.tar"
 SRC_DIR="odepkg-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_odepkg_CONTENTS='usr/'
+octave_odepkg_CONTENTS='etc/ usr/'
 octave_odepkg_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}

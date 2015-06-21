@@ -1,22 +1,21 @@
 NAME="octave-financial"
-VERSION=0.4.0r124
+VERSION=0.4.0r148
 OV=0.4.0
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : financial"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge financial: Financial manipulation, plotting and date tools."
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/financial-${PV}.tar"
 SRC_DIR="financial-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_financial_CONTENTS='usr/'
+octave_financial_CONTENTS='etc/ usr/'
 octave_financial_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}

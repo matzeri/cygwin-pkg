@@ -1,22 +1,21 @@
 NAME="octave-fuzzy-logic-toolkit"
 VERSION=0.4.5
 OV=0.4.5
-RELEASE=1
-
+RELEASE=2
 
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : fuzzy-logic-toolkit"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge fuzzy-logic-toolkit: fuzzy logic toolkit for Octave."
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/fuzzy-logic-toolkit-${PV}.tar"
 SRC_DIR="fuzzy-logic-toolkit-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_fuzzy_logic_toolkit_CONTENTS='usr/'
+octave_fuzzy_logic_toolkit_CONTENTS='etc/ usr/'
 octave_fuzzy_logic_toolkit_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}

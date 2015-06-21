@@ -1,22 +1,21 @@
 NAME="octave-communications"
-VERSION=1.2.0
-OV=1.2.0
+VERSION=1.2.1
+OV=1.2.1
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : communications"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge communications: Digital Communications"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/communications-${PV}.tar"
 SRC_DIR="communications-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_communications_CONTENTS='usr/'
+octave_communications_CONTENTS='etc/ usr/'
 octave_communications_REQUIRES="octave octave-signal"
-
 
 src_compile() {
         cd ${D}

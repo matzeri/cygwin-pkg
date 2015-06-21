@@ -1,22 +1,21 @@
 NAME="octave-secs1d"
-VERSION=0.1.0r12375
+VERSION=0.1.0r12690
 OV=0.1.0
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : secs1d"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge secs1D: 1D Drift-Diffusion simulator for semiconductor"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/secs1d-${PV}.tar"
 SRC_DIR="secs1d-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_secs1d_CONTENTS='usr/'
+octave_secs1d_CONTENTS='etc/ usr/'
 octave_secs1d_REQUIRES="octave octave-bim"
-
 
 src_compile() {
         cd ${D}

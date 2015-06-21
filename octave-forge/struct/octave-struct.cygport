@@ -1,22 +1,21 @@
 NAME="octave-struct"
-VERSION=1.0.10r92
-OV=1.0.10
+VERSION=1.0.11
+OV=1.0.11
 RELEASE=1
 
-
 CATEGORY="Math"
-DESCRIPTION="Octave-Forge package : struct"
-SUMMARY="Contributed functions for GNU Octave from octave.sourceforge.net"
+SUMMARY="Octave-Forge struct:aAdditional Structure manipulations functions."
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/struct-${PV}.tar"
 SRC_DIR="struct-${PV}"
+PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_struct_CONTENTS='usr/'
-octave_struct_REQUIRES=""
-
+octave_struct_CONTENTS='etc/ usr/'
+octave_struct_REQUIRES="octave"
 
 src_compile() {
         cd ${D}
