@@ -1,22 +1,21 @@
-NAME="octave-io"
-VERSION=2.2.8
-OV=2.2.8
+NAME="octave-stk"
+VERSION=2.3.1
+OV=2.3.1
 RELEASE=1
 
 CATEGORY="Math"
-SUMMARY="Octave-Forge io: Input/Output in external formats."  
+SUMMARY="Octave-Forge stk: Small Toolbox for Kriging"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/io-${PV}.tar"
-SRC_DIR="io-${PV}"
+SRC_URI="http://matzeri.altervista.org/octave-forge/stk-${PV}.tar"
+SRC_DIR="stk-${PV}"
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_io_CONTENTS='etc/ usr/'
-octave_io_REQUIRES="octave"
-
+octave_stk_CONTENTS='etc/ usr/'
+octave_stk_REQUIRES="octave"
 
 src_compile() {
         cd ${D}
@@ -31,7 +30,7 @@ src_compile() {
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
 	pkg local_list  ${B}/octave_packages	
 	pkg global_list  ${B}/octave_packages	
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/io-${PV}.tar.gz
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/stk-${PV}.tar.gz
 "
 }
 
@@ -53,8 +52,9 @@ src_install() {
 	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
 	pkg local_list  ${B}/octave_packages	
 	pkg global_list  ${B}/octave_packages	
-        pkg install -nodeps -noauto -global -verbose  ${B}/io-${OV}.tar.gz 
+        pkg install -nodeps -noauto -global -verbose  ${B}/stk-${OV}.tar.gz 
 	pkg list
 " 
+	find ${D}/usr/lib/octave/packages/ -name "PKG_*" -exec rm {}  \;
 
 }

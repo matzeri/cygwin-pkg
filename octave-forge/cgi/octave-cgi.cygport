@@ -1,15 +1,13 @@
 NAME="octave-cgi"
-VERSION=0.1.0r12663
-OV=0.1.0
+VERSION=0.1.1
+OV=0.1.1
 RELEASE=1
-
 
 CATEGORY="Math"
 SUMMARY="Octave-Forge cgi: Common Gatway Interface for Octave"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
-
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/cgi-${PV}.tar"
 SRC_DIR="cgi-${PV}"
@@ -18,7 +16,6 @@ PATCH_URI="do-octave-update.patch"
 PKG_NAMES="${PN}"
 octave_cgi_CONTENTS='etc/ usr/'
 octave_cgi_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}
