@@ -1,0 +1,43 @@
+NAME="xdelta"
+VERSION="3.0.9"
+RELEASE=1
+
+CATEGORY="Utils"
+SUMMARY="open-source binary diff, delta/differential compression tools, VCDIFF/RFC 3284 delta compression"
+DESCRIPTION="${SUMMARY}"
+HOMEPAGE="http://xdelta.org/"
+
+SRC_URI=".https://github.com/jmacd/xdelta-devel/releases/download/v3.0.9/xdelta3-3.0.9.tar.xz"
+SRC_DIR="xdelta3-${PV}"
+
+PKG_NAMES="xdelta "
+
+xdelta_CONTENTS="usr"
+
+KEEP_LA_FILES="none"
+
+src_compile() {
+        cd ${S}
+        cygautoreconf
+        cd ${B}
+        cygconf 
+        cygmake 
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	cd ${D}/usr/bin
+	ln -s xdelta3.exe xdelta
+	inform "xdelta3.1 will be gzipped on post install" 
+	cd ${D}/usr/share/man/man1
+	ln -s xdelta3.1.gz xdelta.1.gz
+}
+
+src_test() {
+        cd ${B}
+	inform " Expected Failure :"
+	inform " ... non-failures 46; expected 54 failed: incorrect: XD3_INTERNAL"
+        ./xdelta3 test
+}
+
