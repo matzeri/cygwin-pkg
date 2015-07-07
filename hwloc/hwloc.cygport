@@ -1,0 +1,35 @@
+NAME="hwloc"
+VERSION="1.11.0"
+RELEASE=1
+
+CATEGORY="Utils"
+SUMMARY="Portable Hardware Locality (hwloc)"
+DESCRIPTION="The Portable Hardware Locality (hwloc) software package provides a portable abstraction of the hierarchical topology of modern architectures"
+HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"
+
+SRC_URI="http://www.open-mpi.org/software/hwloc/v1.11/downloads/hwloc-${PV}.tar.bz2"
+
+PKG_NAMES="hwloc libhwloc-devel libhwloc5"
+libhwloc_devel_SUMMARY="${SUMMARY} - devel"
+libhwloc5_SUMMARY="${SUMMARY} - runtime"
+
+hwloc_CONTENTS="--exclude=usr/bin/cyg*dll usr/bin usr/share/doc usr/share/man/man1"
+libhwloc_devel_CONTENTS="usr/include usr/lib usr/share/hwloc
+usr/share/man/man3 usr/share/man/man7"
+libhwloc5_CONTENTS="usr/bin/cyghwloc-5.dll"
+
+KEEP_LA_FILES="none"
+
+src_compile() {
+        cd ${S}
+        cygautoreconf
+        cd ${B}
+        cygconf --disable-cairo
+        cygmake 
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	mv ${D}/usr/*.txt ${D}/usr/share/doc/hwloc
+}
