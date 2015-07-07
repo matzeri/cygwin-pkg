@@ -1,0 +1,45 @@
+NAME="surf"
+VERSION="1.0.6"
+RELEASE=1
+
+CATEGORY="Libs Math"
+DESCRIPTION="surf is a tool to visualize some real algebraic geometry: plane algebraic curves, algebraic surfaces and hyperplane sections of surfaces. surf is script driven and has (optionally) a nifty GUI using the Gtk widget set. "
+SUMMARY="surf : visualizer for algebraic geometry"
+
+HOMEPAGE="http://surf.sourceforge.net/"
+SRC_URI="http://sourceforge.net/projects/surf/files/surf/1.0.6/surf-1.0.6.tar.gz"
+# PATCH_URI="cddlib-undefined.patch"
+
+PKG_NAMES="surf"
+
+surf_CONTENTS="usr/bin/*.exe usr/share/"
+surf_SUMMARY="${SUMMARY} - binary"
+
+src_compile()
+{
+  cd ${S}
+  cygautoreconf
+  cd ${B}
+  cygconf --disable-cups
+  cygmake
+}
+
+src_install()
+{
+  cd ${B}
+  cyginstall
+  mkdir -p ${D}/usr/share/doc/surf
+# adding examples without the .svn directory
+  cp -vr ${S}/examples ${D}/usr/share/doc/surf
+  cd ${D}/usr/share/doc/surf
+  for i in $(find examples -name ".svn"); do rm -r $i ; done
+}
+
+
+src_test() {
+  cd ${B}
+  cygmake check
+  
+}
+
+
