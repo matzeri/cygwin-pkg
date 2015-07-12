@@ -1,0 +1,22 @@
+--- Makefile.cygwin	1970-01-01 01:00:00.000000000 +0100
++++ Makefile.cygwin	2015-07-09 17:48:36.480348300 +0200
+@@ -0,0 +1,19 @@
++PACKAGE?=connect-proxy
++PACKAGE_ALT?=connect
++INSTALL_DIR?=${DESTDIR}/usr
++OBJS?=connect.o
++
++all default: ${PACKAGE}
++
++install: ${PACKAGE}
++	mkdir -p ${INSTALL_DIR}/bin/
++	mkdir -p ${INSTALL_DIR}/share/man/man1/
++	install ${PACKAGE} ${INSTALL_DIR}/bin/
++	install ${PACKAGE}.1 ${INSTALL_DIR}/share/man/man1
++	gzip ${INSTALL_DIR}/share/man/man1/${PACKAGE}.1
++
++${PACKAGE}: ${OBJS}
++	${CC} -o $@ $^ ${LDFLAGS}
++
++clean:
++	${RM} ${PACKAGE}.exe connect.o *~ ${OBJS} || echo "# $@: $^"

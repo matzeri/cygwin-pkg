@@ -1,0 +1,146 @@
+--- connect-proxy.1	1970-01-01 03:00:00.000000000 +0300
++++ connect-proxy.1	2010-04-17 11:11:39.140625000 +0400
+@@ -0,0 +1,143 @@
++.TH connect-proxy 1 2010/04/17 "connect-proxy 101-1"
++.SH NAME
++connect-proxy \- SSH Proxy Command
++.SH SYNOPSIS
++.B connect-proxy [-dnhst45] [-R
++.I resolve
++.B ] [-p
++.I local-port
++.B ] [-w
++.I sec
++.B ]
++.br
++.in +8
++.B [-H 
++.I [user@]proxy-server[:port]
++.B ]
++.br
++.B [-S
++.I [user@]socks-server[:port]
++.B ]
++.br
++.B [-T 
++.I socks-server[:port]
++.B ]
++.br
++.B [-c
++.I telnet-proxy-command
++.B ]
++.br
++.I host port
++.br
++.in -8
++.SH DESCRIPTION
++.B connect-proxy
++is the simple relaying command to make network connection via SOCKS
++or http proxy. It is mainly intended to be used as a proxy command
++of OpenSSH.
++.br
++.SH OPTIONS
++.I host
++and
++.I port
++are target hostname and port number to connect.
++.br
++.br
++.IP "-H"
++Specifies hostname and port number of a http proxy server.
++If port is omitted, 80 is used.
++.br
++.br
++.IP "-h"
++Use http proxy server specified in HTTP_PROXY environment variable.
++.br
++.br
++.IP "-S"
++Specifies hostname and port number of SOCKS server.
++Like -H option, port number can be omitted and the default is 1080.
++.br
++.br
++.IP "-s"
++Use SOCKS proxy server specified in SOCKS5_SERVER or SOCKS4_SERVER
++environment variable (depending on -4 or -5).
++.br
++.br
++.IP "-T"
++Secifies hostname and port number of a telnet proxy.
++The port number can be omitted and default is 23.
++.br
++.br
++.IP "-t"
++Use a telnet proxy specified in TELNET_PROXY environment variable.
++.br
++.br
++.IP "-4 or -5"
++Specifies SOCKS protocol version. It is valid only with -s or -S.
++Default is -5 (protocol version 5).
++.br
++.br
++.IP "-R"
++Method to resolve hostname. 3 keywords (local, remote, both)
++or a dot-notation IP address are allowed. Keyword both means:
++"Try local first, then remote". If a dot-notation IP address
++is specified, that host will be used as a nameserver (UNIX only).
++Default is remote for SOCKS5 or local for others.
++On SOCKS4 protocol, remote resolving method (remote and both) uses
++protocol version 4a.
++.br
++.br
++.IP "-p"
++Listen to a local TCP port and make relaying with it
++instead of using standard input and output.
++.br
++.br
++.IP "-w"
++Timeout in seconds on making connection.
++.br
++.br
++.IP "-c"
++Request string against telnet proxy server.
++The special word %h and %p in this string are replaced with hostname
++and port number before sending. For telnet proxy by DeleGate, both 
++.B telnet %h %p
++and
++.B %h:%p
++are acceptable. Default is 
++.B telnet %h %p.
++.br
++.br
++.IP "-a"
++Specifies authentication methods separated by comma.
++Currently userpass and none are supported. Default is userpass.
++You can also specifying this parameter using environment
++variable SOCKS5_AUTH.
++.br
++.br
++.IP "-d"
++Used for debugging. If you fail to connect, use this and check request
++to and response from the server.
++.br
++.br
++.SH "USAGE"
++Modify your \fI~/.ssh/config\fR file to use connect command as proxy command.
++For example, if SOCKS server is running on firewall host socks.local.net
++with port 1080, you can add \fBProxyCommand\fR option in \fI~/.ssh/config\fR,
++like this:
++.PP
++.Vb 2
++\&    Host remote.outside.net
++.br
++\&        ProxyCommand connect -S socks.local.net %h %p
++.Ve
++.PP
++%h and %p will be replaced on invoking proxy command with target hostname
++and port specified to SSH command.
++.br
++.br
++
++
++.SH "SEE ALSO"
++.BR ssh (1)
++.BR ssh_config (5)
++.PP
++.I http://bitbucket.org/gotoh/connect

@@ -1,0 +1,31 @@
+NAME="connect-proxy"
+VERSION="1.104"
+RELEASE=1
+
+CATEGORY="Net"
+
+SUMMARY="SSH Proxy Command"
+DESCRIPTION="SSH Proxy Command:simple relaying command to make network connection via SOCKS and https proxy"
+HOMEPAGE="http://bitbucket.org/gotoh/connect/"
+SRC_URI="http://bitbucket.org/gotoh/connect/get/tip.tar.bz2"
+SRC_DIR="gotoh-connect-dc5de2343be3"
+PATCH_URI="connect-proxy-man.patch
+connect-proxy-Makefile.patch"
+
+DOCS="doc/*"
+
+src_compile() {
+	cd ${S}
+	lndirs
+	cd ${B}
+	cygmake -f Makefile.cygwin
+}
+
+src_test() {
+	:
+}
+
+src_install() {
+	cd ${B}
+	cyginstall -f Makefile.cygwin
+}
