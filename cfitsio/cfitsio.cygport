@@ -1,5 +1,5 @@
 NAME="cfitsio"
-VERSION=3.37
+VERSION=3.370
 RELEASE=1
 
 CATEGORY="Graphics"
