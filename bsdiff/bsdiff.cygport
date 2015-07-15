@@ -1,0 +1,31 @@
+NAME="bsdiff"
+VERSION="4.3"
+RELEASE=5
+
+CATEGORY="Utils"
+
+SUMMARY="tools for building and applying patches to binary files"
+DESCRIPTION="bsdiff and bspatch are tools for building and applying patches to binary files"
+HOMEPAGE="http://www.daemonology.net/bsdiff/"
+SRC_URI="http://www.daemonology.net/bsdiff/${PN}-${PV}.tar.gz"
+SRC_DIR="${PN}-${PV}"
+PATCH_URI="bsdiff-Makefile.patch
+O_BINARY.patch"
+
+DOCS="doc/*"
+
+src_compile() {
+	cd ${S}
+	lndirs
+	cd ${B}
+	cygmake 
+}
+
+src_test() {
+	:
+}
+
+src_install() {
+	cd ${B}
+	cyginstall 
+}
