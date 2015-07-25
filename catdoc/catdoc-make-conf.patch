@@ -1,0 +1,176 @@
+--- origsrc/catdoc-0.94.2/acconfig.h	2006-02-24 11:44:06.000000000 -0600
++++ src/catdoc-0.94.2/acconfig.h	1969-12-31 18:00:00.000000000 -0600
+@@ -1,2 +0,0 @@
+-#undef VERSION
+-#undef PACKAGE
+--- origsrc/catdoc-0.94.2/charsets/Makefile.in	2006-02-24 11:44:06.000000000 -0600
++++ src/catdoc-0.94.2/charsets/Makefile.in	2012-11-05 10:25:30.750000000 -0600
+@@ -5,7 +5,7 @@ srcdir = @srcdir@
+ top_srcdir = @top_srcdir@
+ VPATH = @srcdir@
+ prefix = @prefix@
+-installroot = @installroot@
++DESTDIR = @DESTDIR@
+ exec_prefix = @exec_prefix@
+ 
+ bindir = @bindir@
+@@ -28,16 +28,16 @@ LIB_DIR=@datadir@/catdoc
+ all: @charsetcheck@
+ clean:
+ install: install-dirs install-spc install-charsets
+-install-spc: tex.spc ascii.spc tex.rpl ascii.rpl
+-	    $(INSTALL) -m 644 ascii.spc $(installroot)$(LIB_DIR)/ascii$(SPEC_EXT) 
+-	    $(INSTALL) -m 644 tex.spc $(installroot)$(LIB_DIR)/tex$(SPEC_EXT) 
+-	    $(INSTALL) -m 644 ascii.rpl $(installroot)$(LIB_DIR)/ascii$(REPL_EXT)
+-	    $(INSTALL) -m 644 tex.rpl $(installroot)$(LIB_DIR)/tex$(REPL_EXT)
++install-spc: $(srcdir)/tex.spc $(srcdir)/ascii.spc $(srcdir)/tex.rpl $(srcdir)/ascii.rpl
++	    $(INSTALL) -m 644 ascii.spc $(DESTDIR)$(LIB_DIR)/ascii$(SPEC_EXT) 
++	    $(INSTALL) -m 644 tex.spc $(DESTDIR)$(LIB_DIR)/tex$(SPEC_EXT) 
++	    $(INSTALL) -m 644 ascii.rpl $(DESTDIR)$(LIB_DIR)/ascii$(REPL_EXT)
++	    $(INSTALL) -m 644 tex.rpl $(DESTDIR)$(LIB_DIR)/tex$(REPL_EXT)
+ install-charsets:
+-	for i in *.txt; do\
+-	   $(INSTALL) -m 0644 $$i $(installroot)$(LIB_DIR);\
++	for i in $(srcdir)/*.txt; do\
++	   $(INSTALL) -m 0644 $$i $(DESTDIR)$(LIB_DIR);\
+ 	done
+ install-dirs:
+-	../mkinstalldirs $(installroot)$(LIB_DIR)
++	$(top_srcdir)/mkinstalldirs $(DESTDIR)$(LIB_DIR)
+ distclean:
+ 	rm Makefile
+--- origsrc/catdoc-0.94.2/configure.in	2006-02-25 09:28:12.000000000 -0600
++++ src/catdoc-0.94.2/configure.in	2012-11-05 10:45:16.890625000 -0600
+@@ -1,5 +1,5 @@
+ dnl Process this file with autoconf to produce a configure script.
+-AC_INIT(acconfig.h)
++AC_INIT([catdoc],[0.94.2],[cygwin@cygwin.com])
+ catdoc_version=0.94.2
+ dnl Checks for programs.
+ AC_PROG_CC
+@@ -38,9 +38,6 @@ fi
+ fi
+ ])
+ fi
+-AC_ARG_WITH(install-root,[  --with-install-root=path
+-			   allows to install catdoc into other directory 
+-			   than compilied-in path points to],installroot=$withval,)
+ replsuffix=.replchars
+ specsuffix=.specchars
+ targetcharset=koi8-r
+@@ -58,7 +55,7 @@ then
+  charsetcheck=""
+ fi]) 
+ test -z "$manext" && manext=.1
+-test -z "$man1dir" && man1dir=\${prefix}/man/man1
++test -z "$man1dir" && man1dir=\${prefix}/share/man/man1
+ if test -n "$WISH"; then
+ AC_ARG_ENABLE(wordview,[  --disable-wordview	   Do not install tcl-tk
+ 						wrapper],[:],)
+@@ -123,6 +120,7 @@ AC_SUBST(charsetcheck)
+ AC_SUBST(installroot)
+ AC_SUBST(catdoc_version)
+ AC_SUBST(CFLAGS)
+-AC_SUBST(WORDS_BIGENDIAN DEFS)
++AC_SUBST(WORDS_BIGENDIAN)
++AC_SUBST(DEFS)
+ AC_CONFIG_HEADER(src/config.h)
+ AC_OUTPUT(doc/Makefile charsets/Makefile src/Makefile Makefile doc/catdoc.1 doc/xls2csv.1 doc/wordview.1 doc/catppt.1)
+--- origsrc/catdoc-0.94.2/doc/Makefile.in	2006-02-25 10:08:27.000000000 -0600
++++ src/catdoc-0.94.2/doc/Makefile.in	2012-11-05 10:25:30.765625000 -0600
+@@ -1,7 +1,7 @@
+ 
+ # Your C compilier and flags
+ SHELL = /bin/sh
+-installroot=@installroot@
++DESTDIR=@DESTDIR@
+ srcdir = @srcdir@
+ top_srcdir = @top_srcdir@
+ INSTALL = @INSTALL@
+@@ -25,13 +25,13 @@ clean:
+ 	rm build
+ install: @installtargets@
+ install-catdoc: catdoc.1 xls2csv.1 catppt.1
+-	../mkinstalldirs $(installroot)$(mandir)
+-	$(INSTALL) -m 644 catdoc.1 $(installroot)$(mandir)/catdoc$(manext)
+-	$(INSTALL) -m 644 xls2csv.1 $(installroot)$(mandir)/xls2csv$(manext)
+-	$(INSTALL) -m 644 catppt.1 $(installroot)$(mandir)/catppt$(manext)
++	$(top_srcdir)/mkinstalldirs $(DESTDIR)$(mandir)
++	$(INSTALL) -m 644 catdoc.1 $(DESTDIR)$(mandir)/catdoc$(manext)
++	$(INSTALL) -m 644 xls2csv.1 $(DESTDIR)$(mandir)/xls2csv$(manext)
++	$(INSTALL) -m 644 catppt.1 $(DESTDIR)$(mandir)/catppt$(manext)
+ install-wordview:	
+-	../mkinstalldirs $(installroot)$(mandir)
+-	$(INSTALL) -m 644 wordview.1 $(installroot)$(mandir)/wordview$(manext)
++	$(top_srcdir)/mkinstalldirs $(DESTDIR)$(mandir)
++	$(INSTALL) -m 644 wordview.1 $(DESTDIR)$(mandir)/wordview$(manext)
+ # Following rules are primarily for developers use. I doubt that you
+ # need to rebuild these versions of documentation
+ distclean: catppt.txt catppt.ps catdoc.1 catdoc.txt catdoc.ps xls2csv.1  xls2csv.txt xls2csv.ps
+--- origsrc/catdoc-0.94.2/src/Makefile.in	2006-02-24 11:44:06.000000000 -0600
++++ src/catdoc-0.94.2/src/Makefile.in	2012-11-05 10:25:30.796875000 -0600
+@@ -1,4 +1,4 @@
+-# Your C compilier and flags
++# Your C compiler and flags
+ SHELL = /bin/sh
+ 
+ srcdir = @srcdir@
+@@ -6,12 +6,15 @@ top_srcdir = @top_srcdir@
+ VPATH = @srcdir@
+ prefix = @prefix@
+ exec_prefix = @exec_prefix@
+-installroot = @installroot@
++DESTDIR = @DESTDIR@
+ 
++#directory, where catdoc binary would be placed
+ bindir = @bindir@
+ libdir = @libdir@
+ confdir = @sysconfdir@
+ datadir = @datadir@
++datarootdir = @datarootdir@
++#directory where to put man page
+ mandir = @mandir@
+ INSTALL = @INSTALL@
+ WISH = @WISH@
+@@ -28,8 +31,6 @@ FLAGS=-I. @CFLAGS@  @DEFS@ -DCATDOC_VERS
+ 
+ #Directory, where all system-wide stuff resides
+ DATA_DIR=$(datadir)/catdoc
+-#directory, where catdoc binary would be placed
+-#directory where to put man page
+ 
+ #System-wide configuration file
+ SYSTEMRC=$(confdir)/catdocrc
+@@ -72,7 +73,9 @@ OBJXLS=xls2csv.o sheet.o xlsparse.o $(CO
+ OBJPPT=catppt.o pptparse.o $(COMMONOBJ)
+ #.c.o:
+ #	$(CC) -c $(CFLAGS) $*
++
+ all: @buildtargets@
++
+ catdoc: $(OBJ)
+ 	$(CC)  -o catdoc  $(OBJ)
+ xls2csv: $(OBJXLS)
+@@ -82,14 +85,15 @@ catppt: $(OBJPPT)
+ 	$(CC) -o catppt $(OBJPPT) -lm
+ 
+ install: @installtargets@
+-install-catdoc:catdoc xls2csv catppt 
+-	../mkinstalldirs $(installroot)$(bindir)
+-	$(INSTALL) -m 755 catdoc $(installroot)$(bindir)/catdoc
+-	$(INSTALL) -m 755 xls2csv $(installroot)$(bindir)/xls2csv
+-	$(INSTALL) -m 755 catppt $(installroot)$(bindir)/catppt
++
++install-catdoc: catdoc xls2csv catppt 
++	$(top_srcdir)/mkinstalldirs $(DESTDIR)$(bindir)
++	$(INSTALL) -m 755 catdoc $(DESTDIR)$(bindir)/catdoc
++	$(INSTALL) -m 755 xls2csv $(DESTDIR)$(bindir)/xls2csv
++	$(INSTALL) -m 755 catppt $(DESTDIR)$(bindir)/catppt
+ install-wordview: wordview 
+-	../mkinstalldirs $(installroot)$(bindir)
+-	$(INSTALL) -m 755 wordview $(installroot)$(bindir)/wordview
++	$(top_srcdir)/mkinstalldirs $(DESTDIR)$(bindir)
++	$(INSTALL) -m 755 wordview $(DESTDIR)$(bindir)/wordview
+ wordview: wordview.tcl
+ 	echo "#! $(WISH)" >wordview
+ 	echo set charset_lib "\"$(CHARSETPATH)\"">>wordview

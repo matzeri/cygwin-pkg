@@ -1,0 +1,64 @@
+NAME="catdoc"
+VERSION="0.94.2"
+RELEASE=5
+
+CATEGORY="Text"
+SUMMARY="Dump Word, Excel and Powerpoint files contents"
+DESCRIPTION="catdoc, catppt and xls2csv.
+CATDOC is a program which reads MS-Word file and prints readable
+ASCII text to stdout, just like Unix cat command.
+It is also able to produce correct escape sequences if some UNICODE
+charachers have to be represented specially in your typesetting system
+such as (La)TeX."
+
+HOMEPAGE="http://ftp.wagner.pp.ru/~vitus/software/catdoc/"
+SRC_URI="http://ftp.wagner.pp.ru/pub/catdoc/${PN}-${PV}.tar.gz"
+PATCH_URI="
+catdoc-0.94.2-bufferoverflow-rh872390-rh872391.patch
+catdoc-postinstall.patch
+catdoc-make-conf.patch
+catdocx.patch"
+
+PKG_NAMES="catdoc wordview"
+
+catdoc_CONTENTS="
+--exclude=usr/bin/wordview \
+--exclude=usr/share/man/man1/wordview.1.gz \
+usr etc"
+
+wordview_REQUIRES="catdoc"
+wordview_CONTENTS="usr/bin/wordview
+usr/share/man/man1/wordview.1.gz"
+
+MAKEOPTS="-j1"
+DIFF_EXCLUDES="config.h.in~ aclocal.m4 configure"
+
+src_compile() {
+   cd ${B}
+   lndirs
+
+   cd ${S}
+   aclocal-1.4
+   autoconf
+   #cygautoreconf
+
+   cd ${B}
+   cygconf --with-input=cp1252 --with-output=8859-1
+   cygmake
+}
+src_test() {
+    echo "no tests defined"
+}
+src_install() {
+    cd ${B}
+    rm install
+    cyginstall
+
+    cd ${S}
+    insinto /etc/defaults/etc
+    doins ${S}/CYGWIN-PATCHES/catdocrc
+# additional script
+    dobin ${S}/CYGWIN-PATCHES/catdocx
+    dodoc ${S}/CYGWIN-PATCHES/catdocx-license.txt
+
+}
