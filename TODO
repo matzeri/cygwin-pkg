@@ -4,9 +4,6 @@ ccrypt
 CUnit
 fftw3
 metis
-ngspice
-octave-forge
-onig
 ping
 pure-ftpd (+64 bit version)
 qhull
