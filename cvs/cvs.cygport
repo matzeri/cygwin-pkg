@@ -1,0 +1,43 @@
+NAME="cvs"
+VERSION=1.11.23
+RELEASE=2
+CATEGORY="Devel"
+SUMMARY="Version control system"
+DESCRIPTION="CVS is a version control system, an important component of Source
+Configuration Management (SCM). Using it, you can record the history of sources
+files, and documents."
+HOMEPAGE="http://cvs.nongnu.org/"
+SRC_URI="http://ftp.gnu.org/non-gnu/cvs/source/stable/${VERSION}/cvs-${VERSION}.tar.bz2"
+PATCH_URI="
+ cvs-1.11.23-cvspass.patch
+ cvs-1.11.19-extzlib.patch
+ cvs-1.11.19-netbsd-tag.patch
+ cvs-1.11.19-abortabort.patch
+ cvs-1.11.1p1-bs.patch
+ cvs-1.11.21-proxy.patch
+ cvs-1.11.19-logmsg.patch
+ cvs-1.11.19-tagname.patch
+ cvs-1.11.19-comp.patch
+ cvs-1.11.19-tmp.patch
+ cvs-1.11.21-pam.patch
+ cvs-1.11.21-diff.patch
+ cvs-1.11.21-diff-kk.patch
+ cvs-1.11.21-sort.patch
+ cvs-1.11.22-ipv6-proxy.patch
+ cvs-1.11.23-getline64.patch
+ cvs-1.11.22-stdinargs.patch
+ cvs-1.11.23-cve-2010-3846.patch
+ cvs-1.11.23-remove_undefined_date_from_cvs_1_header.patch
+ cvs-1.11.23-sanity.patch
+ cvs-1.11.23-make_make_check_sanity_testing_verbose.patch
+ cvs-1.11.23-Set-PAM_TTY-and-PAM_RHOST-on-PAM-authentication.patch
+ cvs-1.11.23-Back-port-KeywordExpand-configuration-keyword.patch
+ cvs-1.11.23-Allow-CVS-server-to-use-any-Kerberos-key-with-cvs-se.patch
+ cvs-1.11.23-Fix-proxy-response-parser.patch
+ cvs-1.11.23-doc-Add-mandatory-argument-to-sp.patch
+ cvs-1.11.23-crypt-2.diff
+ cvs-1.11.23-Pass-compilation-with-Wformat-security.patch
+
+"
+
+DIFF_EXCLUDES="cvs.info* Makefile"
