@@ -1,6 +1,6 @@
 NAME="tesseract-ocr"
 VERSION=3.04.00
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Text"
 SUMMARY="Tesseract Open Source OCR Engine"
@@ -12,12 +12,54 @@ SRC_URI="https://github.com/tesseract-ocr/tesseract/archive/tesseract-${PV}.tar.
 SRC_DIR="tesseract-${PV}"
 PATCH_URI="tesseract-undefined.patch"
 
-PKG_NAMES="tesseract-ocr libtesseract-ocr_3 tesseract-ocr-devel"
+PKG_NAMES="tesseract-ocr tesseract-training-util libtesseract-ocr_3 tesseract-ocr-devel"
 
-tesseract_ocr_CONTENTS="usr/bin/*.exe usr/share"
+tesseract_ocr_CONTENTS="usr/bin/tesseract.exe usr/share"
 tesseract_ocr_REQUIRES="tesseract-ocr-eng"
+
+tesseract_training_util_SUMMARY="${SUMMARY} language training "
+tesseract_training_util_CONTENTS="
+usr/bin/ambiguous_words.exe
+usr/bin/classifier_tester.exe
+usr/bin/cntraining.exe
+usr/bin/combine_tessdata.exe
+usr/bin/dawg2wordlist.exe
+usr/bin/mftraining.exe
+usr/bin/set_unicharset_properties.exe
+usr/bin/shapeclustering.exe
+usr/bin/text2image.exe
+usr/bin/unicharset_extractor.exe
+usr/bin/wordlist2dawg.exe
+usr/bin/language-specific.sh
+usr/bin/tesstrain.sh
+usr/bin/tesstrain_utils.sh
+"
+
+tesseract_training_util_REQUIRES="tesseract-ocr tesseract-training-core"
+
 libtesseract_ocr_3_SUMMARY="${SUMMARY} (C runtime)"
 libtesseract_ocr_3_CONTENTS="usr/bin/cyg*"  
+
 tesseract_ocr_devel_SUMMARY="${SUMMARY} (development)"
 tesseract_ocr_devel_CONTENTS="usr/include/ usr/lib/"
+
+src_compile() {
+        cd ${S}
+        cygautoreconf
+        cd ${B}
+        cygconf LIBS="$(pkg-config --libs icu-i18n)"
+        cygmake
+        cygmake training
+}
+
+src_install() {
+        cd ${B}
+        cyginstall
+        cyginstall training-install
+	dobin ${S}/training/language-specific.sh
+	dobin ${S}/training/tesstrain.sh
+	dobin ${S}/training/tesstrain_utils.sh
+	insinto /usr/share/tessdata/testing
+	doins ${S}/testing/eurotext.tif ${S}/testing/phototest.tif
+}
 
