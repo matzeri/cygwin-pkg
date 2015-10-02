@@ -1,7 +1,7 @@
 NAME="octave-ocs"
-VERSION=0.1.3r12205
-OV=0.1.3
-RELEASE=2
+VERSION=0.1.5
+OV=0.1.5
+RELEASE=1
 
 CATEGORY="Math"
 SUMMARY="Octave-Forge ocs: solving DC and transient electrical circuit"
