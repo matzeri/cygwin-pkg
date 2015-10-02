@@ -1,12 +1,12 @@
 NAME="libtorrent"
-VERSION=0.13.4
+VERSION=0.13.6
 RELEASE=1
 
 HOMEPAGE="https://github.com/rakshasa/libtorrent"
 SRC_URI="https://github.com/rakshasa/libtorrent/releases/${P}.tar.gz"
 PATCH_URI="libtorrent-no-undefined.patch"
 
-PKG_NAMES="${PN} ${PN}18 ${PN}-devel"
+PKG_NAMES="${PN} ${PN}19 ${PN}-devel"
 
 CATEGORY=Libs
 DESCRIPTION="LibTorrent is a BitTorrent library written in C++ for *nix, with a focus on high performance and good code."
@@ -14,8 +14,8 @@ DESCRIPTION="LibTorrent is a BitTorrent library written in C++ for *nix, with a 
 libtorrent_CONTENTS=""
 libtorrent_SUMMARY="BitTorrent library written in C++ (source empty) "
 
-libtorrent18_CONTENTS="usr/bin/cygtorrent-18.dll"
-libtorrent18_SUMMARY="BitTorrent library written in C++ (runtime)"
+libtorrent19_CONTENTS="usr/bin/cygtorrent-19.dll"
+libtorrent19_SUMMARY="BitTorrent library written in C++ (runtime)"
 
 libtorrent_devel_CONTENTS="usr/include usr/lib usr/share"
 libtorrent_devel_SUMMARY="BitTorrent library written in C++ (development)"
