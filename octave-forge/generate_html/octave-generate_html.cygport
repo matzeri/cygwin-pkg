@@ -1,6 +1,6 @@
 NAME="octave-generate_html"
-VERSION=0.1.8
-OV=0.1.8
+VERSION=0.1.9
+OV=0.1.9
 RELEASE=1
 
 CATEGORY="Math"
