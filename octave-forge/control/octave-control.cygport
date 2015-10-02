@@ -1,6 +1,6 @@
 NAME="octave-control"
-VERSION=2.8.4
-OV=2.8.4
+VERSION=2.8.5
+OV=2.8.5
 RELEASE=1
 
 CATEGORY="Math"
