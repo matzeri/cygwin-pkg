@@ -1,6 +1,6 @@
 NAME="octave-tsa"
-VERSION=4.2.9
-OV=4.2.9
+VERSION=4.3.2
+OV=4.3.2
 RELEASE=1
 
 CATEGORY="Math"
