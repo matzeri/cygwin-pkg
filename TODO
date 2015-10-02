@@ -2,11 +2,8 @@ to convert from previous (versioned) cygport style
 
 ccrypt
 CUnit
-fftw3
 metis
 ping
 pure-ftpd (+64 bit version)
 qhull
 qrupdate
-
-	
