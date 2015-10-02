@@ -1,0 +1,61 @@
+NAME="octave-tisean"
+VERSION=0.2.3
+OV=0.2.3
+RELEASE=1
+
+CATEGORY="Math"
+SUMMARY="Octave-Forge tisean: Nonlinear Time Series Analysis"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
+HOMEPAGE="http://octave.sourceforge.net/"
+
+SRC_URI="http://matzeri.altervista.org/octave-forge/tisean-${PV}.tar"
+SRC_DIR="tisean-${PV}"
+PATCH_URI="do-octave-update.patch"
+
+PKG_NAMES="${PN}"
+octave_tisean_CONTENTS='etc/ usr/'
+octave_tisean_REQUIRES="octave octave-signal"
+
+src_compile() {
+        cd ${D}
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+	export LIBS="-lgfortran"
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/tisean-${PV}.tar.gz
+"
+}
+
+src_test() {
+	: 
+}
+
+src_install() {
+        cd ${D}
+
+        F77=gfortran
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+	export LIBS="-lgfortran"
+
+	octave-cli --eval "
+	echo on 
+        diary ../log/diary 
+	more off 
+	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+	pkg local_list  ${B}/octave_packages	
+	pkg global_list  ${B}/octave_packages	
+        pkg install -nodeps -noauto -global -verbose  ${B}/tisean-${OV}.tar.gz 
+	pkg list
+" 
+
+}
