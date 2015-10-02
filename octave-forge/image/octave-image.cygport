@@ -1,6 +1,6 @@
 NAME="octave-image"
-VERSION=2.4.0
-OV=2.4.0
+VERSION=2.4.1
+OV=2.4.1
 RELEASE=1
 
 CATEGORY="Math"
