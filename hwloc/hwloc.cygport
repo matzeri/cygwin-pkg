@@ -1,5 +1,5 @@
 NAME="hwloc"
-VERSION="1.11.0"
+VERSION="1.11.1"
 RELEASE=1
 
 CATEGORY="Utils"
@@ -33,3 +33,9 @@ src_install() {
 	cyginstall
 	mv ${D}/usr/*.txt ${D}/usr/share/doc/hwloc
 }
+
+src_check() {
+        cd ${B}
+        cygmake -i check
+}
+
