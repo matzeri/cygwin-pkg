@@ -3,7 +3,7 @@ VERSION="1.1.4"
 RELEASE=2
 
 CATEGORY="Utils"
-SUMMARY="open-source binary diff - lagacy support for prestine-tar"
+SUMMARY="open-source binary diff - legacy support for pristine-tar"
 DESCRIPTION="${SUMMARY}"
 HOMEPAGE="http://xdelta.org/"
 

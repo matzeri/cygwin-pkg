@@ -4,7 +4,7 @@ OV=1.0.11
 RELEASE=1
 
 CATEGORY="Math"
-SUMMARY="Octave-Forge struct:aAdditional Structure manipulations functions."
+SUMMARY="Octave-Forge struct: Additional Structure manipulations functions."
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"

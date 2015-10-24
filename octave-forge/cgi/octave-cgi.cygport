@@ -4,7 +4,7 @@ OV=0.1.1
 RELEASE=1
 
 CATEGORY="Math"
-SUMMARY="Octave-Forge cgi: Common Gatway Interface for Octave"
+SUMMARY="Octave-Forge cgi: Common Gateway Interface for Octave"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"

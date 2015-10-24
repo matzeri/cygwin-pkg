@@ -8,7 +8,7 @@ DESCRIPTION="catdoc, catppt and xls2csv.
 CATDOC is a program which reads MS-Word file and prints readable
 ASCII text to stdout, just like Unix cat command.
 It is also able to produce correct escape sequences if some UNICODE
-charachers have to be represented specially in your typesetting system
+characters have to be represented specially in your typesetting system
 such as (La)TeX."
 
 HOMEPAGE="http://ftp.wagner.pp.ru/~vitus/software/catdoc/"

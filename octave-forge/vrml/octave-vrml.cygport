@@ -4,7 +4,7 @@ OV=1.0.13
 RELEASE=2
 
 CATEGORY="Math"
-SUMMARY="Octave-Forge vrml: Common Gatway Interface for Octave"
+SUMMARY="Octave-Forge vrml: 3D graphics using VRML"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"

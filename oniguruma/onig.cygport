@@ -2,12 +2,12 @@ NAME="onig"
 VERSION=5.9.6
 RELEASE=1
 
-DESCRIPTION="Onigurama: Regular expressions library for different character encoding" 
-SUMMARY="Onigurama: Regular expressions library" 
+DESCRIPTION="Oniguruma: Regular expressions library for different character encoding" 
+SUMMARY="Oniguruma: Regular expressions library" 
 CATEGORY="Libs"
 
-HOMEPAGE="http://www.geocities.jp/kosako3/oniguruma"
-SRC_URI="http://www.geocities.jp/kosako3/oniguruma/archive/onig-${PV}.tar.gz" 
+HOMEPAGE="https://github.com/kkos/oniguruma"
+SRC_URI="https://github.com/kkos/oniguruma/releases/download/v5.9.6/onig-5.9.6.tar.gz" 
 PATCH_URI="onig-autoconf.patch"
 
 abi=2
