@@ -1,6 +1,6 @@
 NAME="arpack"
-VERSION=3.2.0
-RELEASE=1
+VERSION=3.3.0
+RELEASE=2
 
 CATEGORY="Math Libs"
 DESCRIPTION="ARPACK is a collection to solve large scale eigenvalue problems." 
@@ -8,6 +8,7 @@ SUMMARY="ARPACK libs (large scale eigenvalue problems )."
 HOMEPAGE="http://www.gnu.org/software/octave/"
 SRC_URI="http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/${PN}-ng-${PV}.tar.gz" 
 SRC_DIR="arpack-ng-${PV}"
+PATCH_URI="arpack-lib0.patch"
 
 PKG_NAMES="arpack libarpack-devel libarpack0 libparpack-devel libparpack0"
 
@@ -41,7 +42,6 @@ src_compile() {
 
 src_test() {
 	cd ${B}
-	cp ${S}/TESTS/testA.mtx ${B}/TESTS/testA.mtx
 	cygmake -i check
 	cd ${B}/EXAMPLES
 	cygmake -i check

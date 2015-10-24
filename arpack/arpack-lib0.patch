@@ -1,0 +1,22 @@
+--- origsrc/arpack-ng-3.2.0/Makefile.am	2014-11-14 15:47:06.000000000 +0100
++++ Makefile.am	2015-03-07 14:08:51.286451200 +0100
+@@ -14,7 +14,7 @@ libarpack_la_SOURCES =
+ # The file dummy.f does not need to exist in the source tree.
+ nodist_EXTRA_libarpack_la_SOURCES = dummy.f
+ 
+-libarpack_la_LDFLAGS = -no-undefined -version-info 2:0
++libarpack_la_LDFLAGS = -no-undefined -version-info 0:0
+ 
+ libarpack_la_LIBADD = \
+ 	$(top_builddir)/SRC/libarpacksrc.la \
+--- origsrc/arpack-ng-3.2.0/PARPACK/Makefile.am	2014-11-14 15:47:06.000000000 +0100
++++ PARPACK/Makefile.am	2015-03-07 14:08:51.306451200 +0100
+@@ -9,7 +9,7 @@ libparpack_la_SOURCES =
+ F77 = $(MPIF77)
+ nodist_EXTRA_libparpack_la_SOURCES = dummy.f
+ 
+-libparpack_la_LDFLAGS = -no-undefined -version-info 2:0
++libparpack_la_LDFLAGS = -no-undefined -version-info 0:0
+ 
+ libparpack_la_LIBADD = \
+ 	$(top_builddir)/SRC/libarpacksrc.la \
