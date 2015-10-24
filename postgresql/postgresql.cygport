@@ -1,5 +1,5 @@
 NAME="postgresql"
-VERSION=9.4.4
+VERSION=9.4.5
 RELEASE=1
 
 CATEGORY="Database"
