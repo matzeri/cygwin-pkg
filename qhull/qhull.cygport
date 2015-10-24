@@ -1,0 +1,49 @@
+NAME="qhull"
+VERSION="2015.0.6"
+RELEASE="1"
+
+CATEGORY="Libs Math"
+
+DESCRIPTION="Qhull implements the Quickhull algorithm for computing the convex hull"
+HOMEPAGE="http://www.qhull.org/"
+SRC_URI="http://www.qhull.org/download/${PN}-${PV}.tar.xz"
+
+abi=7
+
+SUMMARY="Qhull is a general dimension convex hull programx"
+DESCRIPTION="Qhull is a general dimension convex hull program, 
+it also generates Delaunay triangulations, Voronoi
+diagrams, furthest-site Voronoi diagrams, and halfspace 
+intersections about a point."
+
+PKG_NAMES="${PN} lib${PN}-devel lib${PN}_${abi}"
+
+qhull_CONTENTS='usr/bin/*.exe usr/share/'
+
+libqhull_devel_CONTENTS='usr/include/ usr/lib/'
+libqhull_devel_SUMMARY='Qhull (convex hull program) - (development)'
+
+libqhull_7_CONTENTS='usr/bin/cyg*'
+libqhull_7_SUMMARY='Qhull (convex hull program) - (runtime)'
+
+# We do not use the standard src_compile and src_test.
+
+DIFF_EXCLUDES="Makefile"
+inherit cmake
+
+src_compile() {
+        cd ${B}
+	cygcmake
+        cygmake -j1
+}
+
+
+src_test() {
+	cd ${B}
+	cygmake test
+}
+
+src_install() {
+        cd ${B}
+	cyginstall
+}
