@@ -1,6 +1,6 @@
 NAME="octave-stk"
-VERSION=2.3.1
-OV=2.3.1
+VERSION=2.3.3
+OV=2.3.3
 RELEASE=1
 
 CATEGORY="Math"
