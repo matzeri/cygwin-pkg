@@ -1,5 +1,5 @@
 NAME="lapack"
-VERSION=3.5.0r1524
+VERSION=3.5.0r1606
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -37,7 +37,7 @@ inherit cmake
 
 src_compile() {
 	cd ${B}
-	cygcmake 
+	cygcmake -DCBLAS:BOOL=ON
 	cygmake
 
 # building cygwin dll
