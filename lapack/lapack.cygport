@@ -1,6 +1,6 @@
 NAME="lapack"
 VERSION=3.5.0r1606
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Libs Math"
 
@@ -11,6 +11,8 @@ SRC_URI="http://www.netlib.org/lapack/${PN}-${PV}.tgz \
 http://www.netlib.org/lapack/manpages-3.5.0.tgz"
 
 PATCH_URI="
+lapack-pkconfig.patch
+lapack-cblas-on.patch
 lapack-CYGWIN.patch
 lapack-dll.patch"
 

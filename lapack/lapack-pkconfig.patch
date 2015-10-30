@@ -1,0 +1,41 @@
+--- origsrc/lapack-3.5.0r1606/BLAS/blas.pc.in	2010-12-15 19:44:42.000000000 +0100
++++ BLAS/blas.pc.in	2015-10-30 22:05:34.490622400 +0100
+@@ -5,5 +5,5 @@ Name: blas
+ Description: Basic Linear Algebra Subprograms F77 reference implementations
+ Version: @LAPACK_VERSION@
+ URL: http://www.netlib.org/blas/
+-Libs: -L${libdir} -lblas
++Libs: -lblas
+ Libs.private: -lm
+--- origsrc/lapack-3.5.0r1606/CBLAS/cblas.pc.in	2014-08-23 03:21:57.000000000 +0200
++++ CBLAS/cblas.pc.in	2015-10-30 22:06:07.002482000 +0100
+@@ -1,9 +1,9 @@
+ prefix=@prefix@
+ libdir=@libdir@
+ 
+-Name: lapacke
++Name: cblas
+ Description: C Standard Interface to BLAS Linear Algebra PACKage
+ Version: @LAPACK_VERSION@
+ URL: http://www.netlib.org/lapack/
+-Libs: -L${libdir} -lcblas
++Libs: -lcblas
+ Requires: blas
+--- origsrc/lapack-3.5.0r1606/LAPACKE/lapacke.pc.in	2011-12-09 05:09:29.000000000 +0100
++++ LAPACKE/lapacke.pc.in	2015-10-30 22:06:53.351133000 +0100
+@@ -5,5 +5,5 @@ Name: lapacke
+ Description: C Standard Interface to LAPACK Linear Algebra PACKage
+ Version: @LAPACK_VERSION@
+ URL: http://www.netlib.org/lapack/
+-Libs: -L${libdir} -llapacke
++Libs: -llapacke
+ Requires: lapack blas
+--- origsrc/lapack-3.5.0r1606/lapack.pc.in	2010-12-15 19:44:42.000000000 +0100
++++ lapack.pc.in	2015-10-30 22:06:28.098688700 +0100
+@@ -5,5 +5,5 @@ Name: lapack
+ Description: FORTRAN reference implementation of LAPACK Linear Algebra PACKage
+ Version: @LAPACK_VERSION@
+ URL: http://www.netlib.org/lapack/
+-Libs: -L${libdir} -llapack
++Libs: -llapack
+ Requires: blas
