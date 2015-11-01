@@ -1,6 +1,6 @@
 NAME="octave-parallel"
-VERSION=3.0.2
-OV=3.0.2
+VERSION=3.0.3
+OV=3.0.3
 RELEASE=1
 
 CATEGORY="Math"
