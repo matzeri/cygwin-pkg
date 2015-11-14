@@ -1,0 +1,47 @@
+NAME="qrupdate"
+VERSION=1.1.2
+RELEASE=2
+
+CATEGORY="Libs Math"
+SUMMARY="QRUPDATE : library for QR and  Cholensky decompositions"
+DESCRIPTION="A LIBRARY FOR FAST UPDATING OF QR AND CHOLESKY DECOMPOSITIONS"
+HOMEPAGE="http://qrupdate.sourceforge.net/"
+SRC_URI="http://downloads.sourceforge.net/qrupdate/${PN}-${PV}.tar.gz"
+SRC_DIR="${PN}-${PV}"
+PATCH_URI="qrupdate-configure.patch"
+
+api="0"
+PKG_NAMES="qrupdate libqrupdate-devel libqrupdate0"
+PKG_HINTS="setup devel lib"
+qrupdate_CONTENTS=''
+qrupdate_SUMMARY="${SUMMARY} - empty source only"
+libqrupdate_devel_CONTENTS='usr/lib usr/share'
+libqrupdate_devel_SUMMARY="${SUMMARY} - development"
+libqrupdate0_CONTENTS='usr/bin'
+libqrupdate0_SUMMARY="${SUMMARY} - runtime"
+
+DIFF_EXCLUDES="Makefile"
+KEEP_LA_FILES="none"
+
+src_compile() {
+	cd ${S}
+    	cygautoreconf
+	cd ${B}
+	cygconf --libexecdir=/usr/lib \
+		--enable-shared 
+	cygmake
+}
+
+src_test() {
+	cd ${B}
+	cygmake -j1 check	
+}
+
+src_install() {
+	cd ${B}
+	cyginstall 
+
+	cd ${S}
+	insinto /usr/share/doc/${PN}
+	doins README INSTALL COPYING
+}
