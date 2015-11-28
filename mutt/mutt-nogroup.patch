@@ -1,0 +1,30 @@
+--- origsrc/mutt-1.5.24/configure.ac	2015-08-30 19:24:20.000000000 +0200
++++ src/mutt-1.5.24/configure.ac	2015-11-28 22:09:05.635257000 +0100
+@@ -557,13 +557,22 @@ then
+ fi
+ AC_SUBST(docdir)
+ 
+-if test x$mutt_cv_setgid = xyes; then
+-        DOTLOCK_GROUP='mail'
+-        DOTLOCK_PERMISSION=2755
+-else
++case "${host}" in
++   *-*-cygwin* )
+         DOTLOCK_GROUP=''
+         DOTLOCK_PERMISSION=755
+-fi
++      ;;
++   *)
++        if test x$mutt_cv_setgid = xyes; then
++                DOTLOCK_GROUP='mail'
++                DOTLOCK_PERMISSION=2755
++        else
++                DOTLOCK_GROUP=''
++                DOTLOCK_PERMISSION=755
++        fi
++      ;;
++esac
++
+ AC_SUBST(DOTLOCK_GROUP)
+ AC_SUBST(DOTLOCK_PERMISSION)
+ 
