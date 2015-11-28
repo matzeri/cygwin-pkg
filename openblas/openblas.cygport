@@ -1,6 +1,6 @@
 NAME="openblas"
 VERSION=0.2.15
-RELEASE=1
+RELEASE=3
 
 CATEGORY="Math"
 DESCRIPTION="OpenBLAS is an optimized BLAS library based on GotoBLAS2"
@@ -9,8 +9,6 @@ HOMEPAGE="http://xianyi.github.com/OpenBLAS/"
 
 SRC_URI="https://github.com/xianyi/OpenBLAS/archive/${PN}-${PV}.tar.gz"
 SRC_DIR="OpenBLAS-${PV}"
-
-PATCH_URI="openblas-dllbuild.patch"
 
 # PKG_NAMES="openblas libopenblas libopenblas-devel"
 PKG_NAMES="openblas libopenblas"
@@ -33,10 +31,14 @@ src_compile() {
         cd ${S}
         lndirs
         cd ${B}
-        make NO_LAPACK=1 DYNAMIC_ARCH=1 NUM_THREADS=16
-	chmod +x ${B}/build.sh
-	./build.sh
+        cygmake NO_LAPACK=1 DYNAMIC_ARCH=1 NUM_THREADS=16
+
+ gcc ${CFLAGS} -shared -Wl,--enable-auto-import -Wl,--enable-auto-image-base \
+    -o cygblas-0.dll -Wl,--out-implib=libblas.dll.a \
+    -Wl,--whole-archive exports/dllinit.o  libopenblas.a \
+    -Wl,--no-whole-archive -shared-libgcc -lgfortran
 }
+
 
 src_install() {
 	cd ${B}
@@ -47,6 +49,8 @@ src_install() {
 #	rm ${D}/usr/lib/*
 #	rm ${D}/usr/cmake/OpenBLASConfig.cmake
 #	insinto /usr/lib/openblas
+#	doins ${B}/libblas.dll.a
+#	insinto /usr/lib/
 #	doins ${B}/libblas.dll.a
 	insinto /usr/bin
 	doins ${B}/cygblas-0.dll
