@@ -1,5 +1,5 @@
 NAME="amd"
-VERSION=2.4.0
+VERSION=2.4.1
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -9,12 +9,12 @@ HOMEPAGE="http://www.cise.ufl.edu/research/sparse/SuiteSparse/"
 #SRC_URI="http://www.cise.ufl.edu/research/sparse/SuiteSparse/${PN}-${PV}.tar.gz"
 SRC_URI="http://dev.gentoo.org/~bicatali/distfiles/${PN}-${PV}.tar.bz2"
 
-PKG_NAMES="amd libamd0 libamd-devel"
+PKG_NAMES="amd libamd1 libamd-devel"
 
 amd_CONTENTS=''
 amd_SUMMARY="${SUMMARY} - empty source only"
-libamd0_CONTENTS='usr/bin/'
-libamd0_SUMMARY="${SUMMARY} - runtime"
+libamd1_CONTENTS='usr/bin/'
+libamd1_SUMMARY="${SUMMARY} - runtime"
 libamd_devel_CONTENTS='usr/include/ usr/lib/ usr/share'
 libamd_devel_SUMMARY="${SUMMARY} - development"
 

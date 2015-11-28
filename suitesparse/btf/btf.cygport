@@ -1,6 +1,6 @@
 NAME="btf"
-VERSION=1.2.0
-RELEASE=3
+VERSION=1.2.1
+RELEASE=1
 
 CATEGORY="Libs Math"
 SUMMARY="SuiteSparse BTF: permutation to block triangular form"

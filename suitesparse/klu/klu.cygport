@@ -1,5 +1,5 @@
 NAME="klu"
-VERSION=1.3.0
+VERSION=1.3.3
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -9,12 +9,12 @@ HOMEPAGE="http://www.cise.ufl.edu/research/sparse/SuiteSparse/"
 #SRC_URI="http://www.cise.ufl.edu/research/sparse/SuiteSparse/${PN}-${PV}.tar.gz"
 SRC_URI="http://dev.gentoo.org/~bicatali/distfiles/${PN}-${PV}.tar.bz2"
 
-PKG_NAMES="klu libklu0 libklu-devel"
+PKG_NAMES="klu libklu1 libklu-devel"
 
 klu_CONTENTS=''
 klu_SUMMARY="${SUMMARY} - empty source only"
-libklu0_CONTENTS='usr/bin/'
-libklu0_SUMMARY="${SUMMARY} - runtime"
+libklu1_CONTENTS='usr/bin/'
+libklu1_SUMMARY="${SUMMARY} - runtime"
 libklu_devel_CONTENTS='usr/include/ usr/lib/ usr/share'
 libklu_devel_SUMMARY="${SUMMARY} - development"
 

@@ -1,5 +1,5 @@
 NAME="ldl"
-VERSION=2.2.0
+VERSION=2.2.1
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -9,12 +9,12 @@ HOMEPAGE="http://www.cise.ufl.edu/research/sparse/SuiteSparse/"
 #SRC_URI="http://www.cise.ufl.edu/research/sparse/SuiteSparse/${PN}-${PV}.tar.gz"
 SRC_URI="http://dev.gentoo.org/~bicatali/distfiles/${PN}-${PV}.tar.bz2"
 
-PKG_NAMES="ldl libldl0 libldl-devel"
+PKG_NAMES="ldl libldl1 libldl-devel"
 
 ldl_CONTENTS=''
 ldl_SUMMARY="${SUMMARY} - empty source only"
-libldl0_CONTENTS='usr/bin/'
-libldl0_SUMMARY="${SUMMARY} - runtime"
+libldl1_CONTENTS='usr/bin/'
+libldl1_SUMMARY="${SUMMARY} - runtime"
 libldl_devel_CONTENTS='usr/include/ usr/lib/ usr/share'
 libldl_devel_SUMMARY="${SUMMARY} - development"
 

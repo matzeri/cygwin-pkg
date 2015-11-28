@@ -1,5 +1,5 @@
 NAME="ccolamd"
-VERSION=2.9.0
+VERSION=2.9.1
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -9,12 +9,12 @@ HOMEPAGE="http://www.cise.ufl.edu/research/sparse/SuiteSparse/"
 #SRC_URI="http://www.cise.ufl.edu/research/sparse/SuiteSparse/${PN}-${PV}.tar.gz"
 SRC_URI="http://dev.gentoo.org/~bicatali/distfiles/${PN}-${PV}.tar.bz2"
 
-PKG_NAMES="ccolamd libccolamd0 libccolamd-devel"
+PKG_NAMES="ccolamd libccolamd1 libccolamd-devel"
 
 ccolamd_CONTENTS=''
 ccolamd_SUMMARY="${SUMMARY} - empty source only"
-libccolamd0_CONTENTS='usr/bin/'
-libccolamd0_SUMMARY="${SUMMARY} - runtime"
+libccolamd1_CONTENTS='usr/bin/'
+libccolamd1_SUMMARY="${SUMMARY} - runtime"
 libccolamd_devel_CONTENTS='usr/include/ usr/lib/ usr/share'
 libccolamd_devel_SUMMARY="${SUMMARY} - development"
 

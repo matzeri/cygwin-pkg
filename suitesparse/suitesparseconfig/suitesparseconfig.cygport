@@ -1,5 +1,5 @@
 NAME="suitesparseconfig"
-VERSION=4.3.1
+VERSION=4.4.5
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -9,12 +9,12 @@ HOMEPAGE="http://www.cise.ufl.edu/research/sparse/SuiteSparse/"
 #SRC_URI="http://www.cise.ufl.edu/research/sparse/SuiteSparse/${PN}-${PV}.tar.gz"
 SRC_URI="http://dev.gentoo.org/~bicatali/distfiles/${PN}-${PV}.tar.bz2"
 
-PKG_NAMES="suitesparseconfig libsuitesparseconfig0 libsuitesparseconfig-devel"
+PKG_NAMES="suitesparseconfig libsuitesparseconfig1 libsuitesparseconfig-devel"
 
 suitesparseconfig_CONTENTS=''
 suitesparseconfig_SUMMARY="${SUMMARY} - empty source only"
-libsuitesparseconfig0_CONTENTS='usr/bin/'
-libsuitesparseconfig0_SUMMARY="${SUMMARY} - runtime"
+libsuitesparseconfig1_CONTENTS='usr/bin/'
+libsuitesparseconfig1_SUMMARY="${SUMMARY} - runtime"
 libsuitesparseconfig_devel_CONTENTS='usr/include/ usr/lib/'
 libsuitesparseconfig_devel_SUMMARY="${SUMMARY} - development"
 
