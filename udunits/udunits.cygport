@@ -1,11 +1,12 @@
 NAME="udunits"
-VERSION=2.2.17
+VERSION=2.2.20
 RELEASE=1
 
 DESCRIPTION="The UDUNITS-2 package provides support for units of physical quantities "
 HOMEPAGE="http://www.unidata.ucar.edu/software/udunits/"
-SRC_URI="http://www.unidata.ucar.edu/downloads/udunits/${PN}-${PV}.tar.gz" 
-PATCH_URI="udunits-cygwin.patch"
+SRC_URI="http://www.unidata.ucar.edu/downloads/udunits/UDUNITS-2-${PV}.tar.gz" 
+PATCH_URI="udunits-undefined.patch"
+SRC_DIR="UDUNITS-2-2.2.20"
 
 abi=0
 
@@ -31,7 +32,7 @@ libudunits0_SUMMARY="UDUNITS-2 - (runtime)"
 libudunits_devel_CATEGORY="Math Devel Libs"
 libudunits_devel_SUMMARY="UDUNITS-2 - (development)"
 
-DIFF_EXCLUDES="udunits2.info version.texi stamp-vti"
+DIFF_EXCLUDES="*.info version.texi stamp-vti"
 KEEP_LA_FILES="none"
 
 
