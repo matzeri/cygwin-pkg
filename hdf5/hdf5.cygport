@@ -1,5 +1,5 @@
 NAME="hdf5"
-VERSION=1.8.15
+VERSION=1.8.16
 RELEASE=1
 
 DESCRIPTION="HDF5 API interface"
@@ -7,16 +7,23 @@ HOMEPAGE="http://www.hdfgroup.org/HDF5/"
 SRC_DIR=${PN}-${PV}
 SRC_URI="ftp://ftp.hdfgroup.org/HDF5/current/src/${SRC_DIR}.tar.bz2"
 
-abi=10
-PKG_NAMES="hdf5 libhdf5_${abi} libhdf5-devel"
+PKG_NAMES="hdf5 libhdf5_10 libhdf5cpp_11 libhdf5-devel"
+
 hdf5_CONTENTS='--exclude=usr/bin/*.dll usr/bin usr/share/'
-libhdf5_10_CONTENTS="usr/bin/*-${abi}.dll"
+libhdf5_10_CONTENTS="
+ usr/bin/cyghdf5-10.dll
+ usr/bin/cyghdf5_hl-10.dll"
+libhdf5cpp_11_CONTENTS="
+ usr/bin/cyghdf5_cpp-11.dll
+ usr/bin/cyghdf5_hl_cpp-11.dll"
 libhdf5_devel_CONTENTS='usr/include/ usr/lib/'
 
 hdf5_CATEGORY="Archive Utils"
 hdf5_SUMMARY="HDF5 Hierarchical Data Format"
 libhdf5_10_CATEGORY="Devel Libs Archive Utils"
 libhdf5_10_SUMMARY="HDF5 Hierarchical Data Format - (runtime)"
+libhdf5cpp_11_CATEGORY="Devel Libs Archive Utils"
+libhdf5cpp_11_SUMMARY="HDF5 Hierarchical Data Format - (C++ runtime)"
 libhdf5_devel_CATEGORY="Devel Archive Utils"
 libhdf5_devel_SUMMARY="HDF5 Hierarchical Data Format - (development)"
 
