@@ -1,5 +1,5 @@
 NAME="pbzip2"
-VERSION=1.1.12
+VERSION=1.1.13
 RELEASE=1
 
 CATEGORY="Archive"
@@ -25,5 +25,5 @@ src_compile() {
 
 src_install() {
 	cd ${B}
-	cyginstall PREFIX=${D}/usr
+	cyginstall PREFIX=/usr
 }
