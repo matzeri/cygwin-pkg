@@ -13,7 +13,7 @@
  cat $file \
   | $SED -e '/<info name=\"hwlocVersion\" value=\"'$HWLOC_VERSION'\"\/>/d' \
 - | $SED -e '/<info name=\"ProcessName\" value=\"hwloc-assembler\"\/>/d' -e '/<info name=\"ProcessName\" value=\"lt-hwloc-assembler\"\/>/d' \
-+ | $SED -e '/<info name=\"ProcessName\" value=\"hwloc-assembler'$EXEEXT'\"\/>/d' -e '/<info name=\"ProcessName\" value=\"lt-hwloc-assembleri'$EXEEXT'\"\/>/d' \
++ | $SED -e '/<info name=\"ProcessName\" value=\"hwloc-assembler'$EXEEXT'\"\/>/d' -e '/<info name=\"ProcessName\" value=\"lt-hwloc-assembler'$EXEEXT'\"\/>/d' \
   > ${file}.tmp
  mv -f ${file}.tmp $file
  
