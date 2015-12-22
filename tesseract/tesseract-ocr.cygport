@@ -1,6 +1,6 @@
 NAME="tesseract-ocr"
 VERSION=3.04.00
-RELEASE=2
+RELEASE=3
 
 CATEGORY="Text"
 SUMMARY="Tesseract Open Source OCR Engine"
