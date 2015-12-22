@@ -1,6 +1,6 @@
 NAME="leptonica"
 VERSION=1.72
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Libs"
 SUMMARY="Library for image processing and image analysis applications"
