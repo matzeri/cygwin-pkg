@@ -1,0 +1,9 @@
+--- origsrc/CUnit-2.1-3/doc/headers/Makefile.am	2016-02-20 21:46:57.287192900 +0100
++++ src/CUnit-2.1-3/doc/headers/Makefile.am	2016-02-20 23:04:10.161098300 +0100
+@@ -23,5 +23,6 @@ $(INCLUDE_FILES) : copy_headers
+ 
+ copy_headers:
+ 	cp -f $(top_srcdir)/CUnit/Headers/*.h .
++	cp -f $(top_builddir)/CUnit/Headers/*.h .
+ 	cp -f $(top_srcdir)/CUnit/Sources/Win/Win.h .
+ 

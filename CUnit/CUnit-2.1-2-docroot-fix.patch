@@ -1,0 +1,29 @@
+diff -up CUnit-2.1-2/doc/headers/Makefile.am.fix CUnit-2.1-2/doc/headers/Makefile.am
+--- CUnit-2.1-2/doc/headers/Makefile.am.fix	2011-01-29 23:02:48.979554008 +0530
++++ doc/headers/Makefile.am	2011-01-29 23:03:17.265554008 +0530
+@@ -1,6 +1,6 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-dochdrdir = $(prefix)/doc/@PACKAGE@/headers
++dochdrdir = $(datarootdir)/doc/@PACKAGE@/headers
+ 
+ INCLUDE_FILES = \
+ 	Automated.h \
+diff -up CUnit-2.1-2/doc/Makefile.am.fix CUnit-2.1-2/doc/Makefile.am
+--- CUnit-2.1-2/doc/Makefile.am.fix	2011-01-29 23:03:29.287553948 +0530
++++ doc/Makefile.am	2011-01-29 23:03:43.111554042 +0530
+@@ -1,6 +1,6 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-docdir = $(prefix)/doc/@PACKAGE@
++docdir = $(datarootdir)/doc/@PACKAGE@
+ 
+ doc_DATA = \
+ 	CUnit_doc.css \
+@@ -13,4 +13,4 @@ doc_DATA = \
+ 	test_registry.html \
+ 	writing_tests.html
+ 
+-SUBDIRS = headers
+\ No newline at end of file
++SUBDIRS = headers

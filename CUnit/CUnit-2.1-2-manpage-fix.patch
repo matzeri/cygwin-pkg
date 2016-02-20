@@ -1,0 +1,57 @@
+diff -up CUnit-2.1-2/Man/man3/CUnit.3.man CUnit-2.1-2/Man/man3/CUnit.3
+--- CUnit-2.1-2/Man/man3/CUnit.3.man	2011-01-29 23:04:42.302553933 +0530
++++ Man/man3/CUnit.3	2011-01-29 23:06:46.210553841 +0530
+@@ -473,7 +473,7 @@ dynamically.  The following functions ar
+ be used instead of directly setting the value of the data structure members.  All
+ return CUE_SUCCESS on success, and the indicated error code on failure.
+ .P
+-.TP5
++.TP 5
+ .B "CU_ErrorCode CU_set_suite_name(CU_pSuite pSuite, const char *strNewName)"
+ .TP 5
+ .B "CU_ErrorCode CU_set_test_name(CU_pTest pTest, const char *strNewName)"
+@@ -481,7 +481,7 @@ These functions change the name of regis
+ are available as the
+ .B pSuite->pName</I>
+ and 
+-.BpTest->pName
++.B pTest->pName
+ data structure members.  If the suite or test is NULL, then CUE_NOSUITE or CUE_NOTEST
+ is returned, respectively.  If strNewName is NULL, then CUE_NO_SUITENAME or
+ CUE_NO_TESTNAME is returned, respectively.
+@@ -518,13 +518,13 @@ nothing is known about the suite or test
+ data structures to enumerate the suites and tests.  This is not directly supported in 
+ the client API.
+ .P
+-.TP5
++.TP 5
+ .B "CU_pSuite CU_get_suite(const char* strName)"
+-.TP5
++.TP 5
+ .B "CU_pSuite CU_get_suite_at_pos(unsigned int pos)"
+-.TP5
++.TP 5
+ .B "unsigned int CU_get_suite_pos(CU_pSuite pSuite)"
+-.TP5
++.TP 5
+ .B "unsigned int CU_get_suite_pos_by_name(const char* strName)"
+ </P>
+ These functions facilitate lookup of suites registered in the active test registry.  
+@@ -539,13 +539,13 @@ These return 0 if the suite cannot be fo
+ CUnit error state to CUE_NOREGISTRY> if the registry is not initialized.  As appropriate, 
+ CUE_NO_SUITENAME is set if strName is NULL, and CUE_NOSUITE is set if pSuite is NULL.
+ .P
+-.TP5
++.TP 5
+ .B "CU_pTest CU_get_test(CU_pSuite pSuite, const char *strName)"
+-.TP5
++.TP 5
+ .B "CU_pTest CU_get_test_at_pos<(CU_pSuite pSuite, unsigned int pos)"
+-.TP5
++.TP 5
+ .B "unsigned int CU_get_test_pos<(CU_pSuite pSuite, CU_pTest pTest)"
+-.TP5
++.TP 5
+ .B "unsigned int CU_get_test_pos_by_name(CU_pSuite pSuite, const char *strName)"
+ These functions facilitate lookup of tests registered in suites.  The first 
+ 2 functions allow lookup of the test by name or position and return NULL if the 

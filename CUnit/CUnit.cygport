@@ -1,0 +1,42 @@
+NAME="CUnit"
+VERSION="2.1.3"
+RELEASE="1"
+
+CATEGORY="Libs Math"
+
+SRC_DIR="${PN}-2.1-3"
+DESCRIPTION="CUnit is a lightweight system for writing, administering, and running unit tests in C.  It provides C programmers a basic testing functionality with a flexible variety of user interfaces."
+SUMMARY="CUnit is a Unit testing framework for C"
+
+HOMEPAGE="http://cunit.sourceforge.net"
+SRC_URI="http://sourceforge.net/projects/cunit/files/CUnit/2.1-3/${SRC_DIR}.tar.bz2" 
+
+PATCH_URI="CUnit-2.1-2-docroot-fix.patch
+CUnit-2.1-2-manpage-fix.patch
+CUnit-undefined.patch"
+
+abi=1
+
+PKG_NAMES="${PN}"
+
+CUnit_CONTENTS="usr/"
+
+DIFF_EXCLUDES="Makefile cunit.pc"
+
+src_compile() {
+        cd ${S}
+        cygautoreconf
+        rm -f config.status
+        cd ${B}
+        cygconf 
+        cygmake
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	
+	dodir /usr/share/doc/${PN}/Examples
+	cp -r ${S}/Examples ${D}/usr/share/doc/${PN}/
+
+}
