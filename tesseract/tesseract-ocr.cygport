@@ -1,6 +1,6 @@
 NAME="tesseract-ocr"
 VERSION=3.04.00
-RELEASE=3
+RELEASE=4
 
 CATEGORY="Text"
 SUMMARY="Tesseract Open Source OCR Engine"
@@ -10,7 +10,9 @@ HOMEPAGE="https://github.com/tesseract-ocr"
 # SRC_URI="https://https://github.com/tesseract-ocr/tesseract/archive/3.04.00.tar.gz"
 SRC_URI="https://github.com/tesseract-ocr/tesseract/archive/tesseract-${PV}.tar.gz"
 SRC_DIR="tesseract-${PV}"
-PATCH_URI="tesseract-undefined.patch"
+PATCH_URI="
+tesseract-training.patch
+tesseract-undefined.patch"
 
 PKG_NAMES="tesseract-ocr tesseract-training-util libtesseract-ocr_3 tesseract-ocr-devel"
 

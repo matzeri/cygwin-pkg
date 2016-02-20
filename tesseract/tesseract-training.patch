@@ -1,0 +1,704 @@
+--- origsrc/tesseract-3.04.00/ccutil/ambigs.cpp	2015-07-11 09:53:12.000000000 +0200
++++ ccutil/ambigs.cpp	2015-12-11 16:00:23.087012800 +0100
+@@ -24,13 +24,13 @@
+ #include "helpers.h"
+ #include "universalambigs.h"
+ 
+-#if defined _WIN32 || defined(__CYGWIN__)
++#if defined _WIN32 
+ #ifndef __GNUC__
+ #define strtok_r strtok_s
+ #else
+ #include "strtok_r.h"
+ #endif  /* __GNUC__ */
+-#endif  /* _WIN32 __CYGWIN__*/
++#endif  /* _WIN32 */
+ 
+ namespace tesseract {
+ 
+--- origsrc/tesseract-3.04.00/configure.ac	2015-07-11 09:53:12.000000000 +0200
++++ configure.ac	2015-12-11 16:00:23.102013700 +0100
+@@ -88,7 +88,7 @@ case "${host_os}" in
+         ;;
+     cygwin*)
+         AM_CONDITIONAL(ADD_RT, false)
+-        AM_CONDITIONAL(T_WIN, true)
++        AM_CONDITIONAL(T_WIN, false)
+         AC_SUBST([AM_LDFLAGS], ['-Wl,-no-undefined -Wl,--as-needed'])
+         ;;
+     solaris*)
+--- origsrc/tesseract-3.04.00/training/language-specific.sh	2015-07-11 09:53:12.000000000 +0200
++++ training/language-specific.sh	2015-11-29 21:29:25.000000000 +0100
+@@ -353,6 +353,30 @@ GREEK_FONTS=( \
+     "VL PGothic" \
+     )
+ 
++ANCIENT_GREEK_FONTS=( \
++    "GFS Artemisia" \
++    "GFS Artemisia Bold" \
++    "GFS Artemisia Bold Italic" \
++    "GFS Artemisia Italic" \
++    "GFS Bodoni" \
++    "GFS Bodoni Bold" \
++    "GFS Bodoni Bold Italic" \
++    "GFS Bodoni Italic" \
++    "GFS Didot" \
++    "GFS Didot Bold" \
++    "GFS Didot Bold Italic" \
++    "GFS Didot Italic" \
++    "GFS DidotClassic" \
++    "GFS Neohellenic" \
++    "GFS Neohellenic Bold" \
++    "GFS Neohellenic Bold Italic" \
++    "GFS Neohellenic Italic" \
++    "GFS Philostratos" \
++    "GFS Porson" \
++    "GFS Pyrsos" \
++    "GFS Solomos" \
++    )
++
+ ARABIC_FONTS=( \
+     "Arabic Transparent Bold" \
+     "Arabic Transparent" \
+@@ -780,7 +804,7 @@ VERTICAL_FONTS=( \
+ #      holds the text corpus file for the language, used in phase F
+ #   ${FONTS[@]}
+ #      holds a sequence of applicable fonts for the language, used in
+-#      phase F & I
++#      phase F & I. only set if not already set, i.e. from command line
+ #   ${TRAINING_DATA_ARGUMENTS}
+ #      non-default arguments to the training_data program used in phase T
+ #   ${FILTER_ARGUMENTS} -
+@@ -794,7 +818,6 @@ set_lang_specific_parameters() {
+   local lang=$1
+   # The default text location is now given directly from the language code.
+   TEXT_CORPUS="${FLAGS_webtext_prefix}/${lang}.corpus.txt"
+-  FONTS=( "${LATIN_FONTS[@]}" )
+   FILTER_ARGUMENTS=""
+   WORDLIST2DAWG_ARGUMENTS=""
+   # These dawg factors represent the fraction of the corpus not covered by the
+@@ -816,30 +839,30 @@ set_lang_specific_parameters() {
+   case ${lang} in
+     # Latin languages.
+     enm ) TEXT2IMAGE_EXTRA_ARGS=" --ligatures"   # Add ligatures when supported
+-          FONTS=( "${EARLY_LATIN_FONTS[@]}" );;
++          test -z "$FONTS" && FONTS=( "${EARLY_LATIN_FONTS[@]}" );;
+     frm ) TEXT_CORPUS="${FLAGS_webtext_prefix}/fra.corpus.txt"
+           # Make long-s substitutions for Middle French text
+           FILTER_ARGUMENTS="--make_early_language_variant=fra"
+           TEXT2IMAGE_EXTRA_ARGS=" --ligatures"   # Add ligatures when supported.
+-          FONTS=( "${EARLY_LATIN_FONTS[@]}" );;
++          test -z "$FONTS" && FONTS=( "${EARLY_LATIN_FONTS[@]}" );;
+     frk ) TEXT_CORPUS="${FLAGS_webtext_prefix}/deu.corpus.txt"
+-          FONTS=( "${FRAKTUR_FONTS[@]}" );;
++          test -z "$FONTS" && FONTS=( "${FRAKTUR_FONTS[@]}" );;
+     ita_old )
+           TEXT_CORPUS="${FLAGS_webtext_prefix}/ita.corpus.txt"
+           # Make long-s substitutions for Early Italian text
+           FILTER_ARGUMENTS="--make_early_language_variant=ita"
+           TEXT2IMAGE_EXTRA_ARGS=" --ligatures"   # Add ligatures when supported.
+-          FONTS=( "${EARLY_LATIN_FONTS[@]}" );;
++          test -z "$FONTS" && FONTS=( "${EARLY_LATIN_FONTS[@]}" );;
+     spa_old )
+           TEXT_CORPUS="${FLAGS_webtext_prefix}/spa.corpus.txt"
+           # Make long-s substitutions for Early Spanish text
+           FILTER_ARGUMENTS="--make_early_language_variant=spa"
+           TEXT2IMAGE_EXTRA_ARGS=" --ligatures"  # Add ligatures when supported.
+-          FONTS=( "${EARLY_LATIN_FONTS[@]}" );;
++          test -z "$FONTS" && FONTS=( "${EARLY_LATIN_FONTS[@]}" );;
+     srp_latn )
+           TEXT_CORPUS=${FLAGS_webtext_prefix}/srp.corpus.txt ;;
+     vie ) TRAINING_DATA_ARGUMENTS+=" --infrequent_ratio=10000"
+-          FONTS=( "${VIETNAMESE_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${VIETNAMESE_FONTS[@]}" ) ;;
+     # Highly inflective languages get a bigger dawg size.
+     # TODO(rays) Add more here!
+     hun ) WORD_DAWG_SIZE=1000000 ;;
+@@ -899,14 +922,14 @@ set_lang_specific_parameters() {
+           # Strip unrenderable words as not all fonts will render the extended
+           # latin symbols found in Vietnamese text.
+           WORD_DAWG_SIZE=1000000
+-          FONTS=( "${EARLY_LATIN_FONTS[@]}" );;
++          test -z "$FONTS" && FONTS=( "${EARLY_LATIN_FONTS[@]}" );;
+ 
+     # Cyrillic script-based languages.
+-    rus ) FONTS=( "${RUSSIAN_FONTS[@]}" )
++    rus ) test -z "$FONTS" && FONTS=( "${RUSSIAN_FONTS[@]}" )
+           NUMBER_DAWG_FACTOR=0.05
+           WORD_DAWG_SIZE=1000000 ;;
+     aze_cyrl | bel | bul | kaz | mkd | srp | tgk | ukr | uzb_cyrl )
+-          FONTS=( "${RUSSIAN_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${RUSSIAN_FONTS[@]}" ) ;;
+ 
+     # Special code for performing Cyrillic language-id that is trained on
+     # Russian, Serbian, Ukranian, Belarusian, Macedonian, Tajik and Mongolian
+@@ -916,70 +939,70 @@ set_lang_specific_parameters() {
+           TRAINING_DATA_ARGUMENTS+=" --infrequent_ratio=10000"
+           GENERATE_WORD_BIGRAMS=0
+           WORD_DAWG_SIZE=1000000
+-          FONTS=( "${RUSSIAN_FONTS[@]}" );;
++          test -z "$FONTS" && FONTS=( "${RUSSIAN_FONTS[@]}" );;
+ 
+     # South Asian scripts mostly have a lot of different graphemes, so trim
+     # down the MEAN_COUNT so as not to get a huge amount of text.
+     asm | ben )
+           MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.15
+-          FONTS=( "${BENGALI_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${BENGALI_FONTS[@]}" ) ;;
+     bih | hin | mar | nep | san )
+           MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.15
+-          FONTS=( "${DEVANAGARI_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${DEVANAGARI_FONTS[@]}" ) ;;
+     bod ) MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.15
+-          FONTS=( "${TIBETAN_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${TIBETAN_FONTS[@]}" ) ;;
+     dzo )
+           WORD_DAWG_FACTOR=0.01
+-          FONTS=( "${TIBETAN_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${TIBETAN_FONTS[@]}" ) ;;
+     guj ) MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.15
+-          FONTS=( "${GUJARATI_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${GUJARATI_FONTS[@]}" ) ;;
+     kan ) MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.15
+           TRAINING_DATA_ARGUMENTS+=" --no_newline_in_output"
+           TEXT2IMAGE_EXTRA_ARGS=" --char_spacing=0.5"
+-          FONTS=( "${KANNADA_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${KANNADA_FONTS[@]}" ) ;;
+     mal ) MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.15
+           TRAINING_DATA_ARGUMENTS+=" --no_newline_in_output"
+           TEXT2IMAGE_EXTRA_ARGS=" --char_spacing=0.5"
+-          FONTS=( "${MALAYALAM_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${MALAYALAM_FONTS[@]}" ) ;;
+     ori )
+           WORD_DAWG_FACTOR=0.01
+-          FONTS=( "${ORIYA_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${ORIYA_FONTS[@]}" ) ;;
+     pan ) MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.01
+-          FONTS=( "${PUNJABI_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${PUNJABI_FONTS[@]}" ) ;;
+     sin ) MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.01
+-          FONTS=( "${SINHALA_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${SINHALA_FONTS[@]}" ) ;;
+     tam ) MEAN_COUNT="30"
+           WORD_DAWG_FACTOR=0.15
+           TRAINING_DATA_ARGUMENTS+=" --no_newline_in_output"
+           TEXT2IMAGE_EXTRA_ARGS=" --char_spacing=0.5"
+-          FONTS=( "${TAMIL_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${TAMIL_FONTS[@]}" ) ;;
+     tel ) MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.15
+           TRAINING_DATA_ARGUMENTS+=" --no_newline_in_output"
+           TEXT2IMAGE_EXTRA_ARGS=" --char_spacing=0.5"
+-          FONTS=( "${TELUGU_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${TELUGU_FONTS[@]}" ) ;;
+ 
+     # SouthEast Asian scripts.
+     khm ) MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.15
+           TRAINING_DATA_ARGUMENTS+=" --infrequent_ratio=10000"
+-          FONTS=( "${KHMER_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${KHMER_FONTS[@]}" ) ;;
+     lao ) MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.15
+           TRAINING_DATA_ARGUMENTS+=" --infrequent_ratio=10000"
+-          FONTS=( "${LAOTHIAN_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${LAOTHIAN_FONTS[@]}" ) ;;
+     mya ) MEAN_COUNT="12"
+           WORD_DAWG_FACTOR=0.15
+           TRAINING_DATA_ARGUMENTS+=" --infrequent_ratio=10000"
+-          FONTS=( "${BURMESE_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${BURMESE_FONTS[@]}" ) ;;
+     tha ) MEAN_COUNT="30"
+           WORD_DAWG_FACTOR=0.01
+           TRAINING_DATA_ARGUMENTS+=" --infrequent_ratio=10000"
+@@ -987,7 +1010,7 @@ set_lang_specific_parameters() {
+           TRAINING_DATA_ARGUMENTS+=" --no_space_in_output --desired_bigrams="
+           AMBIGS_FILTER_DENOMINATOR="1000"
+           LEADING=48
+-          FONTS=( "${THAI_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${THAI_FONTS[@]}" ) ;;
+ 
+     # CJK
+     chi_sim )
+@@ -998,7 +1021,7 @@ set_lang_specific_parameters() {
+           TRAINING_DATA_ARGUMENTS+=" --infrequent_ratio=10000"
+           TRAINING_DATA_ARGUMENTS+=" --no_space_in_output --desired_bigrams="
+           FILTER_ARGUMENTS="--charset_filter=chi_sim --segmenter_lang=chi_sim"
+-          FONTS=( "${CHI_SIM_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${CHI_SIM_FONTS[@]}" ) ;;
+     chi_tra )
+           MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.015
+@@ -1006,14 +1029,14 @@ set_lang_specific_parameters() {
+           TRAINING_DATA_ARGUMENTS+=" --infrequent_ratio=10000"
+           TRAINING_DATA_ARGUMENTS+=" --no_space_in_output --desired_bigrams="
+           FILTER_ARGUMENTS="--charset_filter=chi_tra --segmenter_lang=chi_tra"
+-          FONTS=( "${CHI_TRA_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${CHI_TRA_FONTS[@]}" ) ;;
+     jpn ) MEAN_COUNT="15"
+           WORD_DAWG_FACTOR=0.015
+           GENERATE_WORD_BIGRAMS=0
+           TRAINING_DATA_ARGUMENTS+=" --infrequent_ratio=10000"
+           TRAINING_DATA_ARGUMENTS+=" --no_space_in_output --desired_bigrams="
+           FILTER_ARGUMENTS="--charset_filter=jpn --segmenter_lang=jpn"
+-          FONTS=( "${JPN_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${JPN_FONTS[@]}" ) ;;
+     kor ) MEAN_COUNT="20"
+           WORD_DAWG_FACTOR=0.015
+           NUMBER_DAWG_FACTOR=0.05
+@@ -1021,38 +1044,41 @@ set_lang_specific_parameters() {
+           TRAINING_DATA_ARGUMENTS+=" --desired_bigrams="
+           GENERATE_WORD_BIGRAMS=0
+           FILTER_ARGUMENTS="--charset_filter=kor --segmenter_lang=kor"
+-          FONTS=( "${KOREAN_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${KOREAN_FONTS[@]}" ) ;;
+ 
+     # Middle-Eastern scripts.
+-    ara ) FONTS=( "${ARABIC_FONTS[@]}" ) ;;
+-    div ) FONTS=( "${THAANA_FONTS[@]}" ) ;;
++    ara ) test -z "$FONTS" && FONTS=( "${ARABIC_FONTS[@]}" ) ;;
++    div ) test -z "$FONTS" && FONTS=( "${THAANA_FONTS[@]}" ) ;;
+     fas | pus | snd | uig | urd )
+-          FONTS=( "${PERSIAN_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${PERSIAN_FONTS[@]}" ) ;;
+     heb | yid )
+           NUMBER_DAWG_FACTOR=0.05
+           WORD_DAWG_FACTOR=0.08
+-          FONTS=( "${HEBREW_FONTS[@]}" ) ;;
+-    syr ) FONTS=( "${SYRIAC_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${HEBREW_FONTS[@]}" ) ;;
++    syr ) test -z "$FONTS" && FONTS=( "${SYRIAC_FONTS[@]}" ) ;;
+ 
+     # Other scripts.
+     amh | tir)
+-          FONTS=( "${AMHARIC_FONTS[@]}" ) ;;
+-    chr ) FONTS=( "${NORTH_AMERICAN_ABORIGINAL_FONTS[@]}" \
++          test -z "$FONTS" && FONTS=( "${AMHARIC_FONTS[@]}" ) ;;
++    chr ) test -z "$FONTS" && FONTS=( "${NORTH_AMERICAN_ABORIGINAL_FONTS[@]}" \
+                   "Noto Sans Cherokee" \
+                 ) ;;
+-    ell | grc )
++    ell )
+           NUMBER_DAWG_FACTOR=0.05
+           WORD_DAWG_FACTOR=0.08
+-          FONTS=( "${GREEK_FONTS[@]}" ) ;;
+-    hye ) FONTS=( "${ARMENIAN_FONTS[@]}" ) ;;
+-    iku ) FONTS=( "${NORTH_AMERICAN_ABORIGINAL_FONTS[@]}" ) ;;
+-    kat)  FONTS=( "${GEORGIAN_FONTS[@]}" ) ;;
++          test -z "$FONTS" && FONTS=( "${GREEK_FONTS[@]}" ) ;;
++    grc )
++          test -z "$EXPOSURES" && EXPOSURES="-3 -2 -1 0 1 2 3"
++          test -z "$FONTS" && FONTS=( "${ANCIENT_GREEK_FONTS[@]}" ) ;;
++    hye ) test -z "$FONTS" && FONTS=( "${ARMENIAN_FONTS[@]}" ) ;;
++    iku ) test -z "$FONTS" && FONTS=( "${NORTH_AMERICAN_ABORIGINAL_FONTS[@]}" ) ;;
++    kat)  test -z "$FONTS" && FONTS=( "${GEORGIAN_FONTS[@]}" ) ;;
+     kat_old)
+           TEXT_CORPUS="${FLAGS_webtext_prefix}/kat.corpus.txt"
+-          FONTS=( "${OLD_GEORGIAN_FONTS[@]}" ) ;;
+-    kir ) FONTS=( "${KYRGYZ_FONTS[@]}" )
++          test -z "$FONTS" && FONTS=( "${OLD_GEORGIAN_FONTS[@]}" ) ;;
++    kir ) test -z "$FONTS" && FONTS=( "${KYRGYZ_FONTS[@]}" )
+           TRAINING_DATA_ARGUMENTS=" --infrequent_ratio=100" ;;
+-    kur ) FONTS=( "${KURDISH_FONTS[@]}" ) ;;
++    kur ) test -z "$FONTS" && FONTS=( "${KURDISH_FONTS[@]}" ) ;;
+ 
+     *) err "Error: ${lang} is not a valid language code"
+   esac
+@@ -1061,6 +1087,11 @@ set_lang_specific_parameters() {
+   elif [[ ! -z ${MEAN_COUNT} ]]; then
+     TRAINING_DATA_ARGUMENTS+=" --mean_count=${MEAN_COUNT}"
+   fi
++  # Default to Latin fonts if none have been set
++  test -z "$FONTS" && FONTS=( "${LATIN_FONTS[@]}" )
++
++  # Default to 0 exposure if it hasn't been set
++  test -z "$EXPOSURES" && EXPOSURES=0
+ }
+ 
+ #=============================================================================
+--- origsrc/tesseract-3.04.00/training/pango_font_info.cpp	2015-07-11 09:53:12.000000000 +0200
++++ training/pango_font_info.cpp	2015-12-11 16:00:23.158016900 +0100
+@@ -18,6 +18,7 @@
+  **********************************************************************/
+ 
+ // Include automatically generated configuration file if running autoconf.
++#define _GNU_SOURCE
+ #ifdef HAVE_CONFIG_H
+ #include "config_auto.h"
+ #endif
+--- origsrc/tesseract-3.04.00/training/tesstrain.sh	2015-07-11 09:53:12.000000000 +0200
++++ training/tesstrain.sh	2015-11-29 19:46:42.000000000 +0100
+@@ -17,14 +17,14 @@
+ # USAGE:
+ #
+ # tesstrain.sh
+-#    --bin_dir PATH             # Location of training program.
+-#    --fontlist FONTS_STR       # A plus-separated list of fontnames to train on.
++#    --fontlist FONTS           # A list of fontnames to train on.
+ #    --fonts_dir FONTS_PATH     # Path to font files.
+ #    --lang LANG_CODE           # ISO 639 code.
+ #    --langdata_dir DATADIR     # Path to tesseract/training/langdata directory.
+ #    --output_dir OUTPUTDIR     # Location of output traineddata file.
+ #    --overwrite                # Safe to overwrite files in output_dir.
+ #    --run_shape_clustering     # Run shape clustering (use for Indic langs).
++#    --exposures EXPOSURES      # A list of exposure levels to use (e.g. "-1 0 1").
+ #
+ # OPTIONAL flags for input data. If unspecified we will look for them in
+ # the langdata_dir directory.
+@@ -49,11 +49,8 @@ source `dirname $0`/tesstrain_utils.sh
+ ARGV=("$@")
+ parse_flags
+ 
+-tlog "\n=== Starting training for language '${LANG_CODE}'"
+-
+-tlog "Cleaning workspace directory ${TRAINING_DIR}..."
+ mkdir -p ${TRAINING_DIR}
+-rm -fr ${TRAINING_DIR}/*
++tlog "\n=== Starting training for language '${LANG_CODE}'"
+ 
+ source `dirname $0`/language-specific.sh
+ set_lang_specific_parameters ${LANG_CODE}
+--- origsrc/tesseract-3.04.00/training/tesstrain_utils.sh	2015-07-11 09:53:12.000000000 +0200
++++ training/tesstrain_utils.sh	2015-11-29 19:47:05.000000000 +0100
+@@ -16,10 +16,6 @@
+ #
+ # USAGE: source tesstrain_utils.sh
+ 
+-FONTS=(
+-    "Arial" \
+-    "Times New Roman," \
+-)
+ if [ "$(uname)" == "Darwin" ];then
+     FONTS_DIR="/Library/Fonts/"
+ else
+@@ -29,7 +25,7 @@ OUTPUT_DIR="/tmp/tesstrain/tessdata"
+ OVERWRITE=0
+ RUN_SHAPE_CLUSTERING=0
+ EXTRACT_FONT_PROPERTIES=1
+-WORKSPACE_DIR="/tmp/tesstrain"
++WORKSPACE_DIR=`mktemp -d`
+ 
+ # Logging helper functions.
+ tlog() {
+@@ -45,11 +41,11 @@ err_exit() {
+ # if the program file is not found.
+ # Usage: run_command CMD ARG1 ARG2...
+ run_command() {
+-    local cmd=$1
+-    shift
+-    if [[ ! -x ${cmd} ]]; then
+-        err_exit "File ${cmd} not found"
++    local cmd=`which $1`
++    if [[ -z ${cmd} ]]; then
++        err_exit "$1 not found"
+     fi
++    shift
+     tlog "[$(date)] ${cmd} $@"
+     ${cmd} "$@" 2>&1 1>&2 | tee -a ${LOG_FILE}
+     # check completion status
+@@ -69,22 +65,6 @@ check_file_readable() {
+     done
+ }
+ 
+-# Set global path variables that are based on parsed flags.
+-set_prog_paths() {
+-    if [[ -z ${BINDIR} ]]; then
+-        err_exit "Need to specify location of program files"
+-    fi
+-    CN_TRAINING_EXE=${BINDIR}/cntraining
+-    COMBINE_TESSDATA_EXE=${BINDIR}/combine_tessdata
+-    MF_TRAINING_EXE=${BINDIR}/mftraining
+-    SET_UNICHARSET_PROPERTIES_EXE=${BINDIR}/set_unicharset_properties
+-    SHAPE_TRAINING_EXE=${BINDIR}/shapeclustering
+-    TESSERACT_EXE=${BINDIR}/tesseract
+-    TEXT2IMAGE_EXE=${BINDIR}/text2image
+-    UNICHARSET_EXTRACTOR_EXE=${BINDIR}/unicharset_extractor
+-    WORDLIST2DAWG_EXE=${BINDIR}/wordlist2dawg
+-}
+-
+ # Sets the named variable to given value. Aborts if the value is missing or
+ # if it looks like a flag.
+ # Usage: parse_value VAR_NAME VALUE
+@@ -109,18 +89,27 @@ parse_flags() {
+         case ${ARGV[$i]} in
+             --)
+                 break;;
+-            --bin_dir)
+-                parse_value "BINDIR" ${ARGV[$j]}
+-                i=$j ;;
+-            --fontlist)   # Expect a plus-separated list of names
+-                if [[ -z ${ARGV[$j]} ]] || [[ ${ARGV[$j]:0:2} == "--" ]]; then
+-                    err_exit "Invalid value passed to --fontlist"
+-                fi
+-                local ofs=$IFS
+-                IFS='+'
+-                FONTS=( ${ARGV[$j]} )
+-                IFS=$ofs
+-                i=$j ;;
++            --fontlist)
++		fn=0
++		FONTS=""
++                while test $j -lt ${#ARGV[@]}; do
++                    test -z "${ARGV[$j]}" && break
++                    test `echo ${ARGV[$j]} | cut -c -2` = "--" && break
++                    FONTS[$fn]="${ARGV[$j]}"
++                    fn=$((fn+1))
++                    j=$((j+1))
++                done
++                i=$((j-1)) ;;
++            --exposures)
++                exp=""
++                while test $j -lt ${#ARGV[@]}; do
++                    test -z "${ARGV[$j]}" && break
++                    test `echo ${ARGV[$j]} | cut -c -2` = "--" && break
++                    exp="$exp ${ARGV[$j]}"
++                    j=$((j+1))
++                done
++                parse_value "EXPOSURES" "$exp"
++                i=$((j-1)) ;;
+             --fonts_dir)
+                 parse_value "FONTS_DIR" ${ARGV[$j]}
+                 i=$j ;;
+@@ -156,9 +145,6 @@ parse_flags() {
+     if [[ -z ${LANG_CODE} ]]; then
+         err_exit "Need to specify a language --lang"
+     fi
+-    if [[ -z ${BINDIR} ]]; then
+-        err_exit "Need to specify path to built binaries --bin_dir"
+-    fi
+     if [[ -z ${LANGDATA_ROOT} ]]; then
+         err_exit "Need to specify path to language files --langdata_dir"
+     fi
+@@ -171,8 +157,6 @@ parse_flags() {
+         fi
+     fi
+ 
+-    set_prog_paths
+-
+     # Location where intermediate files will be created.
+     TRAINING_DIR=${WORKSPACE_DIR}/${LANG_CODE}
+     # Location of log file for the whole run.
+@@ -200,8 +184,8 @@ initialize_fontconfig() {
+     export FONT_CONFIG_CACHE=$(mktemp -d --tmpdir font_tmp.XXXXXXXXXX)
+     local sample_path=${FONT_CONFIG_CACHE}/sample_text.txt
+     echo "Text" >${sample_path}
+-    run_command ${TEXT2IMAGE_EXE} --fonts_dir=${FONTS_DIR} \
+-        --font="Arial" --outputbase=${sample_path} --text=${sample_path} \
++    run_command text2image --fonts_dir=${FONTS_DIR} \
++        --font="${FONTS[0]}" --outputbase=${sample_path} --text=${sample_path} \
+         --fontconfig_tmpdir=${FONT_CONFIG_CACHE}
+ }
+ 
+@@ -228,14 +212,14 @@ generate_font_image() {
+       fi
+     done
+ 
+-    run_command ${TEXT2IMAGE_EXE} ${common_args} --font="${font}" \
++    run_command text2image ${common_args} --font="${font}" \
+         --text=${TRAINING_TEXT} ${TEXT2IMAGE_EXTRA_ARGS}
+     check_file_readable ${outbase}.box ${outbase}.tif
+ 
+     if (( ${EXTRACT_FONT_PROPERTIES} )) &&
+         [[ -r ${TRAIN_NGRAMS_FILE} ]]; then
+         tlog "Extracting font properties of ${font}"
+-        run_command ${TEXT2IMAGE_EXE} ${common_args} --font="${font}" \
++        run_command text2image ${common_args} --font="${font}" \
+             --ligatures=false --text=${TRAIN_NGRAMS_FILE} \
+             --only_extract_font_properties --ptsize=32
+         check_file_readable ${outbase}.fontinfo
+@@ -254,35 +238,36 @@ phase_I_generate_image() {
+         err_exit "Could not find training text file ${TRAINING_TEXT}"
+     fi
+     CHAR_SPACING="0.0"
+-    EXPOSURE="0"
+ 
+-    if (( ${EXTRACT_FONT_PROPERTIES} )) && [[ -r ${BIGRAM_FREQS_FILE} ]]; then
+-        # Parse .bigram_freqs file and compose a .train_ngrams file with text
+-        # for tesseract to recognize during training. Take only the ngrams whose
+-        # combined weight accounts for 95% of all the bigrams in the language.
+-        NGRAM_FRAC=$(cat ${BIGRAM_FREQS_FILE} \
+-            | awk '{s=s+$2}; END {print (s/100)*p}' p=99)
+-        cat ${BIGRAM_FREQS_FILE} | sort -rnk2 \
+-            | awk '{s=s+$2; if (s <= x) {printf "%s ", $1; } }' \
+-            x=${NGRAM_FRAC} > ${TRAIN_NGRAMS_FILE}
+-        check_file_readable ${TRAIN_NGRAMS_FILE}
+-    fi
+-
+-    local counter=0
+-    for font in "${FONTS[@]}"; do
+-        generate_font_image "${font}" &
+-        let counter=counter+1
+-        let rem=counter%par_factor
+-        if [[ "${rem}" -eq 0 ]]; then
+-          wait
++    for EXPOSURE in $EXPOSURES; do
++        if (( ${EXTRACT_FONT_PROPERTIES} )) && [[ -r ${BIGRAM_FREQS_FILE} ]]; then
++            # Parse .bigram_freqs file and compose a .train_ngrams file with text
++            # for tesseract to recognize during training. Take only the ngrams whose
++            # combined weight accounts for 95% of all the bigrams in the language.
++            NGRAM_FRAC=$(cat ${BIGRAM_FREQS_FILE} \
++                | awk '{s=s+$2}; END {print (s/100)*p}' p=99)
++            cat ${BIGRAM_FREQS_FILE} | sort -rnk2 \
++                | awk '{s=s+$2; if (s <= x) {printf "%s ", $1; } }' \
++                x=${NGRAM_FRAC} > ${TRAIN_NGRAMS_FILE}
++            check_file_readable ${TRAIN_NGRAMS_FILE}
+         fi
+-    done
+-    wait
+-    # Check that each process was successful.
+-    for font in "${FONTS[@]}"; do
+-        local fontname=$(echo ${font} | tr ' ' '_' | sed 's/,//g')
+-        local outbase=${TRAINING_DIR}/${LANG_CODE}.${fontname}.exp${EXPOSURE}
+-        check_file_readable ${outbase}.box ${outbase}.tif
++
++        local counter=0
++        for font in "${FONTS[@]}"; do
++            generate_font_image "${font}" &
++            let counter=counter+1
++            let rem=counter%par_factor
++            if [[ "${rem}" -eq 0 ]]; then
++              wait
++            fi
++        done
++        wait
++        # Check that each process was successful.
++        for font in "${FONTS[@]}"; do
++            local fontname=$(echo ${font} | tr ' ' '_' | sed 's/,//g')
++            local outbase=${TRAINING_DIR}/${LANG_CODE}.${fontname}.exp${EXPOSURE}
++            check_file_readable ${outbase}.box ${outbase}.tif
++        done
+     done
+ }
+ 
+@@ -291,7 +276,7 @@ phase_UP_generate_unicharset() {
+     tlog "\n=== Phase UP: Generating unicharset and unichar properties files ==="
+ 
+     local box_files=$(ls ${TRAINING_DIR}/*.box)
+-    run_command ${UNICHARSET_EXTRACTOR_EXE} -D "${TRAINING_DIR}/" ${box_files}
++    run_command unicharset_extractor -D "${TRAINING_DIR}/" ${box_files}
+     local outfile=${TRAINING_DIR}/unicharset
+     UNICHARSET_FILE="${TRAINING_DIR}/${LANG_CODE}.unicharset"
+     check_file_readable ${outfile}
+@@ -299,7 +284,7 @@ phase_UP_generate_unicharset() {
+ 
+     XHEIGHTS_FILE="${TRAINING_DIR}/${LANG_CODE}.xheights"
+     check_file_readable ${UNICHARSET_FILE}
+-    run_command ${SET_UNICHARSET_PROPERTIES_EXE} \
++    run_command set_unicharset_properties \
+         -U ${UNICHARSET_FILE} -O ${UNICHARSET_FILE} -X ${XHEIGHTS_FILE} \
+         --script_dir=${LANGDATA_ROOT}
+     check_file_readable ${XHEIGHTS_FILE}
+@@ -327,7 +312,7 @@ phase_D_generate_dawg() {
+     if [[ -s ${WORDLIST_FILE} ]]; then
+         tlog "Generating word Dawg"
+         check_file_readable ${UNICHARSET_FILE}
+-        run_command ${WORDLIST2DAWG_EXE} -r 1 ${WORDLIST_FILE} ${WORD_DAWG} \
++        run_command wordlist2dawg -r 1 ${WORDLIST_FILE} ${WORD_DAWG} \
+             ${UNICHARSET_FILE}
+         check_file_readable ${WORD_DAWG}
+ 
+@@ -339,13 +324,13 @@ phase_D_generate_dawg() {
+     if [[ -s ${freq_wordlist_file} ]]; then
+         check_file_readable ${UNICHARSET_FILE}
+         tlog "Generating frequent-word Dawg"
+-        run_command ${WORDLIST2DAWG_EXE}  -r 1 ${freq_wordlist_file} \
++        run_command wordlist2dawg  -r 1 ${freq_wordlist_file} \
+             ${FREQ_DAWG} ${UNICHARSET_FILE}
+         check_file_readable ${FREQ_DAWG}
+     fi
+ 
+     # Punctuation DAWG
+-    # -r arguments to WORDLIST2DAWG_EXE denote RTL reverse policy
++    # -r arguments to wordlist2dawg denote RTL reverse policy
+     # (see Trie::RTLReversePolicy enum in third_party/tesseract/dict/trie.h).
+     # We specify 0/RRP_DO_NO_REVERSE when generating number DAWG,
+     # 1/RRP_REVERSE_IF_HAS_RTL for freq and word DAWGS,
+@@ -360,20 +345,20 @@ phase_D_generate_dawg() {
+         PUNC_FILE="${LANGDATA_ROOT}/common.punc"
+     fi
+     check_file_readable ${PUNC_FILE}
+-    run_command ${WORDLIST2DAWG_EXE} -r ${punc_reverse_policy} \
++    run_command wordlist2dawg -r ${punc_reverse_policy} \
+         ${PUNC_FILE} ${PUNC_DAWG} ${UNICHARSET_FILE}
+     check_file_readable ${PUNC_DAWG}
+ 
+     # Numbers DAWG
+     if [[ -s ${NUMBERS_FILE} ]]; then
+-        run_command ${WORDLIST2DAWG_EXE} -r 0 \
++        run_command wordlist2dawg -r 0 \
+             ${NUMBERS_FILE} ${NUMBER_DAWG} ${UNICHARSET_FILE}
+         check_file_readable ${NUMBER_DAWG}
+     fi
+ 
+     # Bigram dawg
+     if [[ -s ${WORD_BIGRAMS_FILE} ]]; then
+-        run_command ${WORDLIST2DAWG_EXE} -r 1 \
++        run_command wordlist2dawg -r 1 \
+             ${WORD_BIGRAMS_FILE} ${BIGRAM_DAWG} ${UNICHARSET_FILE}
+         check_file_readable ${BIGRAM_DAWG}
+     fi
+@@ -387,10 +372,9 @@ phase_E_extract_features() {
+         par_factor=1
+     fi
+     tlog "\n=== Phase E: Extracting features ==="
+-    TRAIN_EXPOSURES='0'
+ 
+     local img_files=""
+-    for exposure in ${TRAIN_EXPOSURES}; do
++    for exposure in ${EXPOSURES}; do
+         img_files=${img_files}' '$(ls ${TRAINING_DIR}/*.exp${exposure}.tif)
+     done
+ 
+@@ -405,7 +389,7 @@ phase_E_extract_features() {
+     tlog "Using TESSDATA_PREFIX=${TESSDATA_PREFIX}"
+     local counter=0
+     for img_file in ${img_files}; do
+-        run_command ${TESSERACT_EXE} ${img_file} ${img_file%.*} \
++        run_command tesseract ${img_file} ${img_file%.*} \
+             ${box_config} ${config} &
+       let counter=counter+1
+       let rem=counter%par_factor
+@@ -427,7 +411,7 @@ phase_C_cluster_prototypes() {
+     tlog "\n=== Phase C: Clustering feature prototypes (cnTraining) ==="
+     local out_normproto=$1
+ 
+-    run_command ${CN_TRAINING_EXE} -D "${TRAINING_DIR}/" \
++    run_command cntraining -D "${TRAINING_DIR}/" \
+         $(ls ${TRAINING_DIR}/*.tr)
+ 
+     check_file_readable ${TRAINING_DIR}/normproto
+@@ -447,7 +431,7 @@ phase_S_cluster_shapes() {
+         font_props=${font_props}" -X ${TRAINING_DIR}/${LANG_CODE}.xheights"
+     fi
+ 
+-    run_command ${SHAPE_TRAINING_EXE} \
++    run_command shapeclustering \
+         -D "${TRAINING_DIR}/" \
+         -U ${TRAINING_DIR}/${LANG_CODE}.unicharset \
+         -O ${TRAINING_DIR}/${LANG_CODE}.mfunicharset \
+@@ -468,7 +452,7 @@ phase_M_cluster_microfeatures() {
+         font_props=${font_props}" -X ${TRAINING_DIR}/${LANG_CODE}.xheights"
+     fi
+ 
+-    run_command ${MF_TRAINING_EXE} \
++    run_command mftraining \
+         -D "${TRAINING_DIR}/" \
+         -U ${TRAINING_DIR}/${LANG_CODE}.unicharset \
+         -O ${TRAINING_DIR}/${LANG_CODE}.mfunicharset \
+@@ -528,7 +512,7 @@ make__traineddata() {
+   fi
+ 
+   # Compose the traineddata file.
+-  run_command ${COMBINE_TESSDATA_EXE} ${TRAINING_DIR}/${LANG_CODE}.
++  run_command combine_tessdata ${TRAINING_DIR}/${LANG_CODE}.
+ 
+   # Copy it to the output dir, overwriting only if allowed by the cmdline flag.
+   if [[ ! -d ${OUTPUT_DIR} ]]; then
