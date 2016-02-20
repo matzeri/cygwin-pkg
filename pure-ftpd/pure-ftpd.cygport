@@ -1,0 +1,36 @@
+NAME="pure-ftpd"
+VERSION=1.0.42
+RELEASE=1
+
+CATEGORY="Net"
+SUMMARY="A free (BSD), secure, standard-conformant FTP server."
+DESCRIPTION="A free (BSD), secure, standard-conformant FTP server."
+HOMEPAGE="http://pureftpd.org/"
+
+SRC_URI="http://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${PV}.tar.bz2"
+PATCH_URI="pure-ftpd-config.patch
+pure-ftpd-noroot.patch"
+
+CYGCONF_ARGS="--with-everything --with-rfc2640 --enable-largefile --with-tls --without-privsep"
+DOCS="README.*"
+
+PKG_NAMES="pure-ftpd"
+pure_ftpd_CONTENTS="usr"
+
+src_compile() {
+        cd ${S}
+        cygautoreconf
+        cd ${B}
+        cygconf 
+        cygmake
+}
+
+src_test() {
+	:
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	dobin ${C}/pure-ftpd-config
+}

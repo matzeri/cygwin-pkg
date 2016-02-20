@@ -1,0 +1,308 @@
+--- origsrc/pure-ftpd-1.0.29/CYGWIN-PATCHES/pure-ftpd-config	1970-01-01 03:00:00.000000000 +0300
++++ CYGWIN-PATCHES/pure-ftpd-config	2010-04-16 18:34:14.218750000 +0400
+@@ -0,0 +1,305 @@
++#!/bin/bash
++
++# ======================================================================
++# Initialization
++# ======================================================================
++PROGNAME=$(basename $0)
++_tdir=$(dirname $0)
++PROGDIR=$(cd $_tdir && pwd)
++
++CSIH_SCRIPT=/usr/share/csih/cygwin-service-installation-helper.sh
++
++# Subdirectory where the new package is being installed
++PREFIX=/usr
++
++# Directory where the config files are stored
++SYSCONFDIR=/etc
++
++source ${CSIH_SCRIPT}
++
++
++# ======================================================================
++# Routine: install_service
++#   Install pure-ftpd as a service
++# ======================================================================
++install_service() {
++  local run_service_as
++  local password
++  local ftpd_service_args
++  local skip_request
++
++  if csih_is_nt
++  then
++    if cygrunsrv -Q pure-ftpd >/dev/null 2>&1
++    then
++      csih_inform "pure-ftpd service already installed."
++	  csih_inform "Current args: `cygrunsrv -Q pure-ftpd|grep sbin|sed -e 's/.*sbin\/pure-ftpd //'`"
++      csih_request "Do you want to reinstall it with different args?" || return 0
++      cygrunsrv -R pure-ftpd
++      if cygrunsrv -Q pure-ftpd >/dev/null 2>&1
++      then
++        csih_warning "Cannot uninstall previous service installation."
++        exit 1
++      fi    
++      skip_request="1"
++    fi
++    if ( [ -n "${skip_request}" ] || csih_request "Do you want to install pure-ftpd as a service?" )
++    then
++      csih_get_cygenv "ntsec smbntsec"
++      
++      if ( csih_is_nt2003 || [ "$csih_FORCE_PRIVILEGED_USER" = "yes" ] )
++      then
++        csih_inform "On Windows Server 2003, Windows Vista, and above, the"
++        csih_inform "SYSTEM account cannot setuid to other users -- a capability"
++        csih_inform "pure-ftpd requires  You need to have or to create a"
++        csih_inform "privileged account.  This script will help you do so."
++        echo ""
++
++        if ! csih_create_privileged_user
++        then
++          csih_error_recoverable "There was a serious problem creating a privileged user."
++          csih_request "Do you want to proceed anyway?" || exit 1
++        fi
++      fi
++
++      # never returns empty if NT or above
++      run_service_as=$(csih_service_should_run_as)
++
++      if [ "${run_service_as}" = "${csih_PRIVILEGED_USERNAME}" ]
++      then
++        password="${csih_PRIVILEGED_PASSWORD}"
++        if [ -z "${password}" ]
++        then
++          csih_get_value "Please enter the password for user '${run_service_as}':" "-s"
++          password="${csih_value}"
++        fi
++      fi
++
++      # at this point, we either have $run_service_as = "system" and $password is empty,
++      # or $run_service_as is some privileged user and (hopefully) $password contains
++      # the correct password.  So, from here out, we use '-z "${password}"' to discriminate
++      # the two cases.
++
++      csih_check_user "${run_service_as}"
++
++      if [ -n "${pure_ftpd_args}" ]
++      then 
++        ftpd_service_args="${pure_ftpd_args}"
++      else
++        echo ""
++        csih_inform "The behavior of pure-ftpd is controlled by command-line arguments."
++        echo ""
++        csih_inform "For example, if you want all ftp users to be chrooted to their"
++        csih_inform "home directories, you should use -A option."
++        echo ""
++        csih_inform "Read /usr/share/doc/pure-ftpd/README for more information."
++        echo ""
++        csih_inform "You can run this script later again to reinstall the service"
++        csih_inform "with different arguments."
++        echo ""
++        echo -n -e "${_csih_QUERY_STR} Arguments for pure-ftpd: "
++
++        # if there is any auto_answer setting, accept empty arguments
++        if [ -n "${csih_auto_answer}" ]
++        then
++          echo ""   
++        else
++          read -e ftpd_service_args
++        fi
++      fi
++
++      if [ -z "${password}" ]
++      then
++        if cygrunsrv -I pure-ftpd -d "CYGWIN pure-ftpd" -p /usr/sbin/pure-ftpd \
++          -a "${ftpd_service_args}" -y tcpip -e CYGWIN="${csih_cygenv}"
++        then
++          echo ""
++          csih_inform "The pure-ftpd service has been installed under the LocalSystem"
++          csih_inform "account (also known as SYSTEM) with the following arguments:"
++          echo ""
++          csih_inform "  pure-ftpd ${ftpd_service_args}"
++          echo ""
++          csih_inform "To start the service now, call \`net start pure-ftpd' or"
++          csih_inform "\`cygrunsrv -S pure-ftpd'. Otherwise, it will start automatically"
++          csih_inform "after the next reboot."
++          echo ""
++          csih_inform "Read /usr/share/doc/Cygwin/pure-ftpd.README and"
++          csih_inform "/usr/share/doc/pure-ftpd/README before starting the service!"
++        fi
++      else
++        if cygrunsrv -I pure-ftpd -d "CYGWIN pure-ftpd" -p /usr/sbin/pure-ftpd \
++          -a "${ftpd_service_args}" -y tcpip -e CYGWIN="${csih_cygenv}" \
++          -u "${run_service_as}" -w "${password}"
++        then
++          echo ""
++          csih_inform "The pure-ftpd service has been installed under the '${run_service_as}'"
++          csih_inform "account with the following arguments:"
++          echo ""
++          csih_inform "  pure-ftpd ${ftpd_service_args}"
++          echo ""
++          csih_inform "To start the service now, call \`net start pure-ftpd' or"
++          csih_inform "\`cygrunsrv -S pure-ftpd'. Otherwise, it will start automatically"
++          csih_inform "after the next reboot."
++          echo ""
++          csih_inform "Read /usr/share/doc/Cygwin/pure-ftpd.README and"
++          csih_inform "/usr/share/doc/pure-ftpd/README before starting the service!"
++        fi
++      fi
++
++      # now, if successfully installed, set ownership of the affected files 
++      if cygrunsrv -Q pure-ftpd >/dev/null 2>&1
++      then
++        chown "${run_service_as}" ${LOCALSTATEDIR}/log/pure-* >/dev/null 2>&1
++        chown -R "${run_service_as}" ${LOCALSTATEDIR}/run/pure-* >/dev/null 2>&1
++        chmod 644 ${LOCALSTATEDIR}/log/pure-* >/dev/null 2>&1
++        chmod 754 "${LOCALSTATEDIR}/run/pure-ftpd" >/dev/null 2>&1
++      else
++        csih_warning "Something went wrong installing the pure-ftpd service."
++      fi
++    fi # user allowed us to install as service
++    
++  fi # csih_is_nt
++} # --- End of install_service --- #
++
++
++# ======================================================================
++# Routine: create_anonftp_user
++#   Creates local account 'ftp' for anonymous ftp support.
++#   
++#   Exits on catastrophic error
++#   Returns 0 on total success
++#   Returns 1 on failure
++# ======================================================================
++create_anonftp_user()
++{
++  csih_stacktrace "${@}"
++  $_csih_trace
++  local ftp_user="ftp"
++  local ftp_user_in_passwd=no
++  local ftp_user_in_sam=no
++  local ret=0
++
++  _csih_setup
++
++  if csih_is_nt
++  then
++    if ! grep -q "^${ftp_user}:" "${SYSCONFDIR}/passwd"
++      then
++      echo ""
++      csih_inform "Anonymous ftp requires an unprivileged local account \`${ftp_user}'."
++      csih_request "Do you want to enable anonymous ftp?" || return 0
++      echo ""
++
++      grep -q "^${ftp_user}:" "${SYSCONFDIR}/passwd" && ftp_user_in_passwd=yes
++      net user "${ftp_user}" >/dev/null 2>&1 && ftp_user_in_sam=yes
++      if [ "${ftp_user_in_passwd}" != "yes" ]
++      then
++        if [ "${ftp_user_in_sam}" != "yes" ]
++        then
++          csih_inform "Note that creating a new user requires that the current account have"
++          csih_inform "Administrator privileges.  Should this script attempt to create a"
++          # give auto-answer a chance to veto
++          if csih_request "new local account '${ftp_user}'?"
++          then
++            net user "${ftp_user}" /add /fullname:"anonymous ftp user" /active:no > /dev/null 2>&1 && ftp_user_in_sam=yes
++            if [ "${ftp_user_in_sam}" != "yes" ]
++            then
++              csih_warning "Creating the user '${ftp_user}' failed!"
++            fi
++          fi
++        fi
++        if [ "${ftp_user_in_sam}" = "yes" ]
++        then
++          mkpasswd -l -u "${ftp_user}" | sed -e 's/bash$/false/' >> ${SYSCONFDIR}/passwd
++          ftp_user_in_passwd=yes
++        fi
++      else
++        if [ "${ftp_user_in_sam}" != "yes" ]
++        then
++          csih_warning "Something is wrong: ${ftp_user} is in ${SYSCONFDIR}/passwd,"
++          csih_warning "but Windows does not know anything about ${ftp_user}."
++        fi
++      fi
++      mkdir -p /home/${ftp_user}
++      chown ${ftp_user}:None /home/${ftp_user}
++      chmod 755 /home/${ftp_user}
++      [ "x${ftp_user_in_passwd}" = "xyes" -a "x${ftp_user_in_sam}" = "xyes" ] && return 0
++      return 1
++    fi      
++  fi
++  return 1 # not nt
++} # === End of create_anonftp_user() === #
++
++
++# ======================================================================
++# Main Entry Point
++# ======================================================================
++
++
++# ======================================================================
++# Parse options
++# ======================================================================
++while :
++do
++  case $# in
++  0)
++    break
++    ;;
++  esac
++
++  option=$1
++  shift
++
++  case "$option" in
++  -d | --debug )
++    set -x
++    csih_trace_on
++    ;;
++
++  -y | --yes )
++    csih_auto_answer=yes
++    ;;
++
++  -n | --no )
++    csih_auto_answer=no
++    ;;
++
++  -p | --privileged )
++    csih_FORCE_PRIVILEGED_USER=yes
++    ;;
++
++  -a | --args )
++    pure_ftpd_args="$1"
++  shift
++  ;;
++
++  *)
++    echo "usage: ${PROGNAME} [OPTION]..."
++    echo
++    echo "This script creates the basic pure-ftpd configuration."
++    echo
++    echo "Options:"
++    echo "    --debug       -d     Enable shell's debug output."
++    echo "    --yes         -y     Answer all questions with \"yes\" automatically."
++    echo "    --no          -n     Answer all questions with \"no\" automatically."
++    echo "    --args        -a     Arguments for pure-ftpd service."
++    echo "    --privileged  -p     On Windows NT/2k/XP, require privileged user"
++    echo "                         instead of LocalSystem for pure-ftpd service."
++    echo
++    exit 1
++    ;;
++
++  esac
++done
++
++# ======================================================================
++# Action!
++# ======================================================================
++
++
++install_service
++create_anonftp_user
++
++echo
++echo "Configuration finished. Have fun!"
++
