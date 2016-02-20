@@ -1,12 +1,14 @@
 NAME="qhull"
-VERSION="2015.0.6"
+VERSION="2015.2"
 RELEASE="1"
 
 CATEGORY="Libs Math"
 
 DESCRIPTION="Qhull implements the Quickhull algorithm for computing the convex hull"
 HOMEPAGE="http://www.qhull.org/"
-SRC_URI="http://www.qhull.org/download/${PN}-${PV}.tar.xz"
+SRC_URI="http://www.qhull.org/download/qhull-2015-src-7.2.0.tgz"
+SRC_DIR="${PN}-${PV}"
+PATCH_URI="qhull-2015.2-shared.src.patch"
 
 abi=7
 
