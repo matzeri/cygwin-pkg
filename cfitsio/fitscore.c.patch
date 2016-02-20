@@ -1,0 +1,14 @@
+--- fitscore.c.orig	2016-02-19 10:11:11.676253300 +0100
++++ fitscore.c	2016-02-19 10:11:48.107921100 +0100
+@@ -43,6 +43,11 @@
+ /* stddef.h is apparently needed to define size_t with some compilers ?? */
+ #include <stddef.h>
+ #include <locale.h>
++
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ #include "fitsio2.h"
+ 
+ #define errmsgsiz 25

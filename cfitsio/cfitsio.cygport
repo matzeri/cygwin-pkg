@@ -1,49 +1,49 @@
 NAME="cfitsio"
-VERSION=3.370
-RELEASE=1
+VERSION=3.380
+RELEASE=2
+CATEGORY="Libs Graphics"
+SUMMARY="Flexible Image Transport System data parser library"
+DESCRIPTION="CFITSIO is a library of C and Fortran subroutines for reading and
+writing data files in FITS (Flexible Image Transport System) data format.
+CFITSIO provides simple high-level routines for reading and writing FITS files
+that insulate the programmer from the internal complexities of the FITS format.
+CFITSIO also provides many advanced features for manipulating and filtering
+the information in FITS files."
+HOMEPAGE="http://heasarc.gsfc.nasa.gov/fitsio/"
+# SRC_URI="ftp://heasarc.gsfc.nasa.gov/software/fitsio/c/cfitsio${VERSION//.}.tar.gz"
 
-CATEGORY="Graphics"
-SUMMARY="FITS (Flexible Image Transport System)"
-DESCRIPTION="CFITSIO is a library of C and Fortran subroutines for reading and writing data files in FITS (Flexible Image Transport System) data format. CFITSIO provides simple high-level routines for reading and writing FITS files that insulate the programmer from the internal complexities of the FITS format."
+# https://github.com/sfabbro/cfitsio
+# http://dev.gentoo.org/~bicatali/distfiles/
+SRC_URI="http://dev.gentoo.org/~bicatali/distfiles/cfitsio-${VERSION}.tar.gz"
+SRC_DIR="cfitsio-3.38"
+PATCH_URI="fitscore.c.patch"
 
-
-HOMEPAGE="https://heasarc.gsfc.nasa.gov/docs/software/fitsio/fitsio.html"
-SRC_URI="http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio3370.tar.gz"
-SRC_DIR="cfitsio"
-
-PATCH_URI="cmake.patch"
-
-abi=3
-
-PKG_NAMES="cfitsio-util libcfitsio-devel libcfitsio${abi}"
-
-cfitsio_util_CONTENTS='usr/bin/*.exe'
-cfitsio_util_SUMMARY="${SUMMARY} - utility"
-
-libcfitsio_devel_CONTENTS='usr/include/ usr/lib/ usr/share/'
-libcfitsio_devel_SUMMARY="${SUMMARY} - devel"
-
-libcfitsio3_CONTENTS='usr/bin/cyg*'
-libcfitsio3_SUMMARY="${SUMMARY} - runtime"
-
-DIFF_EXCLUDES="Makefile"
-inherit cmake
+PKG_NAMES="cfitsio-util libcfitsio4 libcfitsio-devel"
+cfitsio_util_CATEGORY="Science"
+cfitsio_util_SUMMARY="FITS image compression programs"
+cfitsio_util_CONTENTS="usr/bin/*.exe"
+libcfitsio4_SUMMARY="${SUMMARY} (runtime)"
+libcfitsio4_CONTENTS="usr/bin/cygcfitsio-4.dll usr/share/doc/"
+libcfitsio_devel_SUMMARY="${SUMMARY} (development)"
+libcfitsio_devel_CONTENTS="usr/include/ usr/lib/"
 
 src_compile() {
-        cd ${B}
-	cygcmake
-        cygmake 
+	cd ${S}
+	cygautoreconf
+	cd ${B}
+	cygconf --prefix=${D}/usr --exec-prefix=${D}/usr \
+                --with-bzip2-libs=-lbz2
+	cygmake 
 }
-
 
 src_test() {
 	cd ${B}
-	cygmake test
+	cygmake check
 }
 
 src_install() {
-        cd ${B}
-	cyginstall
-	insinto /usr/share/doc/cfitsio
-	doins ${S}/docs/*.pdf
+	cd ${B}
+	cygmake install 
 }
+
+DOCS="License.txt"
