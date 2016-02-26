@@ -1,27 +1,28 @@
 NAME="proj"
-VERSION=4.8.0
+VERSION=4.9.2
 RELEASE=1
 
 CATEGORY="Graphics Libs"
 DESCRIPTION="Cartographic projection library and utilities"
+SUMMARY="The PROJ Cartographic Projections Software"
 HOMEPAGE="http://trac.osgeo.org/proj/"
 
-SRC_URI="http://download.osgeo.org/proj/proj-4.8.0.tar.gz 
+SRC_URI="http://download.osgeo.org/proj/${PN}.4-${PV}.tar.gz 
 http://download.osgeo.org/proj/proj-datumgrid-1.5.zip"
-SRC_DIR="${PN}-${PV}"
+SRC_DIR="${PN}.4-${PV}"
 
 
-abi=1
+abi=9
 PKG_NAMES="proj libproj-devel libproj${abi}"
 
-proj_SUMMARY='"The PROJ Cartographic Projections Software (utilities)'
-proj_CONTENTS='--exclude=usr/bin/*.dll usr/bin usr/share'
+PKG_CONTENTS[0]="--exclude=usr/bin/*.dll usr/bin usr/share"
+PKG_SUMMARY[0]="${SUMMARY} (utilities)"
 
-libproj_devel_SUMMARY='"The PROJ Cartographic Projections Software (devel)'
-libproj_devel_CONTENTS='usr/include usr/lib'
+PKG_CONTENTS[1]="usr/include usr/lib"
+PKG_SUMMARY[1]="${SUMMARY} (devel)"
 
-libproj1_SUMMARY='"The PROJ Cartographic Projections Software (runtime)'
-libproj1_CONTENTS='usr/bin/*.dll'
+PKG_CONTENTS[2]="usr/bin/*.dll"
+PKG_SUMMARY[2]="${SUMMARY} (runtime)"
 
 CYGPORT_USE_UNSTABLE_API=1
 src_unpack_hook () {
