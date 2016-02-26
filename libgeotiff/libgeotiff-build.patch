@@ -1,0 +1,78 @@
+--- origsrc/libgeotiff-1.4.1/Makefile.am	2014-09-29 15:30:36.000000000 +0200
++++ Makefile.am	2016-02-26 15:37:08.149342800 +0100
+@@ -18,7 +18,7 @@ if TIFF_IS_CONFIG
+ TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
+ endif
+ 
+-AM_CFLAGS = -I./libxtiff $(PROJ_CFLAGS) $(TIFF_CFLAGS) \
++AM_CFLAGS = -I.$(srcdir)/libxtiff $(PROJ_CFLAGS) $(TIFF_CFLAGS) \
+ 			-DCSV_DATA_DIR=\"$(datadir)/epsg_csv\"
+ 
+ csvdir = $(datadir)/epsg_csv
+@@ -110,7 +110,7 @@ if CSV_IS_CONFIG
+                              csv/unit_of_measure.c
+ endif
+ 
+-libgeotiff_la_LDFLAGS = -version-info 3:1:1
++libgeotiff_la_LDFLAGS = -version-info 3:1:1 ${NOUNDEFINED}
+ 
+ libgeotiff_la_LIBADD = libxtiff/libxtiff.la
+ 
+--- origsrc/libgeotiff-1.4.1/bin/Makefile.am	2014-09-29 15:30:34.000000000 +0200
++++ bin/Makefile.am	2016-02-26 15:32:16.818745800 +0100
+@@ -10,7 +10,7 @@ if TIFF_IS_CONFIG
+ TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
+ endif
+ 
+-AM_CFLAGS = -I../ -I../libxtiff $(TIFF_CFLAGS) 
++AM_CFLAGS = -I../ -I$(srcdir)/.. -I$(srcdir)/../libxtiff $(TIFF_CFLAGS) 
+ 
+ LDADD = ../libgeotiff.la
+ 
+--- origsrc/libgeotiff-1.4.1/configure.ac	2014-09-29 15:30:34.000000000 +0200
++++ configure.ac	2016-02-26 15:44:39.508327200 +0100
+@@ -280,8 +280,8 @@ elif test "$PROJ_LIB" != "" -a "$PROJ_IN
+   PROJ_INC=-I$PROJ_INC
+ 
+   AC_SUBST(PROJ_INC,$PROJ_INC)
+-  AC_DEFINE(HAVE_PROJECTS_H)
+-  AC_DEFINE(HAVE_LIBPROJ)
++  AC_DEFINE([HAVE_PROJECTS_H],1,[Define if proj_api.h exists])
++  AC_DEFINE([HAVE_LIBPROJ],1,[Define if libproj is available])
+   AC_SUBST([HAVE_LIBPROJ])
+   PROJ_CONFIG="yes"
+ 
+@@ -316,7 +316,21 @@ fi
+ AM_CONDITIONAL([CSV_IS_CONFIG], [test ! x$CSV_CONFIG = xno])
+ 
+ 
+-AC_ARG_ENABLE(towgs84, [  --disable-towgs84       Disable WGS84 parameters for binary compatibility with pre-1.4.1], AC_DEFINE(GEO_NORMALIZE_DISABLE_TOWGS84))
++AC_ARG_ENABLE(towgs84, [  --disable-towgs84       Disable WGS84 parameters for binary compatibility with pre-1.4.1], AC_DEFINE([GEO_NORMALIZE_DISABLE_TOWGS84],1,"Disable WGS84 parameters"))
++
++AC_MSG_CHECKING([if libtool needs -no-undefined flag to build shared libraries])
++case "${host}" in
++   *-*-cygwin* | *-*-mingw*|*-*-aix*)
++    ## Add in the -no-undefined flag to LDFLAGS for libtool.
++    AC_MSG_RESULT([yes])
++    NOUNDEFINED=" -no-undefined"
++    ;;
++  *)
++    ## Don't add in anything.
++    AC_MSG_RESULT([no])
++    ;;
++esac
++AC_SUBST([NOUNDEFINED])
+ 
+ dnl #########################################################################
+ dnl Doxygen settings
+--- origsrc/libgeotiff-1.4.1/libxtiff/Makefile.am	2014-09-29 15:30:34.000000000 +0200
++++ libxtiff/Makefile.am	2016-02-26 15:35:23.901140700 +0100
+@@ -4,7 +4,7 @@ if TIFF_IS_CONFIG
+ TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
+ endif
+ 
+-AM_CFLAGS = -I../ $(TIFF_CFLAGS) 
++AM_CFLAGS = -I../ -I$(srcdir)/.. $(TIFF_CFLAGS) 
+ 
+ libxtiff_la_SOURCES = xtiff.c
+ 
