@@ -11,6 +11,14 @@ frontend is currently supported. The GTK/GNOME frontend is no
 longer being maintained."
 HOMEPAGE="http://irssi.org/"
 SRC_URI="http://irssi.org/files/irssi-${PV}.tar.xz"
+
+PKG_NAMES="irssi irssi-devel"
+
+irssi_CONTENTS="etc/ usr/bin/ usr/lib/ usr/share"
+
+irssi_devel_CONTENTS="usr/include/"
+irssi_devel_SUMMARY="Irssi - headers"
+
 CFLAGS="-DUSEIMPORTLIB"
 CYGCONF_ARGS="--with-perl-staticlib"
 DIFF_EXCLUDES="irssi-config.h"
