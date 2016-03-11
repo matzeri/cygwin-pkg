@@ -1,7 +1,7 @@
 inherit qt4
 
 NAME="TeXmacs"
-VERSION=1.99.2
+VERSION=1.99.4
 RELEASE=1
 
 HOMEPAGE="http://www.texmacs.org/"
@@ -24,6 +24,7 @@ src_compile() {
 	cygautoreconf
 	lndirs
 	cd ${B}
+ 	export LDFLAGS=-lz
 	cygconf --with-iconv=/usr --with-imlib2=linked --with-gs --with-qt=${QT4_QTDIR}
 	cygmake
 }
