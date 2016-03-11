@@ -1,22 +1,22 @@
 NAME="glpk"
-VERSION=4.58
+VERSION=4.59
 RELEASE=1
 
 DESCRIPTION="The GNU Linear Programming Kit package is intended for solving large-scale linear programming problems"
 HOMEPAGE="http://www.gnu.org/software/glpk/"
 SRC_URI="ftp://ftp.gnu.org/gnu/glpk/${PN}-${PV}.tar.gz" 
 
-abi="39"
+abi="40"
 
 CATEGORY="Math"
 PKG_NAMES="glpk libglpk${abi} libglpk-devel"
 
 glpk_SUMMARY="GLPK (GNU Linear Programming Kit)"
-libglpk39_SUMMARY="GLPK (GNU Linear Programming Kit) shared library"
+libglpk40_SUMMARY="GLPK (GNU Linear Programming Kit) shared library"
 libglpk_devel_SUMMARY="GLPK (GNU Linear Programming Kit) development"
 
 glpk_CONTENTS="usr/bin/*.exe usr/share/doc/"
-libglpk39_CONTENTS="usr/bin/*-${abi}.dll"
+libglpk40_CONTENTS="usr/bin/*-${abi}.dll"
 libglpk_devel_CONTENTS="usr/include/ usr/lib/"
 
 KEEP_LA_FILES="none"
