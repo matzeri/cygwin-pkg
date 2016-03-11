@@ -1,5 +1,5 @@
 NAME="suitesparseconfig"
-VERSION=4.4.5
+VERSION=4.5.1
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -24,7 +24,6 @@ src_compile() {
     cd ${S}
     cygautoreconf
     cd ${B}
-    # cygconf  --includedir="/usr/include/suitesparse" LDFLAGS="-no-undefined" 
     cygconf  --includedir="/usr/include/suitesparse" 
     cygmake       
 }

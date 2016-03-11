@@ -1,5 +1,5 @@
 NAME="cholmod"
-VERSION=3.0.6
+VERSION=3.0.9
 RELEASE=1
 
 CATEGORY="Libs Math"
