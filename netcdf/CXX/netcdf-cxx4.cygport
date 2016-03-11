@@ -1,6 +1,6 @@
 NAME="netcdf-cxx4"
 VERSION=4.2.1
-RELEASE=4
+RELEASE=5
 
 CATEGORY="Libs"
 SUMMARY="NetCDF C++ (network Common Data Form)"
