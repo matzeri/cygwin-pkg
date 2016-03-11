@@ -1,5 +1,5 @@
 NAME="openmpi"
-VERSION=1.8.8
+VERSION=1.10.2
 RELEASE=1
 
 CATEGORY="Libs"
@@ -14,29 +14,26 @@ SRC_URI="http://www.open-mpi.org/software/ompi/v1.8/downloads/${P}.tar.bz2"
 PATCH_URI="pre-install.patch
 "
 
-PKG_NAMES="openmpi libopenmpi libopenmpicxx1 libopenmpifh2 libopenmpiuse1 
-libopenmpiusef08_0 libopenmpiusetkr0 libopenmpi-devel"
+PKG_NAMES="openmpi libopenmpi12 libopenmpicxx1 libopenmpifh12  
+libopenmpiusef08_11 libopenmpiusetkr6 libopenmpi-devel"
 
 openmpi_CONTENTS="usr/bin/cygopen* usr/bin/[smo]* usr/share/doc usr/share/man/man[17]/"
 
-libopenmpi_SUMMARY="${SUMMARY} (C runtime)"
-libopenmpi_CONTENTS="usr/bin/cygmpi-1.dll  
+libopenmpi12_SUMMARY="${SUMMARY} (C runtime)"
+libopenmpi12_CONTENTS="usr/bin/cygmpi-12.dll  
 usr/lib/openmpi/ etc/ usr/share/openmpi/"
 
 libopenmpicxx1_SUMMARY="${SUMMARY} (C++ runtime)"
 libopenmpicxx1_CONTENTS="usr/bin/cygmpi_cxx-1.dll"
 
-libopenmpifh2_SUMMARY="${SUMMARY} (Fortran runtime)"
-libopenmpifh2_CONTENTS="usr/bin/cygmpi_mpifh-2.dll"
+libopenmpifh12_SUMMARY="${SUMMARY} (Fortran runtime)"
+libopenmpifh12_CONTENTS="usr/bin/cygmpi_mpifh-12.dll"
 
-libopenmpiuse1_SUMMARY="${SUMMARY} (Fortran use  runtime)"
-libopenmpiuse1_CONTENTS="usr/bin/cygmpi_usempi-1.dll"
+libopenmpiusef08_11_SUMMARY="${SUMMARY} (Fortran use  F2008 runtime)"
+libopenmpiusef08_11_CONTENTS="usr/bin/cygmpi_usempif08-11.dll"
 
-libopenmpiusef08_0_SUMMARY="${SUMMARY} (Fortran use  F2008 runtime)"
-libopenmpiusef08_0_CONTENTS="usr/bin/cygmpi_usempif08-0.dll"
-
-libopenmpiusetkr0_SUMMARY="${SUMMARY} (Fortran use  tkr runtime)"
-libopenmpiusetkr0_CONTENTS="usr/bin/cygmpi_usempi_ignore_tkr-0.dll"
+libopenmpiusetkr6_SUMMARY="${SUMMARY} (Fortran use  tkr runtime)"
+libopenmpiusetkr6_CONTENTS="usr/bin/cygmpi_usempi_ignore_tkr-6.dll"
 
 libopenmpi_devel_SUMMARY="${SUMMARY} (development)"
 libopenmpi_devel_CONTENTS="usr/include/ usr/lib/libmpi* usr/lib/*.mod
