@@ -1,6 +1,6 @@
 NAME="openblas"
-VERSION=0.2.15
-RELEASE=3
+VERSION=0.2.16
+RELEASE=1
 
 CATEGORY="Math"
 DESCRIPTION="OpenBLAS is an optimized BLAS library based on GotoBLAS2"
