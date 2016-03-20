@@ -1,0 +1,18 @@
+NAME="wtf"
+VERSION=0.0.4
+RELEASE=8
+
+CATEGORY="Text Doc"
+DESCRIPTION="wtf translates acronyms and filename suffixes for you."
+SUMMARY="wtf translates acronyms and filename suffixes for you."
+HOMEPAGE="http://sourceforge.net/projects/wtf"
+SRC_URI="mirror://sourceforge/wtf/${P}.tar.bz2"
+
+MAKEOPTS+=" -j1"
+
+src_compile() {
+	lndirs
+	cd ${B}
+    	cygmake -C data cygwin
+    	cygmake
+}
