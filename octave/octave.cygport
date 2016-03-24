@@ -1,5 +1,5 @@
 NAME="octave"
-VERSION="4.0.0"
+VERSION="4.0.1"
 RELEASE=1
 
 CATEGORY="Math"
@@ -10,7 +10,9 @@ OR="${PV}"
 SRC_URI="ftp://ftp.octave.org/gnu/octave/${PN}-${PV}.tar.xz"
 SRC_DIR="${PN}-${PV}"
 
-PATCH_URI="octave-postinstall.patch"
+PATCH_URI="
+octave-4.0.1-1.pkg.patch
+octave-postinstall.patch"
 
 PKG_NAMES="octave octave-devel octave-doc"
 
@@ -24,9 +26,7 @@ octave_devel_CONTENTS=' usr/bin/mk* usr/include/ usr/lib/octave/'${OR}'/lib*'
 
 octave_doc_CONTENTS='usr/share/doc/octave/[hp]*'
 
-DIFF_EXCLUDES="*octave.info* version.texi stamp-vti" 
-
-RESTRICT="diff debuginfo"
+DIFF_EXCLUDES="*octave.info* config.in.h version.texi stamp-vti" 
 
 src_compile() {
 	cd ${S}
@@ -36,13 +36,12 @@ src_compile() {
 		--enable-shared \
 		--enable-float-truncate \
                 --disable-java \
-		lt_cv_deplibs_check_method=pass_all \
-		LDFLAGS="-Wl,-no-undefined -L/usr/local/lib"
+		LIBS="-lsuitesparseconfig"
 
 # workaround to avoid rebuilding of all interpreter documentation
 	touch AUTHORS BUGS INSTALL.OCTAVE
 
-	cygmake 
+	cygmake LIBS="-lsuitesparseconfig"
 }
 
 src_test() {
