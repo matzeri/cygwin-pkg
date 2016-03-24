@@ -1,6 +1,6 @@
 NAME="octave-io"
-VERSION=2.2.11
-OV=2.2.11
+VERSION=2.4.1
+OV=2.4.1
 RELEASE=1
 
 CATEGORY="Math"
