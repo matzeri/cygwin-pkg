@@ -2,7 +2,7 @@
 inherit perl
 
 NAME="irssi"
-VERSION="0.8.18"
+VERSION="0.8.19"
 RELEASE=1
 CATEGORY="Net"
 SUMMARY="Modular text mode IRC client with Perl scripting"
