@@ -1,6 +1,6 @@
 NAME="octave-splines"
-VERSION=1.2.8
-OV=1.2.8
+VERSION=1.2.9
+OV=1.2.9
 RELEASE=1
 
 CATEGORY="Math"
