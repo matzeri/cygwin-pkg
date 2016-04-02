@@ -1,6 +1,6 @@
 NAME="octave-nan"
-VERSION=2.8.0
-OV=2.8.0
+VERSION=3.0.0
+OV=3.0.0
 RELEASE=1
 
 CATEGORY="Math"
