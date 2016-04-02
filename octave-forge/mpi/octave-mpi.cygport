@@ -1,7 +1,7 @@
 NAME="octave-mpi"
 VERSION=1.2.0r43
 OV=1.2.0
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Math"
 SUMMARY="Octave-Forge mpi: bindings for basic Message Passing Interface (MPI)"
