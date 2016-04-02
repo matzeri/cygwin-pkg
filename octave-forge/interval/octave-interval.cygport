@@ -1,6 +1,6 @@
 NAME="octave-interval"
-VERSION=1.2.0
-OV=1.2.0
+VERSION=1.4.1
+OV=1.4.1
 RELEASE=1
 
 CATEGORY="Math"
