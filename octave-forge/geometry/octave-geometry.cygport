@@ -1,6 +1,6 @@
 NAME="octave-geometry"
-VERSION=2.0.0
-OV=2.0.0
+VERSION=2.1.0
+OV=2.1.0
 RELEASE=1
 
 CATEGORY="Math"
