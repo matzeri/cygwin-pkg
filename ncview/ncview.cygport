@@ -1,0 +1,36 @@
+NAME="ncview"
+VERSION=2.1.6
+RELEASE=1
+
+CATEGORY="Graphics Science"
+SUMMARY="NetCDF X-viewer"
+DESCRIPTION="NetCDF (network Common Data Form) are libraries for array-oriented scientific data"
+HOMEPAGE="http://meteora.ucsd.edu/~pierce/ncview_home_page.html"
+SRC_URI="ftp://cirrus.ucsd.edu/pub/ncview/${PN}-${PV}.tar.gz" 
+PATCH_URI="x_interface.c.patch"
+
+PKG_NAMES="ncview"
+ncview_CONTENTS="etc/ usr/"
+
+KEEP_LA_FILES="none"
+DIFF_EXCLUDES="*.in *.m4 INSTALL configure depcomp install-sh missing"
+
+src_compile() {
+        cd ${S}
+	autoreconf -ifv -I m4macros
+        cd ${B}
+        cygconf 
+        cygmake CFLAGS="${CFLAGS} -Wall -O0"
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	dodir /etc/X11/app-defaults
+	cp  ${S}/Ncview-appdefaults  ${D}/etc/X11/app-defaults/Ncview
+	insinto /usr/share/man/man1
+	doins ${S}/data/ncview.1
+
+}
+
+

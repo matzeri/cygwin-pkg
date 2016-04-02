@@ -1,0 +1,17 @@
+--- src/interface/x_interface.c_bk	2016-03-20 08:46:51.094857500 +0100
++++ src/interface/x_interface.c	2016-03-20 09:33:17.560344000 +0100
+@@ -3355,8 +3355,12 @@
+ 		return;
+ 
+ 	i=0;
+-	while( (w = *(diminfo_row_widget + i++)) != NULL )
+-		XtDestroyWidget( w );
++	while( (w = *(diminfo_row_widget + i)) != NULL )
++		i++;
++	while( i>0 ) {
++		i--;
++		XtDestroyWidget( *(diminfo_row_widget + i ));
++	}
+ }
+ 
+ /*************************************************************************************************/
