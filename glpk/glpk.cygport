@@ -1,10 +1,11 @@
 NAME="glpk"
-VERSION=4.59
+VERSION=4.60
 RELEASE=1
 
 DESCRIPTION="The GNU Linear Programming Kit package is intended for solving large-scale linear programming problems"
 HOMEPAGE="http://www.gnu.org/software/glpk/"
-SRC_URI="ftp://ftp.gnu.org/gnu/glpk/${PN}-${PV}.tar.gz" 
+SRC_URI="ftp://ftp.gnu.org/gnu/glpk/${PN}-${PV}.tar.gz
+ftp://ftp.gnu.org/gnu/glpk/${PN}-${PV}.tar.gz.sig" 
 
 abi="40"
 
