@@ -1,6 +1,6 @@
 NAME="octave-financial"
-VERSION=0.4.0r148
-OV=0.4.0
+VERSION=0.5.0
+OV=0.5.0
 RELEASE=1
 
 CATEGORY="Math"
