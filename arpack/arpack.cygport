@@ -1,6 +1,6 @@
 NAME="arpack"
 VERSION=3.3.0
-RELEASE=2
+RELEASE=3
 
 CATEGORY="Math Libs"
 DESCRIPTION="ARPACK is a collection to solve large scale eigenvalue problems." 
