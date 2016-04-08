@@ -1,0 +1,12 @@
+--- origsrc/xgraph-12.1/params.h	2016-04-02 16:00:25.607448300 +0200
++++ src/xgraph-12.1/params.h	2016-04-02 16:06:00.891237700 +0200
+@@ -71,9 +71,7 @@ DECLARE(param_reset, void, (char *name,
+ DECLARE(param_get, params *, (char *name, params *val));
+ DECLARE(param_dump, void, ());
+ 
+-#ifndef __CYGWIN__
+ DECLARE(stricmp, int, (char *a, char *b));
+-#endif
+ 
+ /* Some convenience macros */
+ 

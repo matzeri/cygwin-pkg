@@ -1,0 +1,2475 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ xgraph (12.1-17) unstable; urgency=low
+ .
+   * prevent use of the Hdcpy button from segfaulting by defining NE as the
+     right kind of null pointer (closes: #706636)
+   * bump policy version
+   * tweak debian git repo urls to current debian repo url naming scheme
+Author: Barak A. Pearlmutter <bap@debian.org>
+Bug-Debian: http://bugs.debian.org/706636
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- /dev/null
++++ xgraph-12.1/draw.h
+@@ -0,0 +1,2 @@
++void DrawWindow(LocalWin *);
++void EraseData(LocalWin *);
+--- xgraph-12.1.orig/copyright.h
++++ xgraph-12.1/copyright.h
+@@ -5,9 +5,6 @@
+  * University of California, Berkeley
+  * 1989
+  *
+- * Animation, Differentiation by Paul Walker
+- * NCSA and University of Illinois at Urbana Champaign Dept. of Physics
+- *
+  * Copyright (c) 1988, 1989, Regents of the University of California.
+  * All rights reserved.
+  *
+@@ -20,41 +17,6 @@
+  * Research Laboratory or the University of California make any
+  * warranty about the software, its performance or its conformity to
+  * any specification.
+- *
+-
+-Animation and differentiation routines were added by Paul Walker,
+-NCSA and UIUC Dept of Physics.  The following copyright and disclaimer
+-applies to these parts of the code only.
+-
+-UNIVERSITY OF ILLINOIS (UI), NATIONAL CENTER FOR SUPERCOMPUTING
+-APPLICATIONS (NCSA), Software Distribution Policy for Copyrighted Software
+-
+-The above mentioned modifications to XGraph made with the authors consent are
+-copyrighted, but  available without fee for education, academic research
+-and non-commercial purposes.  The modifications are copyrighted in the name of
+-the UI, and ownership of the modifications remains with the UI.  Users may
+-distribute the binary and source code to third parties provided that the
+-copyright notice and this statement appears on all copies and that no
+-charge is made for such copies.  Any entity wishing to integrate all or
+-part of the source code into a product for  commercial use or resale,
+-should contact the University of Illinois, c/o NCSA, to negotiate an
+-appropriate license for such commercial use.  
+-
+-UI MAKES NO REPRESENTATIONS ABOUT THE SUITABILITY OF THE SOFTWARE FOR ANY
+-PURPOSE.  IT IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY.  THE
+-UI SHALL NOT BE LIABLE FOR ANY DAMAGES SUFFERED BY THE USER OF THIS
+-SOFTWARE.  The software may have been developed under agreements between
+-the UI and the Federal Government which entitle the Government to certain
+-rights.
+-
+-By copying this program, you, the user, agree to abide by the copyright
+-conditions and understandings with respect to any software which is marked
+-with a copyright notice.
+-
+-Send all comments about the modifications to Paul Walker, 
+-pwalker@ncsa.uiuc.edu
+-
+- *
+  */
+ 
+ #ifndef _RIGHTS_
+@@ -62,4 +24,4 @@ pwalker@ncsa.uiuc.edu
+ 
+ static char copyright[] = "Copyright (c) 1989, Regents of the University of California.  All rights reserved.";
+ 
+-#endif				/* _RIGHTS_ */
++#endif /* _RIGHTS_ */
+--- xgraph-12.1.orig/xgraph.c
++++ xgraph-12.1/xgraph.c
+@@ -1,4 +1,4 @@
+-/* $Header: /usr/src/mash/repository/vint/xgraph/xgraph.c,v 1.3 1999/12/19 00:52:07 heideman Exp $ */
++/* $Header$ */
+ /*
+  * xgraph - A Simple Plotter for X
+  *
+@@ -9,7 +9,10 @@
+  * Please see copyright.h concerning the formal reproduction rights
+  * of this software.
+  *
+- * $Log: xgraph.c,v $
++ * $Log$
++ * Revision 1.4  2007-12-06 11:55:13  bap
++ * flush compiler warnings of various levels of severity
++ *
+  * Revision 1.3  1999/12/19 00:52:07  heideman
+  * warning suppresion, slightly different flot ahndling
+  *
+@@ -20,9 +23,6 @@
+  * xgraph-12.0
+  *
+  */
+-#ifndef lint
+-static char rcsid[] = "$Id: xgraph.c,v 1.3 1999/12/19 00:52:07 heideman Exp $";
+-#endif
+ 
+ #include "copyright.h"
+ #include <stdio.h>
+@@ -34,7 +34,10 @@ static char rcsid[] = "$Id: xgraph.c,v 1
+ #include "hard_devices.h"
+ #include "params.h"
+ 
+-
++extern void DelWindow(Window, LocalWin *);
++extern void PrintWindow(Window,LocalWin *);
++extern int HandleZoom(char *, XButtonPressedEvent *, LocalWin *, Cursor);
++
+ extern void init_X();
+ extern void do_error();
+ 
+@@ -79,8 +82,13 @@ char *Prog_Name;
+ char *disp_name;
+ 
+ 
++extern Window
++NewWindow(char *progname,
++	  double lowX, double lowY,
++	  double upX, double upY,
++	  double asp, int DO);
+ 
+-main(argc, argv)
++int main(argc, argv)
+ int     argc;
+ char   *argv[];
+ 
+@@ -89,8 +97,7 @@ char   *argv[];
+  * The command line format is: xgraph [host:display].
+  */
+ {
+-    Window  primary,
+-            NewWindow();
++    Window  primary;
+     XEvent  theEvent;
+     LocalWin *win_info;
+     Cursor  zoomCursor;
+@@ -376,15 +383,6 @@ int     flags;			/* Options */
+     PointList *spot;
+     PointList *pspot;
+ 
+-    static char *paramstr[] =
+-    {
+-	"Cannot plot negative %s values\n",
+-	"when the logarithmic option is selected.\n",
+-	"Number of points in %d and %d don't match for stacking.\n",
+-	"Point %d in %d and %d doesn't match for stacking.\n",
+-	"Set %d has 0 %s.\n"
+-    };
+-
+     if (flags & (FITX|FITY)) 
+ 	for (i = 0; i < MAXSETS; i++) 
+ 	    for (spot = PlotData[i].list; spot; spot = spot->next) {
+@@ -400,11 +398,11 @@ int     flags;			/* Options */
+ 		maxx = maxx - minx;
+ 		maxy = maxy - miny;
+ 		if (maxx == 0.0) {
+-		    (void) fprintf(stderr, paramstr[3], i, "width");
++		    (void) fprintf(stderr, "Set %d has 0 %s.\n", i, "width");
+ 		    maxx = 1.0;
+ 		}
+ 		if (maxy == 0.0) {
+-		    (void) fprintf(stderr, paramstr[3], i, "height");
++		    (void) fprintf(stderr, "Set %d has 0 %s.\n", i, "height");
+ 		    maxy = 1.0;
+ 		}
+ 		switch (flags & (FITX|FITY)) {
+@@ -432,12 +430,12 @@ int     flags;			/* Options */
+ 	    for (spot = PlotData[i].list, pspot = PlotData[i - 1].list;
+ 		 spot && pspot; spot = spot->next, pspot = pspot->next) {
+ 		if (spot->numPoints != pspot->numPoints) {
+-		    (void) fprintf(stderr, paramstr[2], i - 1, i);
++		    (void) fprintf(stderr, "Point count mismatch, sets %d and %d\n", i - 1, i);
+ 		    exit(1);
+ 		}
+ 		for (j = 0; j < spot->numPoints; j++) {
+ 		    if (spot->xvec[j] != pspot->xvec[j]) {
+-			(void) fprintf(stderr, paramstr[3], j, i - 1, i);
++			(void) fprintf(stderr, "Point %d in %d and %d doesn't match for stacking.\n", j, i - 1, i);
+ 			exit(1);
+ 		    }
+ 		    spot->yvec[j] += pspot->yvec[j];
+@@ -456,8 +454,8 @@ int     flags;			/* Options */
+ 		    else if (spot->yvec[j] == 0)
+ 			spot->yvec[j] = 0.0;
+ 		    else {
+-			(void) fprintf(stderr, paramstr[0], "Y");
+-			(void) fprintf(stderr, paramstr[1]);
++			(void) fprintf(stderr, "Cannot plot negative %s values\n", "Y");
++			(void) fprintf(stderr, "when the logarithmic option is selected.\n");
+ 			exit(1);
+ 		    }
+ 		}
+@@ -468,8 +466,8 @@ int     flags;			/* Options */
+ 		    else if (spot->xvec[j] == 0)
+ 			spot->xvec[j] = 0.0;
+ 		    else {
+-			(void) fprintf(stderr, paramstr[0], "X");
+-			(void) fprintf(stderr, paramstr[1]);
++			(void) fprintf(stderr, "Cannot plot negative %s values\n", "X");
++			(void) fprintf(stderr, "when the logarithmic option is selected.\n");
+ 			exit(1);
+ 		    }
+ 		}
+@@ -919,7 +917,7 @@ int     DO;                     /* Deriv
+ }
+ 
+ 
+-DelWindow(win, win_info)
++void DelWindow(win, win_info)
+ Window  win;			/* Window     */
+ LocalWin *win_info;		/* Local Info */
+ 
+@@ -939,7 +937,7 @@ LocalWin *win_info;		/* Local Info */
+     Num_Windows -= 1;
+ }
+ 
+-PrintWindow(win, win_info)
++void PrintWindow(win, win_info)
+ Window  win;			/* Window       */
+ LocalWin *win_info;		/* Local Info   */
+ 
+--- xgraph-12.1.orig/init.c
++++ xgraph-12.1/init.c
+@@ -1,4 +1,4 @@
+-/* $Header: /usr/src/mash/repository/vint/xgraph/init.c,v 1.2 1999/12/19 00:52:06 heideman Exp $ */
++/* $Header$ */
+ /*
+  * init.c: xgraph initialization code
+  *
+@@ -7,7 +7,10 @@
+  *	ParseArgs();
+  *	ReadDefaults();
+  *
+- * $Log: init.c,v $
++ * $Log$
++ * Revision 1.2  2001-10-08 08:33:31  bap
++ * flush some warnings
++ *
+  * Revision 1.2  1999/12/19 00:52:06  heideman
+  * warning suppresion, slightly different flot ahndling
+  *
+@@ -15,9 +18,6 @@
+  * xgraph-12.0
+  *
+  */
+-#ifndef lint
+-static char rcsid[] = "$Id: init.c,v 1.2 1999/12/19 00:52:06 heideman Exp $";
+-#endif
+ 
+ #include "copyright.h"
+ #include <stdio.h>
+@@ -251,8 +251,8 @@ int     o;
+ static char *def_str;
+ 
+ #define DEF(name, type) \
+-if (def_str = XGetDefault(disp, Prog_Name, name)) { \
+-    param_set(name, type, def_str); \
++if ((def_str = XGetDefault(disp, Prog_Name, (name)))) { \
++    param_set((name), (type), def_str); \
+ }
+ 
+ void
+@@ -448,7 +448,7 @@ int     do_it;
+ 		    if (idx + 1 >= argc)
+ 			argerror("missing coordinate(s)",
+ 				 argv[idx]);
+-		    if (hi = index(argv[idx + 1], ',')) {
++		    if ((hi = index(argv[idx + 1], ','))) {
+ 			char    low[MAXLO];
+ 
+ 			(void) strncpy(low, argv[idx + 1], hi - argv[idx + 1]);
+@@ -471,7 +471,7 @@ int     do_it;
+ 		    if (idx + 1 >= argc)
+ 			argerror("missing coordinate(s)",
+ 				 argv[idx]);
+-		    if (hi = index(argv[idx + 1], ',')) {
++		    if ((hi = index(argv[idx + 1], ','))) {
+ 			char    low[MAXLO];
+ 
+ 			(void) strncpy(low, argv[idx + 1], hi - argv[idx + 1]);
+--- xgraph-12.1.orig/tgif.c
++++ xgraph-12.1/tgif.c
+@@ -8,6 +8,7 @@
+ #include <X11/Xlib.h>
+ #include "hard_devices.h"
+ #include "xgout.h"
++#include "xgraph.h"
+ 
+ #define COLOR	"DarkSlateGray"
+ 
+--- xgraph-12.1.orig/draw.c
++++ xgraph-12.1/draw.c
+@@ -1,18 +1,18 @@
+-/* $Header: /usr/src/mash/repository/vint/xgraph/draw.c,v 1.1.1.1 1999/12/03 23:15:53 heideman Exp $ */
++/* $Header$ */
+ /*
+  * draw.c: xgraph drawing code
+  *
+  * Routines:
+  *	void DrawWindow();
+  *
+- * $Log: draw.c,v $
++ * $Log$
++ * Revision 1.1  2001-10-08 05:53:12  bap
++ * Initial revision
++ *
+  * Revision 1.1.1.1  1999/12/03 23:15:53  heideman
+  * xgraph-12.0
+  *
+  */
+-#ifndef lint
+-static char rcsid[] = "$Id: draw.c,v 1.1.1.1 1999/12/03 23:15:53 heideman Exp $";
+-#endif
+ 
+ #include "copyright.h"
+ #include <stdio.h>
+--- xgraph-12.1.orig/xgraph.man
++++ xgraph-12.1/xgraph.man
+@@ -3,7 +3,7 @@
+ xgraph \- Draw a graph on an X11 Display
+ .SH SYNOPSIS
+ .B xgraph
+-[ options ] [[-geometry |=]WxH+X+Y ] [ -display host:display.screen ] [ file ... ]
++[ options ] [[\-geometry |=]WxH+X+Y ] [ \-display host:display.screen ] [ file ... ]
+ .SH DESCRIPTION
+ The 
+ .I xgraph
+@@ -43,7 +43,7 @@ Overall graphing options for the graph c
+ files by writing lines of the form "<option>: <value>".  The
+ option names are the same as those used for specifying X 
+ resources (see below). The option and value must be separated by at
+-bleast one space.
++least one space.
+ An example input file with three data sets is shown below.  Note
+ that set three is not named, set two has discontinuous data,
+ and the title of the graph is specified near the top of the file.
+@@ -56,15 +56,15 @@ TitleText: Sample Data
+ 1.5 8.9
+ 
+ "set two"
+--3.4 1.4e-3
+--2.0 1.9e-2
+-move -1.0 2.0e-2
+--0.65 2.2e-4
++\-3.4 1.4e\-3
++\-2.0 1.9e\-2
++move \-1.0 2.0e\-2
++\-0.65 2.2e\-4
+ 
+ 2.2 12.8
+-2.4 -3.3
+-2.6 -32.2
+-2.8 -10.3
++2.4 \-3.3
++2.6 \-32.2
++2.8 \-10.3
+ .fi
+ .PP
+ After
+@@ -95,7 +95,7 @@ cursor is inside the
+ button.  Typing EOF (control-D) in a window also closes that window.
+ Depressing a mouse button while the mouse cursor is in the
+ .I Hardcopy
+-button causes a dialog to appear asking about hardcopy (printout)
++button causes a dialog to appear asking about hard copy (printout)
+ options.  These options are described below:
+ .IP "Output Device"
+ Specifies the type of the output device (e.g. "HPGL", "Postscript", etc).
+@@ -109,12 +109,12 @@ when you select a different disposition.
+ .IP "File or Device Name"
+ If the disposition is "To Device",  this field specifies the device
+ name.
+-A device name is the same as the name given for the -P command
++A device name is the same as the name given for the \-P command
+ of lpr(1).
+ If the disposition is "To File",  this field specifies the name
+ of the output file.
+ .IP "Maximum Dimension"
+-This specifies the maximum size of the plot on the hardcopy
++This specifies the maximum size of the plot on the hard copy
+ device in centimeters.
+ .I xgraph
+ takes in account the aspect ratio of the plot on the screen
+@@ -125,7 +125,7 @@ based on the value of the maximum dimens
+ .IP "Include in Document"
+ If selected, this option causes
+ .I xgraph
+-to produce harcopy output that is suitable for inclusion in other
++to produce hard copy output that is suitable for inclusion in other
+ larger documents.
+ As an example,  when this option is selected the Postscript output 
+ produced by xgraph will have a bounding box suitable for use with
+@@ -133,7 +133,7 @@ psfig.
+ .IP "Title Font Family"
+ This field specifies the name of a font to use when drawing
+ the graph title.  Suitable defaults are initially chosen for
+-any given hardcopy device.
++any given hard copy device.
+ The value of this field is hardware specific -- refer to
+ the device reference manual for details.
+ .IP "Title Font Size"
+@@ -150,10 +150,10 @@ except they specify values for the font
+ .I xgraph
+ uses to draw axis labels, and legend descriptions.
+ .IP "Control Buttons"
+-After specifing the parameters for the plot,  the "Ok" button causes
++After specifying the parameters for the plot,  the "Ok" button causes
+ .I xgraph
+-to produce a hardcopy.
+-Pressing the "Cancel" button will abort the hardcopy operation.
++to produce a hard copy.
++Pressing the "Cancel" button will abort the hard copy operation.
+ Depressing the
+ .I About
+ button causes Xgraph to display a window containing the version of
+@@ -183,7 +183,7 @@ This name will be used in the legend.
+ .TP
+ .B  \-bar (BarGraph)
+ Specifies that vertical bars should be drawn from the data points to
+-a base point which can be specified with -brb.  Usually,  the -nl
++a base point which can be specified with \-brb.  Usually,  the \-nl
+ flag is used with this option.  The point itself is located at
+ the center of the bar.
+ .TP
+@@ -196,11 +196,11 @@ devices are 'ps', 'hpgl', 'idraw' and tg
+ .TP
+ .B  \-o <filename> \-O <filename>
+ Set the output file name for postscript, hpgl and idraw devices.
+-Files created with -O can be used other documents, and files generated
+-with -o can be printed directly.
++Files created with \-O can be used other documents, and files generated
++with \-o can be printed directly.
+ .TP
+ .B  \-P<printername>
+-Set the printer name for postscript or hpgl devices. This and the -o or -O
++Set the printer name for postscript or hpgl devices. This and the \-o or \-O
+ option are mutually exclusive.
+ .TP 
+ .B \-stk
+@@ -217,11 +217,11 @@ Output scale factor for postscript, hpgl
+ is 1.0, and 0.5 will generate a 50% reduced plot.
+ .TP
+ .B \-fmtx <printf-format> \-fmty <printf-format>
+-Use the format specified to generate the legents for the x or y axis.
++Use the format specified to generate the legends for the x or y axis.
+ .TP
+ .B  \-bb (BoundBox)
+ Draw a bounding box around the data region.  This is very useful
+-if you prefer to see tick marks rather than grid lines (see -tk).
++if you prefer to see tick marks rather than grid lines (see \-tk).
+ .TP
+ .B  \-bd <color> (Border)
+ This specifies the border color of the
+@@ -277,7 +277,7 @@ Specifies the width of the data lines in
+ .TP
+ .B  \-lx <xl,xh> (XLowLimit, XHighLimit)
+ This option limits the range of the X axis to the specified
+-interval.  This (along with -ly) can be used to "zoom in" on a particularly
++interval.  This (along with \-ly) can be used to "zoom in" on a particularly
+ interesting portion of a larger graph.
+ .TP
+ .B  \-ly <yl,yh> (YLowLimit, YHighLimit)
+@@ -291,12 +291,12 @@ These markers are assigned uniquely to e
+ black and white machines and varies with each color on color machines.
+ .TP
+ .B  \-M (StyleMarkers)
+-Similar to -m but markers are assigned uniquely to each eight consecutive
++Similar to \-m but markers are assigned uniquely to each eight consecutive
+ data sets (this corresponds to each different line style on color machines).
+ .TP
+ .B  \-nl (NoLines)
+-Turn off drawing lines.  When used with -m, -M, -p, or -P this can be used to
+-produce scatter plots.  When used with -bar,  it can be used to
++Turn off drawing lines.  When used with \-m, \-M, \-p, or \-P this can be used to
++produce scatter plots.  When used with \-bar,  it can be used to
+ produce standard bar graphs.
+ .TP
+ .B  \-ng (NoLegend)
+@@ -304,10 +304,10 @@ Turn off drawing Legends. Can be used to
+ .TP
+ .B  \-p (PixelMarkers)
+ Marks each data point with a small marker (pixel sized).  This is
+-usually used with the -nl option for scatter plots.
++usually used with the \-nl option for scatter plots.
+ .TP
+ .B  \-P (LargePixels)
+-Similar to -p but marks each pixel with a large dot.
++Similar to \-p but marks each pixel with a large dot.
+ .TP
+ .B  \-rv (ReverseVideo)
+ Reverse video.  On black and white displays,  this will invert
+@@ -327,7 +327,7 @@ size in points (like 12).  The default f
+ .B  \-tk (Ticks)
+ This option causes
+ .I xgraph
+-to draw tick marks rather than full grid lines.  The -bb option
++to draw tick marks rather than full grid lines.  The \-bb option
+ is also useful when viewing graphs with tick marks only.
+ .TP
+ .B  \-tkax (Tick Axis)
+@@ -364,7 +364,7 @@ workstations,  one line style is used fo
+ Thus,  64 unique data sets can be displayed.
+ .TP
+ .B Device
+-The default output form presented in the hardcopy dialog (i.e. "Postscript",
++The default output form presented in the hard copy dialog (i.e. "Postscript",
+ "HPGL", etc).
+ .TP
+ .B Disposition
+@@ -372,7 +372,7 @@ The default setting of whether output go
+ This must be one of the strings "To File" or "To Device".
+ .TP
+ .B FileOrDev
+-The default file name or device string in the hardcopy dialog.
++The default file name or device string in the hard copy dialog.
+ .TP
+ .B ZeroWidth
+ Width,  in pixels,  of the zero grid line.
+@@ -386,4 +386,4 @@ University of California
+ .br
+ - Zooming in on bar graphs doesn't work right.
+ .br
+-- There is no way to produce hardcopy without running xgraph interactively.
++- There is no way to produce hard copy without running xgraph interactively.
+--- xgraph-12.1.orig/ps.c
++++ xgraph-12.1/ps.c
+@@ -241,11 +241,11 @@ int     flags;			/* Output options */
+ 
+     if (flags & D_DOCU) {
+ 	OUT(psFile, "%%%%BoundingBox: %ld %ld %ld %ld\n",
+-	    0, 0,
+-	    (int) (((double) width) /
+-		   (MICRONS_PER_INCH * INCHES_PER_POINT) + 0.5),
+-	    (int) (((double) height) /
+-		   (MICRONS_PER_INCH * INCHES_PER_POINT) + 0.5)
++	    0L, 0L,
++	    (long) (((double) width) /
++		    (MICRONS_PER_INCH * INCHES_PER_POINT) + 0.5),
++	    (long) (((double) height) /
++		    (MICRONS_PER_INCH * INCHES_PER_POINT) + 0.5)
+ 	    );
+ 	psHeader(psFile, 1);
+ 	PS("%% Rotation and centering are turned off for inclusion in a document\n");
+@@ -275,30 +275,30 @@ int     flags;			/* Output options */
+ 	pnt_width = ((double) width) / MICRONS_PER_INCH * POINTS_PER_INCH;
+ 	pnt_height = ((double) height) / MICRONS_PER_INCH * POINTS_PER_INCH;
+ 	PS("%% Determine whether rotation is required\n");
+-	OUT(psFile, "%lg page-width gt\n", pnt_width);
++	OUT(psFile, "%g page-width gt\n", pnt_width);
+ 	PS("{ %% Rotation required\n");
+ 	PS("   90 rotate\n");
+ 	PS("   0 page-width neg translate\n");
+ 	PS("   %% Handle centering\n");
+ 	PS("   Y-CENTER-PLOT 1 eq { %% Center in y\n");
+-	OUT(psFile, "      page-height %lg sub 2 div\n", pnt_width);
++	OUT(psFile, "      page-height %g sub 2 div\n", pnt_width);
+ 	PS("   } { %% Don't center in y\n");
+ 	PS("      0\n");
+ 	PS("   } ifelse\n");
+ 	PS("   X-CENTER-PLOT 1 eq { %% Center in x\n");
+-	OUT(psFile, "      page-width %lg sub 2 div\n", pnt_height);
++	OUT(psFile, "      page-width %g sub 2 div\n", pnt_height);
+ 	PS("   } { %% Don't center in x\n");
+ 	PS("      0\n");
+ 	PS("   } ifelse\n");
+ 	PS("   translate\n");
+ 	PS("} { %% No rotation - just handle centering\n");
+ 	PS("   X-CENTER-PLOT 1 eq { %% Center in x\n");
+-	OUT(psFile, "      page-width %lg sub 2 div\n", pnt_width);
++	OUT(psFile, "      page-width %g sub 2 div\n", pnt_width);
+ 	PS("   } { %% Don't center in x\n");
+ 	PS("      0\n");
+ 	PS("   } ifelse\n");
+ 	PS("   Y-CENTER-PLOT 1 eq { %% Center in y\n");
+-	OUT(psFile, "      page-height %lg sub 2 div\n", pnt_height);
++	OUT(psFile, "      page-height %g sub 2 div\n", pnt_height);
+ 	PS("   } { %% Don't center in y\n");
+ 	PS("      0\n");
+ 	PS("   } ifelse\n");
+@@ -311,7 +311,7 @@ int     flags;			/* Output options */
+      */
+     factor = POINTS_PER_INCH / VDPI;
+     PS("%% Set the scale\n");
+-    OUT(psFile, "%lg %lg scale\n", factor, factor);
++    OUT(psFile, "%g %g scale\n", factor, factor);
+ }
+ 
+ 
+@@ -459,18 +459,18 @@ int     style;			/* Style
+     struct userInfo *ui = (struct userInfo *) state;
+ 
+     if (TEXTCOLOR != ui->currentColor) {
+-	OUT(ui->psFile, "%lg setgray\n", (double) TEXTCOLOR / 8);
++	OUT(ui->psFile, "%g setgray\n", (double) TEXTCOLOR / 8);
+ 	ui->currentColor = TEXTCOLOR;
+     }
+ 
+     if (style != ui->currentTextStyle) {
+ 	switch (style) {
+ 	case T_AXIS:
+-	    OUT(ui->psFile, "%lg /%s choose-font\n",
++	    OUT(ui->psFile, "%g /%s choose-font\n",
+ 		ui->axis_size * INCHES_PER_POINT * VDPI, ui->axis_family);
+ 	    break;
+ 	case T_TITLE:
+-	    OUT(ui->psFile, "%lg /%s choose-font\n",
++	    OUT(ui->psFile, "%g /%s choose-font\n",
+ 		ui->title_size * INCHES_PER_POINT * VDPI, ui->title_family);
+ 	    break;
+ 	}
+@@ -534,13 +534,13 @@ int     color;			/* Zero to seven
+ 	    PSU("[] 0 setdash\n");
+ 	}
+ 	else {
+-	    OUT(ui->psFile, "[%lg] 0 setdash\n",
++	    OUT(ui->psFile, "[%g] 0 setdash\n",
+ 		((double) lappr) * BASE_DASH * VDPI);
+ 	}
+ 	ui->currentDashStyle = lappr;
+     }
+     if ((color != ui->currentColor) && (style == L_VAR)) {
+-	OUT(ui->psFile, "%lg setgray\n", (double) color / MAXCOLOR);
++	OUT(ui->psFile, "%g setgray\n", (double) color / MAXCOLOR);
+ 	ui->currentColor = color;
+     }
+     PSU("newpath\n");
+@@ -585,7 +585,7 @@ int     color;			/* color of dot */
+     if (color > MAXCOLOR)
+ 	color -= MAXCOLOR;
+     if ((color != ui->currentColor)) {
+-	OUT(ui->psFile, "%lg setgray\n", (double) color / MAXCOLOR);
++	OUT(ui->psFile, "%g setgray\n", (double) color / MAXCOLOR);
+ 	ui->currentColor = color;
+     }
+ 
+--- /dev/null
++++ xgraph-12.1/configure.ac
+@@ -0,0 +1,31 @@
++dnl Process this file with autoconf to produce a configure script.
++AC_INIT([xgraph],[12.1])
++AC_CONFIG_SRCDIR([xgraph.c])
++AM_INIT_AUTOMAKE([foreign])
++
++AC_CONFIG_HEADERS([autoconf.h])
++
++dnl Checks for programs.
++AC_PROG_CC
++
++dnl Checks for libraries.
++AC_CHECK_LIB([m], [pow])
++AC_CHECK_LIB([X11], [XOpenDisplay])
++AC_PATH_X
++
++dnl check header files.
++AC_CHECK_HEADERS([float.h limits.h memory.h stdlib.h string.h strings.h unistd.h])
++
++dnl checks for typedefs
++dnl checks for structures
++dnl checks for compiler characteristics
++
++dnl checks for library functions
++AC_FUNC_MALLOC
++AC_FUNC_REALLOC
++AC_CHECK_FUNCS([floor memset pow strcasecmp strchr])
++
++dnl checks for system services
++
++AC_CONFIG_FILES([Makefile])
++AC_OUTPUT
+--- xgraph-12.1.orig/Makefile.am
++++ xgraph-12.1/Makefile.am
+@@ -2,56 +2,21 @@
+ 
+ # Copyright (C) 1999 by John Heidemann <johnh@isi.edu>
+ 
+-## shallow
+-AUTOMAKE_OPTIONS = 1.0 foreign
++AM_CPPFLAGS = -DDO_DER
+ 
+ bin_PROGRAMS = xgraph
+-xgraph_c_sources = \
+-		xgraph.c xgX.c hard_devices.c dialog.c hpgl.c \
+-		  ps.c idraw.c xtb.c st.c params.c alloc.c draw.c \
+-		  init.c read.c tgif.c derivative.c \
+-		copyright.h \
+-		general.h \
+-		hard_devices.h \
+-		params.h \
+-		plotter.h \
+-		st.h \
+-		xgout.h \
+-		xgraph.h \
+-		xtb.h
+-xgraph_SOURCES = $(xgraph_c_sources)
+ 
+-man_MANS = xgraph.man
+-
+-EXTRA_DIST=\
+-	$(man_MANS) \
+-	README.ANNOUNCE \
+-	README.GENERAL \
+-	README.HARDCOPY \
+-	README.INSTALL \
+-	README.NEWFEATURES \
+-	bitmaps/dot.11 \
+-	bitmaps/gray \
+-	bitmaps/mark1.11 \
+-	bitmaps/mark2.11 \
+-	bitmaps/mark3.11 \
+-	bitmaps/mark4.11 \
+-	bitmaps/mark5.11 \
+-	bitmaps/mark6.11 \
+-	bitmaps/mark7.11 \
+-	bitmaps/mark8.11 \
+-	examples/Animation.xg \
+-	examples/bar.xg \
+-	examples/surface.xg \
+-	examples/surface2.xg \
+-	examples/surface3.xg \
+-	examples/xgtest.xg
+-
+-
+-# C_WARNINGS = -Wall
+-C_WARNINGS = 
+-CFLAGS=$(ADDITIONAL_INCLUDES)  $(C_WARNINGS) -g  $(X_CFLAGS) 
+-
+-xgraph_LDADD= $(ADDITIONAL_LIBS) $(X_LIBS) $(X_PRE_LIBS) $(X_EXTRA_LIBS) -lX11 -lm
++xgraph_SOURCES = xgraph.c xgX.c hard_devices.c dialog.c hpgl.c ps.c	\
++	idraw.c xtb.c st.c params.c alloc.c draw.c init.c read.c	\
++	tgif.c derivative.c copyright.h general.h hard_devices.h	\
++	params.h plotter.h st.h xgout.h xgraph.h xtb.h
+ 
++man_MANS = xgraph.man
+ 
++EXTRA_DIST= $(man_MANS) README.ANNOUNCE README.GENERAL			\
++	README.HARDCOPY README.INSTALL README.NEWFEATURES		\
++	bitmaps/dot.11 bitmaps/gray bitmaps/mark1.11 bitmaps/mark2.11	\
++	bitmaps/mark3.11 bitmaps/mark4.11 bitmaps/mark5.11		\
++	bitmaps/mark6.11 bitmaps/mark7.11 bitmaps/mark8.11		\
++	examples/Animation.xg examples/bar.xg examples/surface.xg	\
++	examples/surface2.xg examples/surface3.xg examples/xgtest.xg
+--- xgraph-12.1.orig/dialog.c
++++ xgraph-12.1/dialog.c
+@@ -15,8 +15,6 @@
+ #include <stdio.h>
+ #include <X11/Xutil.h>
+ 
+-void    do_error();
+-
+ #define MAXCHBUF	1024
+ 
+ #ifdef SHADOW
+@@ -301,15 +299,15 @@ xtb_data info;			/* User data         */
+ 	    (void) xtb_bt_set(data->docu_p, 1, (xtb_data) 0, 0);
+ 	    break;
+ 	}
+-	(void) sprintf(text, "%lg", hard_devices[new].dev_max_dim);
++	(void) sprintf(text, "%G", hard_devices[new].dev_max_dim);
+ 	xtb_ti_set(data->dimspec, text, (xtb_data) 0);
+ 	xtb_ti_set(data->tf_family, hard_devices[new].dev_title_font,
+ 		   (xtb_data) 0);
+-	(void) sprintf(text, "%lg", hard_devices[new].dev_title_size);
++	(void) sprintf(text, "%G", hard_devices[new].dev_title_size);
+ 	xtb_ti_set(data->tf_size, text, (xtb_data) 0);
+ 	xtb_ti_set(data->af_family, hard_devices[new].dev_axis_font,
+ 		   (xtb_data) 0);
+-	(void) sprintf(text, "%lg", hard_devices[new].dev_axis_size);
++	(void) sprintf(text, "%G", hard_devices[new].dev_axis_size);
+ 	xtb_ti_set(data->af_size, text, (xtb_data) 0);
+     }
+     return XTB_HANDLED;
+@@ -777,7 +775,7 @@ xtb_frame *frame;		/* Returned frame */
+     memset(new_info->lines, 0, sizeof(Window) * E_LINES);
+ 
+     lineptr = text;
+-    while (getline(&lineptr, line)) {
++    while (get_line(&lineptr, line)) {
+ 	if (new_info->num_lines >= new_info->alloc_lines) {
+ 	    int old_alloc_lines_size = new_info->alloc_lines * sizeof(Window);
+ 	    new_info->alloc_lines *= 2;
+@@ -888,7 +886,7 @@ char   *err_text;
+ 
+ 
+ int 
+-getline(tptr, lptr)
++get_line(tptr, lptr)
+ char  **tptr;
+ char   *lptr;
+ 
+--- xgraph-12.1.orig/hard_devices.c
++++ xgraph-12.1/hard_devices.c
+@@ -1,19 +1,18 @@
+-/* $Header: /usr/src/mash/repository/vint/xgraph/hard_devices.c,v 1.1.1.1 1999/12/03 23:15:52 heideman Exp $ */
++/* $Header$ */
+ /*
+  * Hardcopy Devices
+  *
+  * This file contains the basic output device table.  The hardcopy
+  * dialog is automatically constructed from this table.
+  *
+- * $Log: hard_devices.c,v $
++ * $Log$
++ * Revision 1.3  2001-10-08 07:39:40  bap
++ * cvs update -jdebian_version_XXX -jupstream_version_12_1
++ *
+  * Revision 1.1.1.1  1999/12/03 23:15:52  heideman
+  * xgraph-12.0
+  *
+  */
+-#ifndef lint
+-static char rcsid[] = "$Id: hard_devices.c,v 1.1.1.1 1999/12/03 23:15:52 heideman Exp $";
+-
+-#endif
+ 
+ #include <stdio.h>
+ #include "copyright.h"
+--- /dev/null
++++ xgraph-12.1/read.h
+@@ -0,0 +1 @@
++int ReadData(FILE *, char *);
+--- xgraph-12.1.orig/params.c
++++ xgraph-12.1/params.c
+@@ -1,11 +1,14 @@
+-/* $Header: /usr/src/mash/repository/vint/xgraph/params.c,v 1.2 1999/12/08 19:32:41 heideman Exp $ */
++/* $Header$ */
+ /*
+  * Xgraph Parameters
+  *
+  * This file contains routines for setting and retrieving
+  * various X style display parameters for xgraph.
+  *
+- * $Log: params.c,v $
++ * $Log$
++ * Revision 1.5  2007-12-06 11:55:13  bap
++ * flush compiler warnings of various levels of severity
++ *
+  * Revision 1.2  1999/12/08 19:32:41  heideman
+  * strcasecmp portability fix
+  *
+@@ -13,10 +16,6 @@
+  * xgraph-12.0
+  *
+  */
+-#ifndef lint
+-static char rcsid[] = "$Id: params.c,v 1.2 1999/12/08 19:32:41 heideman Exp $";
+-
+-#endif
+ 
+ #include <ctype.h>
+ #include <stdio.h>
+@@ -33,7 +32,7 @@ XColor  param_null_color =
+ param_style param_null_style =
+ {STYLE, 0, (char *) 0};
+ 
+-static st_table *param_table = (st_table *) 0;
++static struct st_table *param_table = 0;
+ 
+ typedef struct param_full_defn {
+     param_types type;
+@@ -342,7 +341,7 @@ XFontStruct **font_info;	/* Returned fon
+     /* First attempt to interpret as font family/size */
+     if (PM_INT("Output Device") == D_XWINDOWS) {
+ 	(void) strcpy(name_copy, name);
+-	if (font_size = index(name_copy, '-')) {
++	if ((font_size = index(name_copy, '-'))) {
+ 	    *font_size = '\0';
+ 	    font_family = name_copy;
+ 	    font_size++;
+@@ -358,15 +357,14 @@ XFontStruct **font_info;	/* Returned fon
+ 
+ 		/* Load first one that you can */
+ 		for (i = 0; i < font_count; i++)
+-		    if (*font_info = XLoadQueryFont(param_disp, font_list[i]))
+-			break;
+-		if (*font_info)
+-		    return 1;
++		  if ((*font_info = XLoadQueryFont(param_disp, font_list[i])))
++			return 1;
+ 	    }
+ 	}
+ 	/* Assume normal font name */
+-	return (int) (*font_info = XLoadQueryFont(param_disp, name));
++	return (*font_info = XLoadQueryFont(param_disp, name)) ? 1 : 0;
+     }
++    return 0;
+ }
+ 
+ 
+--- xgraph-12.1.orig/xgraph.h
++++ xgraph-12.1/xgraph.h
+@@ -11,6 +11,7 @@
+ #include <X11/Xlib.h>
+ #include <X11/Xutil.h>
+ #include <X11/cursorfont.h>
++#include <X11/Xresource.h>
+ 
+ /*
+  * Get definitions from headers.
+@@ -198,6 +199,7 @@ extern char *disp_name;
+ /* To make lint happy */
+ extern char *Malloc();
+ extern char *Realloc();
++extern char *Calloc();
+ extern void Free();
+ 
+ #ifndef _POSIX_SOURCE
+@@ -207,4 +209,10 @@ extern double atof();
+ extern void abort();
+ #endif /* _POSIX_SOURCE */
+ 
++/* Extra include files to quash warnings, by Barak A. Pearlmutter */
++#include "init.h"
++#include "read.h"
++#include "draw.h"
++#include "dialog.h"
++
+ #endif				/* _XGRAPH_H_ */
+--- xgraph-12.1.orig/st.c
++++ xgraph-12.1/st.c
+@@ -9,6 +9,8 @@
+  * This is a general purpose hash table package.
+  */
+ 
++#include <stdlib.h>
++#include <string.h>
+ #include <stdio.h>
+ #include "copyright.h"
+ #include "st.h"
+@@ -16,7 +18,7 @@
+ 
+ #define max(a,b) ((a) > (b) ? (a) : (b))
+ #define nil(type) ((type *) 0)
+-#define alloc(type) (type *) Malloc(sizeof(type))
++#define alloc(type) (type *) malloc(sizeof(type))
+ 
+ #define ABS(x) ((x) < 0 ? -(x) : (x))
+ #define ST_NUMCMP(x,y) ((int) (x) - (int) (y))
+@@ -32,34 +34,32 @@
+      (table->hash == st_numhash) ? ST_NUMHASH((key), (table)->num_bins) :\
+      (*table->hash)((key), (table)->num_bins))
+ 
+-char    st_pkg_name[] = "st";
++char st_pkg_name[] = "st";
+ 
+ /* Possible error conditions */
+-char   *st_no_mem = "out of memory";
+-char   *st_bad_ret = "bad return code from function passed to st_foreach";
+-char   *st_bad_gen = "null or zero generator";
++char *st_no_mem = "out of memory";
++char *st_bad_ret = "bad return code from function passed to st_foreach";
++char *st_bad_gen = "null or zero generator";
+ 
+ /* Forward declarations */
+-int     st_numhash(), st_ptrhash(), st_numcmp(), st_ptrcmp();
++int st_numhash(), st_ptrhash(), st_numcmp(), st_ptrcmp();
+ static void rehash();
+ static void errRaise();
+ 
+ 
+-st_table *
+-st_init_table_with_params(compare, hash, size, density, grow_factor,
+-			  reorder_flag)
+-int     (*compare) ();
+-int     (*hash) ();
+-int     size;
+-int     density;
+-double  grow_factor;
+-int     reorder_flag;
+-
++ST_TABLE *st_init_table_with_params(compare, hash, size, density, grow_factor,
++				    reorder_flag)
++int (*compare)();
++int (*hash)();
++int size;
++int density;
++double grow_factor;
++int reorder_flag;
+ /* Detailed table allocator */
+ {
+-    st_table *new;
++    ST_TABLE *new;
+ 
+-    new = alloc(st_table);
++    new = alloc(ST_TABLE );
+     if (!new) {
+ 	errRaise(st_pkg_name, ST_NO_MEM, st_no_mem);
+ 	/* NOTREACHED */
+@@ -74,21 +74,19 @@ int     reorder_flag;
+ 	size = 1;
+     }
+     new->num_bins = size;
+-    new->bins =
+-	(st_table_entry **) Calloc((unsigned) size, sizeof(st_table_entry *));
++    new->bins = 
++	(ST_TABLE_ENTRY **) calloc((unsigned)size, sizeof(ST_TABLE_ENTRY *));
+     if (!new->bins) {
+-	Free((char *) new);
++	free((char *) new);
+ 	errRaise(st_pkg_name, ST_NO_MEM, st_no_mem);
+ 	/* NOTREACHED */
+     }
+     return new;
+ }
+ 
+-st_table *
+-st_init_table(compare, hash)
+-int     (*compare) ();
+-int     (*hash) ();
+-
++ST_TABLE *st_init_table(compare, hash)
++int (*compare)();
++int (*hash)();
+ /* Default table allocator */
+ {
+     return st_init_table_with_params(compare, hash, ST_DEFAULT_INIT_TABLE_SIZE,
+@@ -96,33 +94,31 @@ int     (*hash) ();
+ 				     ST_DEFAULT_GROW_FACTOR,
+ 				     ST_DEFAULT_REORDER_FLAG);
+ }
+-
++			    
+ 
+ void
+-st_Free_table(table)
+-st_table *table;
+-
++st_free_table(table)
++ST_TABLE *table;
+ /* Destroy a table */
+ {
+-    register st_table_entry *ptr,
+-           *next;
+-    int     i;
++    register ST_TABLE_ENTRY *ptr, *next;
++    int i;
+ 
+-    for (i = 0; i < table->num_bins; i++) {
++    for(i = 0; i < table->num_bins ; i++) {
+ 	ptr = table->bins[i];
+-	while (ptr != nil(st_table_entry)) {
++	while (ptr != nil(ST_TABLE_ENTRY)) {
+ 	    next = ptr->next;
+-	    Free((char *) ptr);
++	    free((char *) ptr);
+ 	    ptr = next;
+ 	}
+     }
+-    Free((char *) table->bins);
+-    Free((char *) table);
++    free((char *) table->bins);
++    free((char *) table);
+ }
+ 
+ 
+ #define PTR_NOT_EQUAL(table, ptr, user_key)\
+-(ptr != nil(st_table_entry) && !EQUAL(table->compare, user_key, (ptr)->key))
++(ptr != nil(ST_TABLE_ENTRY) && !EQUAL(table->compare, user_key, (ptr)->key))
+ 
+ #define FIND_ENTRY(table, hash_val, key, ptr, last) \
+     (last) = &(table)->bins[hash_val];\
+@@ -130,34 +126,29 @@ st_table *table;
+     while (PTR_NOT_EQUAL((table), (ptr), (key))) {\
+ 	(last) = &(ptr)->next; (ptr) = *(last);\
+     }\
+-    if ((ptr) != nil(st_table_entry) && (table)->reorder_flag) {\
++    if ((ptr) != nil(ST_TABLE_ENTRY) && (table)->reorder_flag) {\
+ 	*(last) = (ptr)->next;\
+ 	(ptr)->next = (table)->bins[hash_val];\
+ 	(table)->bins[hash_val] = (ptr);\
+     }
+ 
+-int 
+-st_lookup(table, key, value)
+-st_table *table;
++int st_lookup(table, key, value)
++ST_TABLE *table;
+ register char *key;
+-char  **value;
+-
++char **value;
+ /* Look up item in table -- return zero if not found */
+ {
+-    int     hash_val;
+-    register st_table_entry *ptr,
+-          **last;
++    int hash_val;
++    register ST_TABLE_ENTRY *ptr, **last;
+ 
+     hash_val = do_hash(key, table);
+ 
+     FIND_ENTRY(table, hash_val, key, ptr, last);
+-
+-    if (ptr == nil(st_table_entry)) {
++    
++    if (ptr == nil(ST_TABLE_ENTRY)) {
+ 	return 0;
+-    }
+-    else {
+-	if (value != nil(char *))
+-	    *value = ptr->record;
++    } else {
++	if (value != nil(char *))  *value = ptr->record; 
+ 	return 1;
+     }
+ }
+@@ -169,7 +160,7 @@ char  **value;
+ 	hash_val = do_hash(key,table);\
+     }\
+     \
+-    new = alloc(st_table_entry);\
++    new = alloc(ST_TABLE_ENTRY);\
+     \
+     if (new) {\
+ 	new->key = key;\
+@@ -183,139 +174,115 @@ char  **value;
+     } \
+ }
+ 
+-int 
+-st_insert(table, key, value)
+-register st_table *table;
++int st_insert(table, key, value)
++register ST_TABLE *table;
+ register char *key;
+-char   *value;
+-
++char *value;
+ /* Insert an item into the table - replacing if it already exists */
+ {
+-    int     hash_val;
+-    st_table_entry *new;
+-    register st_table_entry *ptr,
+-          **last;
++    int hash_val;
++    ST_TABLE_ENTRY *new;
++    register ST_TABLE_ENTRY *ptr, **last;
+ 
+     hash_val = do_hash(key, table);
+ 
+     FIND_ENTRY(table, hash_val, key, ptr, last);
+ 
+-    if (ptr == nil(st_table_entry)) {
+-	ADD_DIRECT(table, key, value, hash_val, new);
++    if (ptr == nil(ST_TABLE_ENTRY)) {
++	ADD_DIRECT(table,key,value,hash_val,new);
+ 	return 0;
+-    }
+-    else {
++    } else {
+ 	ptr->record = value;
+ 	return 1;
+     }
+ }
+ 
+-void 
+-st_add_direct(table, key, value)
+-st_table *table;
+-char   *key;
+-char   *value;
+-
++void st_add_direct(table, key, value)
++ST_TABLE *table;
++char *key;
++char *value;
+ /* Add item to table without checking for existing item */
+ {
+-    int     hash_val;
+-    st_table_entry *new;
+-
++    int hash_val;
++    ST_TABLE_ENTRY *new;
++    
+     hash_val = do_hash(key, table);
+     ADD_DIRECT(table, key, value, hash_val, new);
+ }
+ 
+-int 
+-st_find_or_add(table, key, slot)
+-st_table *table;
+-char   *key;
++int st_find_or_add(table, key, slot)
++ST_TABLE *table;
++char *key;
+ char ***slot;
+-
+ /* Return slot for key - make one if one doesn't exist */
+ {
+-    int     hash_val;
+-    st_table_entry *new,
+-           *ptr,
+-          **last;
++    int hash_val;
++    ST_TABLE_ENTRY *new, *ptr, **last;
+ 
+     hash_val = do_hash(key, table);
+ 
+     FIND_ENTRY(table, hash_val, key, ptr, last);
+ 
+-    if (ptr == nil(st_table_entry)) {
+-	ADD_DIRECT(table, key, (char *) 0, hash_val, new);
+-	if (slot != nil(char **))
+-	    *slot = &new->record;
++    if (ptr == nil(ST_TABLE_ENTRY)) {
++	ADD_DIRECT(table, key, (char *)0, hash_val, new);
++	if (slot != nil(char **)) *slot = &new->record;
+ 	return 0;
+-    }
+-    else {
+-	if (slot != nil(char **))
+-	    *slot = &ptr->record;
++    } else {
++	if (slot != nil(char **)) *slot = &ptr->record;
+ 	return 1;
+     }
+ }
+ 
+-int 
+-st_find(table, key, slot)
+-st_table *table;
+-char   *key;
++int st_find(table, key, slot)
++ST_TABLE *table;
++char *key;
+ char ***slot;
+-
+ /* Finds an entry in table */
+ {
+-    int     hash_val;
+-    st_table_entry *ptr,
+-          **last;
++    int hash_val;
++    ST_TABLE_ENTRY *ptr, **last;
+ 
+     hash_val = do_hash(key, table);
+ 
+     FIND_ENTRY(table, hash_val, key, ptr, last);
+ 
+-    if (ptr == nil(st_table_entry)) {
++    if (ptr == nil(ST_TABLE_ENTRY)) {
+ 	return 0;
+-    }
+-    else {
+-	if (slot != nil(char **))
+-	    *slot = &ptr->record;
++    } else {
++	if (slot != nil(char **)) *slot = &ptr->record;
+ 	return 1;
+     }
+ }
+ 
+-static void 
+-rehash(table)
+-register st_table *table;
+-
++static void rehash(table)
++register ST_TABLE *table;
+ /* Grows table */
+ {
+-    register st_table_entry *ptr,
+-           *next,
+-          **old_bins = table->bins;
+-    int     i,
+-            old_num_bins = table->num_bins,
+-            hash_val;
+-
+-    table->num_bins = table->grow_factor * old_num_bins;
++    register ST_TABLE_ENTRY *ptr, *next, **old_bins = table->bins;
++    int i, old_num_bins = table->num_bins, hash_val;
+ 
+-    if (table->num_bins % 2 == 0) {
++    table->num_bins = table->grow_factor*old_num_bins;
++    
++    if (table->num_bins%2 == 0) {
+ 	table->num_bins += 1;
+     }
+-
+-    table->bins =
+-	(st_table_entry **) Calloc((unsigned) table->num_bins,
+-				   sizeof(st_table_entry *));
++    
++    table->bins = 
++      (ST_TABLE_ENTRY **) calloc((unsigned) table->num_bins,
++	    sizeof(ST_TABLE_ENTRY *));
+ 
+     if (!table->bins) {
+ 	/* If out of memory: don't resize */
+-	table->bins = old_bins;
++      	table->bins = old_bins;
+ 	table->num_bins = old_num_bins;
+ 	return;
+     }
+-
++    
+     table->num_entries = 0;
+ 
+-    for (i = 0; i < old_num_bins; i++) {
++    for(i = 0; i < old_num_bins ; i++) {
+ 	ptr = old_bins[i];
+-	while (ptr != nil(st_table_entry)) {
++	while (ptr != nil(ST_TABLE_ENTRY)) {
+ 	    next = ptr->next;
+ 	    hash_val = do_hash(ptr->key, table);
+ 	    ptr->next = table->bins[hash_val];
+@@ -324,43 +291,40 @@ register st_table *table;
+ 	    ptr = next;
+ 	}
+     }
+-    Free((char *) old_bins);
++    free((char *) old_bins);
+ }
+ 
+-st_table *
+-st_copy(old_table)
+-st_table *old_table;
++ST_TABLE *st_copy(old_table)
++ST_TABLE *old_table;
+ {
+-    st_table *new_table;
+-    st_table_entry *ptr,
+-           *new;
+-    int     i,
+-            num_bins = old_table->num_bins;
++    ST_TABLE *new_table;
++    ST_TABLE_ENTRY *ptr, *new;
++    int i, num_bins = old_table->num_bins;
+ 
+-    new_table = alloc(st_table);
+-    if (new_table == nil(st_table)) {
++    new_table = alloc(ST_TABLE );
++    if (new_table == nil(ST_TABLE )) {
+ 	errRaise(st_pkg_name, ST_NO_MEM, st_no_mem);
+ 	/* NOTREACHED */
+     }
+-
++    
+     *new_table = *old_table;
+-    new_table->bins =
+-	(st_table_entry **) Calloc((unsigned) num_bins, sizeof(st_table_entry *));
+-
+-    if (new_table->bins == nil(st_table_entry *)) {
+-	Free((char *) new_table);
++    new_table->bins = 
++      (ST_TABLE_ENTRY **) calloc((unsigned) num_bins, sizeof(ST_TABLE_ENTRY *));
++    
++    if (new_table->bins == nil(ST_TABLE_ENTRY *)) {
++	free((char *) new_table);
+ 	errRaise(st_pkg_name, ST_NO_MEM, st_no_mem);
+ 	/* NOTREACHED */
+     }
+ 
+-    for (i = 0; i < num_bins; i++) {
+-	new_table->bins[i] = nil(st_table_entry);
++    for(i = 0; i < num_bins ; i++) {
++	new_table->bins[i] = nil(ST_TABLE_ENTRY);
+ 	ptr = old_table->bins[i];
+-	while (ptr != nil(st_table_entry)) {
+-	    new = alloc(st_table_entry);
+-	    if (new == nil(st_table_entry)) {
+-		Free((char *) new_table->bins);
+-		Free((char *) new_table);
++	while (ptr != nil(ST_TABLE_ENTRY)) {
++	    new = alloc(ST_TABLE_ENTRY);
++	    if (new == nil(ST_TABLE_ENTRY)) {
++		free((char *) new_table->bins);
++		free((char *) new_table);
+ 		errRaise(st_pkg_name, ST_NO_MEM, st_no_mem);
+ 		/* NOTREACHED */
+ 	    }
+@@ -373,60 +337,53 @@ st_table *old_table;
+     return new_table;
+ }
+ 
+-int 
+-st_delete(table, keyp, value)
+-register st_table *table;
++int st_delete(table, keyp, value)
++register ST_TABLE *table;
+ register char **keyp;
+-char  **value;
++char **value;
+ {
+-    int     hash_val;
+-    char   *key = *keyp;
+-    register st_table_entry *ptr,
+-          **last;
++    int hash_val;
++    char *key = *keyp;
++    register ST_TABLE_ENTRY *ptr, **last;
+ 
+     hash_val = do_hash(key, table);
+ 
+-    FIND_ENTRY(table, hash_val, key, ptr, last);
+-
+-    if (ptr == nil(st_table_entry)) {
++    FIND_ENTRY(table, hash_val, key, ptr ,last);
++    
++    if (ptr == nil(ST_TABLE_ENTRY)) {
+ 	return 0;
+     }
+ 
+     *last = ptr->next;
+-    if (value != nil(char *))
+-	*value = ptr->record;
++    if (value != nil(char *)) *value = ptr->record;
+     *keyp = ptr->key;
+-    Free((char *) ptr);
++    free((char *) ptr);
+     table->num_entries--;
+     return 1;
+ }
+ 
+-int 
+-st_foreach(table, func, arg)
+-st_table *table;
+-enum st_retval (*func) ();
+-char   *arg;
++int st_foreach(table, func, arg)
++ST_TABLE *table;
++enum st_retval (*func)();
++char *arg;
+ {
+-    st_table_entry *ptr,
+-          **last;
++    ST_TABLE_ENTRY *ptr, **last;
+     enum st_retval retval;
+-    int     i;
++    int i;
+ 
+-    for (i = 0; i < table->num_bins; i++) {
+-	last = &table->bins[i];
+-	ptr = *last;
+-	while (ptr != nil(st_table_entry)) {
+-	    retval = (*func) (ptr->key, ptr->record, arg);
++    for(i = 0; i < table->num_bins; i++) {
++	last = &table->bins[i]; ptr = *last;
++	while (ptr != nil(ST_TABLE_ENTRY)) {
++	    retval = (*func)(ptr->key, ptr->record, arg);
+ 	    switch (retval) {
+ 	    case ST_CONTINUE:
+-		last = &ptr->next;
+-		ptr = *last;
++		last = &ptr->next; ptr = *last;
+ 		break;
+ 	    case ST_STOP:
+ 		return 0;
+ 	    case ST_DELETE:
+ 		*last = ptr->next;
+-		Free((char *) ptr);
++		free((char *) ptr);
+ 		ptr = *last;
+ 		break;
+ 	    default:
+@@ -438,79 +395,72 @@ char   *arg;
+     return 1;
+ }
+ 
+-int 
+-st_strhash(string, modulus)
++int st_strhash(string, modulus)
+ register char *string;
+-int     modulus;
++int modulus;
+ {
+     register int val = 0;
+     register int c;
+-
++    
+     while ((c = *string++) != '\0') {
+-	val = val * 997 + c;
++	val = val*997 + c;
+     }
+ 
+-    return ((val < 0) ? -val : val) % modulus;
++    return ((val < 0) ? -val : val)%modulus;
+ }
+ 
+-int 
+-st_numhash(x, size)
+-char   *x;
+-int     size;
++int st_numhash(x, size)
++char *x;
++int size;
+ {
+     return ST_NUMHASH(x, size);
+ }
+ 
+-int 
+-st_ptrhash(x, size)
+-char   *x;
+-int     size;
++int st_ptrhash(x, size)
++char *x;
++int size;
+ {
+     return ST_PTRHASH(x, size);
+ }
+ 
+-int 
+-st_numcmp(x, y)
+-char   *x;
+-char   *y;
++int st_numcmp(x, y)
++char *x;
++char *y;
+ {
+     return ST_NUMCMP(x, y);
+ }
+ 
+-int 
+-st_ptrcmp(x, y)
+-char   *x;
+-char   *y;
++int st_ptrcmp(x, y)
++char *x;
++char *y;
+ {
+     return ST_NUMCMP(x, y);
+ }
+ 
+-st_generator *
++ST_GENERATOR *
+ st_init_gen(table)
+-st_table *table;
+-
++ST_TABLE *table;
+ /* Initializes generation of items in table */
+ {
+-    st_generator *gen;
++    ST_GENERATOR *gen;
+ 
+-    gen = alloc(st_generator);
++    gen = alloc(ST_GENERATOR);
+     if (!gen) {
+ 	errRaise(st_pkg_name, ST_NO_MEM, st_no_mem);
+ 	/* NOTREACHED */
+     }
+     gen->table = table;
+-    gen->entry = nil(st_table_entry);
+-    gen->idx = 0;
++    gen->entry = nil(ST_TABLE_ENTRY);
++    gen->st_index = 0;
+     return gen;
+ }
+ 
+ 
+-int
++int 
+ st_gen(gen, key_p, value_p)
+-st_generator *gen;
+-char  **key_p;
+-char  **value_p;
+-
++ST_GENERATOR *gen;
++char **key_p;
++char **value_p;
+ /* Generates next item in generation sequence */
+ {
+     register int i;
+@@ -519,48 +469,44 @@ char  **value_p;
+ 	errRaise(st_pkg_name, ST_BAD_GEN, st_bad_gen);
+ 	/* NOTREACHED */
+     }
+-
+-    if (gen->entry == nil(st_table_entry)) {
++    
++    if (gen->entry == nil(ST_TABLE_ENTRY)) {
+ 	/* try to find next entry */
+-	for (i = gen->idx; i < gen->table->num_bins; i++) {
+-	    if (gen->table->bins[i] != nil(st_table_entry)) {
+-		gen->idx = i + 1;
++	for(i = gen->st_index; i < gen->table->num_bins; i++) {
++	    if (gen->table->bins[i] != nil(ST_TABLE_ENTRY)) {
++		gen->st_index = i+1;
+ 		gen->entry = gen->table->bins[i];
+ 		break;
+ 	    }
+ 	}
+-	if (gen->entry == nil(st_table_entry)) {
++	if (gen->entry == nil(ST_TABLE_ENTRY)) {
+ 	    return 0;		/* that's all folks ! */
+ 	}
+     }
+     *key_p = gen->entry->key;
+-    if (value_p != 0)
+-	*value_p = gen->entry->record;
++    if (value_p != 0) *value_p = gen->entry->record;
+     gen->entry = gen->entry->next;
+     return 1;
+ }
+ 
+ 
+ void
+-st_Free_gen(gen)
+-st_generator *gen;
++st_free_gen(gen)
++ST_GENERATOR *gen;
+ {
+     if (gen) {
+-	Free((char *) gen);
+-    }
+-    else {
++	free((char *) gen);
++    } else {
+ 	errRaise(st_pkg_name, ST_BAD_GEN, st_bad_gen);
+ 	/* NOTREACHED */
+     }
+ }
+ 
+ 
+-static void 
+-errRaise(pkg, num, msg)
+-char   *pkg;
+-int     num;
+-char   *msg;
+-
++static void errRaise(pkg, num, msg)
++char *pkg;
++int num;
++char *msg;
+ /*
+  * In this standalone version of st, and error raise causes
+  * an abort after printing a message.
+--- xgraph-12.1.orig/idraw.c
++++ xgraph-12.1/idraw.c
+@@ -10,6 +10,7 @@
+ #include <X11/Xlib.h>
+ #include "hard_devices.h"
+ #include "xgout.h"
++#include "xgraph.h"
+ 
+ #define HEIGHT	792
+ #define FIX(X)	X = HEIGHT - X;
+--- xgraph-12.1.orig/params.h
++++ xgraph-12.1/params.h
+@@ -15,44 +15,44 @@
+ #endif
+ 
+ typedef enum param_types_defn {
+-    INT, STR, PIXEL, FONT, STYLE, BOOL, DBL
+-}       param_types;
++    INT, STR, PIXEL, FONT, STYLE, BOOL, DBL 
++} param_types;
+ 
+ typedef struct params_int_defn {
+     param_types type;		/* INT */
+-    int     value;
+-}       param_int;
++    int value;
++} param_int;
+ 
+ typedef struct params_str_defn {
+     param_types type;		/* STR */
+-    char   *value;
+-}       param_str;
++    char *value;
++} param_str;
+ 
+ typedef struct params_pix_defn {
+     param_types type;		/* PIXEL */
+-    XColor  value;
+-}       param_pix;
++    XColor value;
++} param_pix;
+ 
+ typedef struct params_font_defn {
+     param_types type;		/* FONT */
+     XFontStruct *value;
+-}       param_font;
++} param_font;
+ 
+ typedef struct params_style_defn {
+     param_types type;		/* STYLE */
+-    int     len;
+-    char   *dash_list;
+-}       param_style;
++    int len;
++    char *dash_list;
++} param_style;
+ 
+ typedef struct params_bool_defn {
+     param_types type;		/* BOOL */
+-    int     value;
+-}       param_bool;
++    int value;
++} param_bool;
+ 
+ typedef struct params_dbl_defn {
+     param_types type;		/* DBL */
+-    double  value;
+-}       param_dbl;
++    double value;
++} param_dbl;
+ 
+ typedef union params_defn {
+     param_types type;
+@@ -63,23 +63,21 @@ typedef union params_defn {
+     param_style stylev;		/* STYLE */
+     param_bool boolv;		/* BOOL */
+     param_dbl dblv;		/* DBL */
+-}       params;
++} params;
+ 
+-DECLARE(param_init, void, (Display * disp, Colormap cmap));
++DECLARE(param_init, void, (Display *disp, Colormap cmap));
+ DECLARE(param_set, void, (char *name, param_types type, char *val));
+ DECLARE(param_reset, void, (char *name, char *val));
+-DECLARE(param_get, params *, (char *name, params * val));
++DECLARE(param_get, params *, (char *name, params *val));
+ DECLARE(param_dump, void, ());
+ 
+-#ifdef stricmp
+-#undef stricmp
+-#endif
++#ifndef __CYGWIN__
+ DECLARE(stricmp, int, (char *a, char *b));
++#endif
+ 
+ /* Some convenience macros */
+ 
+-extern params param_temp,
+-       *param_temp_ptr;
++extern params param_temp, *param_temp_ptr;
+ extern XColor param_null_color;
+ extern param_style param_null_style;
+ 
+@@ -124,4 +122,4 @@ extern param_style param_null_style;
+  (abort(), 0.0))
+ 
+ 
+-#endif				/* _PARAMS_H_ */
++#endif /* _PARAMS_H_ */
+--- xgraph-12.1.orig/plotter.h
++++ xgraph-12.1/plotter.h
+@@ -1,23 +1,23 @@
+-#ifndef _h_plotter
+-#define _h_plotter
+-     /*
+-      * HP plotter definition - these are dependent on the SPECIFIC MODEL of HP
+-      * plotter used, and should always be modified when going to a new
+-      * plotter.
+-      * 
+-      * all dimensions are in plotter units.
+-      * 
+-      * MINX and MINY are the smallest x and y values that are inside the soft
+-      * clip limits of the plotter MAXX and MAXY are the largest x and y values
+-      * that are inside the soft clip limits of the plotter MINUS MINX and
+-      * MINY, so they give the dimension of the soft clip area.
+-      * 
+-      * PLOTTERTYPE is a character string which identifies the plotter that should
+-      * be used.  control information will be read for
+-      * ~cad/lib/technology/$TECHNOLOGY/$PLOTTERTYPE.map and output will go to
+-      * /usr/ucb/lpr -Pplt$PLOTTERTYPE
+-      * 
+-      */
++    /* 
++     * HP plotter definition - these are dependent on the
++     * SPECIFIC MODEL of HP plotter used, and should always
++     * be modified when going to a new plotter.
++     * 
++     * all dimensions are in plotter units.
++     *
++     * MINX and MINY are the smallest x and y values that
++     * are inside the soft clip limits of the plotter
++     * MAXX and MAXY are the largest x and y values that
++     * are inside the soft clip limits of the plotter MINUS
++     * MINX and MINY, so they give the dimension of the
++     * soft clip area.
++     *
++     * PLOTTERTYPE is a character string which identifies the
++     * plotter that should be used.  control information will
++     * be read for ~cad/lib/technology/$TECHNOLOGY/$PLOTTERTYPE.map
++     * and output will go to /usr/ucb/lpr -Pplt$PLOTTERTYPE
++     *
++     */
+ #define PLOTTERTYPE "7550"
+ #define P1X 80
+ #define P1Y 320
+@@ -33,7 +33,7 @@
+ #define TEXTCOLOR 1
+ #define PEN1 3
+ #define PEN2 4
+-#define PEN3 5
++#define PEN3 5 
+ #define PEN4 6
+ #define PEN5 7
+ #define PEN6 8
+@@ -42,7 +42,7 @@
+ 
+ #define LINE1 2
+ #define LINE2 4
+-#define LINE3 5
++#define LINE3 5 
+ #define LINE4 6
+ #define LINE5 2
+ #define LINE6 4
+@@ -57,4 +57,4 @@
+ #define MARK6 "F"
+ #define MARK7 "E"
+ #define MARK8 "A"
+-#endif /* _h_plotter */
++
+--- xgraph-12.1.orig/xtb.c
++++ xgraph-12.1/xtb.c
+@@ -12,9 +12,11 @@
+  * want to use any of the standards yet -- they are too unstable).
+  */
+ 
++#include <stdio.h>
+ #include <X11/Xos.h>
+ #include <X11/Xlib.h>
+ #include <X11/Xutil.h>
++#include <X11/Xresource.h>
+ #include <string.h>  /* for strcpy */
+ #include "xtb.h"
+ 
+@@ -865,7 +867,7 @@ unsigned long pix;
+ }
+ 
+ /* For debugging */
+-focus_evt(evt)
++void focus_evt(evt)
+ XEvent *evt;
+ {
+     switch (evt->xfocus.mode) {
+--- xgraph-12.1.orig/hard_devices.h
++++ xgraph-12.1/hard_devices.h
+@@ -5,26 +5,21 @@
+  * found in hard_devices.c.
+  */
+ 
+-#ifndef _h_hard_devices
+-#define _h_hard_devices
+-
+ #define MFNAME	25
+ 
+-typedef enum hard_dev_docu_defn {
+-    NONE, NO, YES
+-}       hard_dev_docu;
++typedef enum hard_dev_docu_defn { NONE, NO, YES } hard_dev_docu;
+ 
+ struct hard_dev {
+-    char   *dev_name;		/* Device name                */
+-    int     (*dev_init) ();	/* Initialization function    */
+-    char   *dev_spec;		/* Default pipe program       */
+-    char    dev_file[MFNAME];	/* Default file name          */
+-    char    dev_printer[MFNAME];/* Default printer name       */
+-    double  dev_max_dim;	/* Default maximum dimension (cm)    */
+-    char    dev_title_font[MFNAME];	/* Default name of title font        */
+-    double  dev_title_size;	/* Default size of title font (pnts) */
+-    char    dev_axis_font[MFNAME];	/* Default name of axis font         */
+-    double  dev_axis_size;	/* Default size of axis font (pnts)  */
++    char *dev_name;		/* Device name                */
++    int (*dev_init)();		/* Initialization function    */
++    char *dev_spec;		/* Default pipe program       */
++    char dev_file[MFNAME];	/* Default file name          */
++    char dev_printer[MFNAME];	/* Default printer name       */
++    double dev_max_dim;		/* Default maximum dimension (cm)    */
++    char dev_title_font[MFNAME];/* Default name of title font        */
++    double dev_title_size;	/* Default size of title font (pnts) */
++    char dev_axis_font[MFNAME];	/* Default name of axis font         */
++    double dev_axis_size;	/* Default size of axis font (pnts)  */
+     hard_dev_docu dev_docu;	/* Document predicate                */
+ };
+ 
+@@ -38,4 +33,3 @@ extern struct hard_dev hard_devices[];
+ #define D_XWINDOWS 4
+ 
+ extern void hard_init();
+-#endif /* _h_hard_devices */
+--- /dev/null
++++ xgraph-12.1/dialog.h
+@@ -0,0 +1,3 @@
++extern void msg_box(char *, char *);
++extern int get_line(char **, char *);
++extern void do_error(char *);
+--- xgraph-12.1.orig/hpgl.c
++++ xgraph-12.1/hpgl.c
+@@ -255,11 +255,8 @@ int     color;			/* line color */
+ 	            lrx,
+ 	            lry;
+ 
+-	    frac = (width / 2) / sqrt((double)
+-				      ((segs[i].x1 - segs[i].x2) *
+-				       (segs[i].x1 - segs[i].x2)) +
+-				      ((segs[i].y1 - segs[i].y2) *
+-				       (segs[i].y1 - segs[i].y2)));
++	    frac = (width / 2) / hypot(segs[i].x1 - segs[i].x2,
++				       segs[i].y1 - segs[i].y2);
+ 	    lx = frac * (segs[i].y2 - segs[i].y1);
+ 	    ly = -frac * (segs[i].x2 - segs[i].x1);
+ 	    urx = segs[i].x2 + lx;
+@@ -273,7 +270,7 @@ int     color;			/* line color */
+ 	    fprintf(userState->plotterFile, "PU;PA%d,%d;", MAPX(userState, llx),
+ 		    MAPY(userState, lly));
+ 	    fprintf(userState->plotterFile, "PM0;");
+-	    fprintf(userState->plotterFile, "PD,PA%d,%D;PA%d,%D;PA%d,%d;\n",
++	    fprintf(userState->plotterFile, "PD,PA%d,%d;PA%d,%d;PA%d,%d;\n",
+ 		    MAPX(userState, lrx), MAPY(userState, lry),
+ 		    MAPX(userState, urx), MAPY(userState, ury),
+ 		    MAPX(userState, ulx), MAPY(userState, uly));
+--- xgraph-12.1.orig/xtb.h
++++ xgraph-12.1/xtb.h
+@@ -12,95 +12,89 @@
+ #include "copyright.h"
+ 
+ /* Handler function return codes */
+-typedef enum xtb_hret_defn {
+-    XTB_NOTDEF, XTB_HANDLED, XTB_STOP
+-}       xtb_hret;
++typedef enum xtb_hret_defn { XTB_NOTDEF, XTB_HANDLED, XTB_STOP } xtb_hret;
+ 
+ /* If you have an ANSI compiler,  some checking will be done */
+ #ifdef __STDC__
+ #define DECLARE(func, rtn, args)	extern rtn func args
+ typedef void *xtb_data;
+-
+ #else
+ #define DECLARE(func, rtn, args)	extern rtn func ()
+ typedef char *xtb_data;
+-
+ #endif
+ 
+ /* Basic return value */
+ typedef struct xtb_frame_defn {
+-    Window  win;
+-    int     x_loc,
+-            y_loc;
+-    unsigned int width,
+-            height;
+-}       xtb_frame;
++    Window win;
++    int x_loc, y_loc;
++    unsigned int width, height;
++} xtb_frame;
+ 
+-DECLARE(xtb_init, void, (Display * disp, int scrn,
++DECLARE(xtb_init, void, (Display *disp, int scrn,
+ 			 unsigned long foreground,
+ 			 unsigned long background,
+-			 XFontStruct * font));
+- /* Initializes mini-toolbox */
++			 XFontStruct *font));
++   /* Initializes mini-toolbox */
+ 
+ /*
+  * Basic event handling
+  */
+ 
+ DECLARE(xtb_register, void, (Window win,
+-			     xtb_hret(*func) (XEvent * evt, xtb_data info),
++			     xtb_hret (*func)(XEvent *evt, xtb_data info),
+ 			     xtb_data info));
+- /* Registers call-back function */
++   /* Registers call-back function */
+ 
+ DECLARE(xtb_lookup, xtb_data, (Window win));
+- /* Returns data associated with window */
++   /* Returns data associated with window */
+ 
+-DECLARE(xtb_dispatch, xtb_hret, (XEvent * evt));
+- /* Dispatches events for mini-toolbox */
++DECLARE(xtb_dispatch, xtb_hret, (XEvent *evt));
++   /* Dispatches events for mini-toolbox */
+ 
+-DECLARE(xtb_unregister, int, (Window win, xtb_data * info));
+- /* Unregisters a call-back function */
++DECLARE(xtb_unregister, int, (Window win, xtb_data *info));
++   /* Unregisters a call-back function */
+ 
+ /*
+  * Command button frame
+  */
+ 
+ DECLARE(xtb_bt_new, void, (Window win, char *text,
+-			   xtb_hret(*func) (Window win, int state,
+-					    xtb_data val),
++			   xtb_hret (*func)(Window win, int state,
++				       xtb_data val),
+ 			   xtb_data val,
+-			   xtb_frame * frame));
+- /* Creates new button  */
++			   xtb_frame *frame));
++   /* Creates new button  */
+ 
+-DECLARE(xtb_bt_get, int, (Window win, xtb_data * stuff, int *na));
+- /* Returns state of button */
++DECLARE(xtb_bt_get, int, (Window win, xtb_data *stuff, int *na));
++   /* Returns state of button */
+ DECLARE(xtb_bt_set, int, (Window win, int val, xtb_data stuff, int na));
+- /* Sets state of button */
+-DECLARE(xtb_bt_del, void, (Window win, xtb_data * info));
+- /* Deletes a button */
++   /* Sets state of button */
++DECLARE(xtb_bt_del, void, (Window win, xtb_data *info));
++   /* Deletes a button */
+ 
+ /*
+  * Button row frame - built on top of buttons
+  */
+ 
+ DECLARE(xtb_br_new, void, (Window win, int cnt, char *lbls[], int init,
+-			   xtb_hret(*func) (Window win, int prev,
++			   xtb_hret (*func)(Window win, int prev,
+ 					    int this, xtb_data val),
+ 			   xtb_data val,
+-			   xtb_frame * frame));
+- /* Creates a new button row frame */
++			   xtb_frame *frame));
++   /* Creates a new button row frame */
+ 
+ DECLARE(xtb_br_get, int, (Window win));
+- /* Returns currently selected button */
++   /* Returns currently selected button */
+ DECLARE(xtb_br_del, void, (Window win));
+- /* Deletes a button row */
++   /* Deletes a button row */
+ 
+ /*
+  * Text output (label) frames
+  */
+ 
+ DECLARE(xtb_to_new, void, (Window win, char *text,
+-			   XFontStruct * ft, xtb_frame * frame));
+- /* Create new text output frame */
++			   XFontStruct *ft, xtb_frame *frame));
++   /* Create new text output frame */
+ DECLARE(xtb_to_del, void, (Window win));
+ 
+ /*
+@@ -110,31 +104,31 @@ DECLARE(xtb_to_del, void, (Window win));
+ #define MAXCHBUF	1024
+ 
+ DECLARE(xtb_ti_new, void, (Window win, char *text, int maxchar,
+-			   xtb_hret(*func) (Window win, int ch,
+-					    char *textcopy, xtb_data * val),
+-			   xtb_data val, xtb_frame * frame));
+- /* Creates a new text input frame */
++			   xtb_hret (*func)(Window win, int ch,
++					    char *textcopy, xtb_data *val),
++			   xtb_data val, xtb_frame *frame));
++   /* Creates a new text input frame */		   
+ 
+-DECLARE(xtb_ti_get, void, (Window win, char text[MAXCHBUF], xtb_data * val));
+- /* Returns state of text input frame */
++DECLARE(xtb_ti_get, void, (Window win, char text[MAXCHBUF], xtb_data *val));
++   /* Returns state of text input frame */
+ DECLARE(xtb_ti_set, int, (Window win, char *text, xtb_data val));
+- /* Sets the state of text input frame */
++   /* Sets the state of text input frame */
+ DECLARE(xtb_ti_ins, int, (Window win, int ch));
+- /* Inserts character onto end of text input frame */
++   /* Inserts character onto end of text input frame */
+ DECLARE(xtb_ti_dch, int, (Window win));
+- /* Deletes character from end of text input frame */
+-DECLARE(xtb_ti_del, void, (Window win, xtb_data * info));
+- /* Deletes an text input frame */
++   /* Deletes character from end of text input frame */
++DECLARE(xtb_ti_del, void, (Window win, xtb_data *info));
++   /* Deletes an text input frame */
+ 
+ /*
+  * Block frame
+  */
+ 
+ DECLARE(xtb_bk_new, void, (Window win, unsigned width, unsigned height,
+-			   xtb_frame * frame));
+- /* Makes a new block frame */
++			   xtb_frame *frame));
++   /* Makes a new block frame */
+ DECLARE(xtb_bk_del, void, (Window win));
+- /* Deletes a block frame */
++   /* Deletes a block frame */
+ 
+ 
+ /*
+@@ -143,50 +137,46 @@ DECLARE(xtb_bk_del, void, (Window win));
+ 
+ #define MAX_BRANCH	50
+ 
+-typedef enum xtb_fmt_types_defn {
+-    W_TYPE, A_TYPE
+-}       xtb_fmt_types;
+-typedef enum xtb_fmt_dir_defn {
+-    HORIZONTAL, VERTICAL
+-}       xtb_fmt_dir;
++typedef enum xtb_fmt_types_defn { W_TYPE, A_TYPE } xtb_fmt_types;
++typedef enum xtb_fmt_dir_defn { HORIZONTAL, VERTICAL } xtb_fmt_dir;
+ typedef enum xtb_just_defn {
+-    XTB_CENTER = 0, XTB_LEFT, XTB_RIGHT, XTB_TOP, XTB_BOTTOM
+-}       xtb_just;
++    XTB_CENTER=0, XTB_LEFT, XTB_RIGHT, XTB_TOP, XTB_BOTTOM
++} xtb_just;
+ 
+ typedef struct xtb_fmt_widget_defn {
+     xtb_fmt_types type;		/* W_TYPE */
+     xtb_frame *w;
+-}       xtb_fmt_widget;
++} xtb_fmt_widget;
+ 
+ typedef struct xtb_fmt_align_defn {
+     xtb_fmt_types type;		/* A_TYPE */
+     xtb_fmt_dir dir;		/* HORIZONTAL or VERTICAL */
+-    int     padding;		/* Outside padding        */
+-    int     interspace;		/* Internal padding       */
++    int padding;		/* Outside padding        */
++    int interspace;		/* Internal padding       */
+     xtb_just just;		/* Justification          */
+-    int     ni;			/* Number of items */
+-    union xtb_fmt_defn *items[MAX_BRANCH];	/* Branches themselves */
+-}       xtb_fmt_align;
++    int ni;			/* Number of items */
++    union xtb_fmt_defn *items[MAX_BRANCH]; /* Branches themselves */
++} xtb_fmt_align;
+ 
+ typedef union xtb_fmt_defn {
+     xtb_fmt_types type;		/* W_TYPE or A_TYPE */
+     xtb_fmt_widget wid;
+     xtb_fmt_align align;
+-}       xtb_fmt;
++} xtb_fmt;
+ 
+-#define NE	0
++#define NE	((xtb_fmt*)0)
+ 
+-DECLARE(xtb_w, xtb_fmt *, (xtb_frame * w));
+- /* Returns formatting structure for frame */
+-DECLARE(xtb_hort, xtb_fmt *, (xtb_just just, int padding, int interspace,...));
+- /* Varargs routine for horizontal formatting */
+-DECLARE(xtb_vert, xtb_fmt *, (xtb_just just, int padding, int interspace,...));
+- /* Varargs routine for vertical formatting */
+-DECLARE(xtb_fmt_do, xtb_fmt *, (xtb_fmt * def, unsigned *w, unsigned *h));
+- /* Carries out formatting */
++DECLARE(xtb_w, xtb_fmt *, (xtb_frame *w));
++   /* Returns formatting structure for frame */
++DECLARE(xtb_hort, xtb_fmt *, (xtb_just just, int padding, int interspace, ...));
++   /* Varargs routine for horizontal formatting */
++DECLARE(xtb_vert, xtb_fmt *, (xtb_just just, int padding, int interspace, ...));
++   /* Varargs routine for vertical formatting */
++DECLARE(xtb_fmt_do, xtb_fmt *, (xtb_fmt *def, unsigned *w, unsigned *h));
++   /* Carries out formatting */
+ DECLARE(xtb_mv_frames, void, (int nf, xtb_frame frames[]));
+- /* Actually moves widgets */
+-DECLARE(xtb_fmt_free, void, (xtb_fmt * def));
+- /* Frees resources claimed by xtb_w, xtb_hort, and xtb_vert */
++   /* Actually moves widgets */
++DECLARE(xtb_fmt_free, void, (xtb_fmt *def));
++   /* Frees resources claimed by xtb_w, xtb_hort, and xtb_vert */
+ 
+-#endif				/* _XTB_ */
++#endif /* _XTB_ */
+--- xgraph-12.1.orig/read.c
++++ xgraph-12.1/read.c
+@@ -1,11 +1,14 @@
+-/* $Header: /usr/src/mash/repository/vint/xgraph/read.c,v 1.2 1999/12/03 23:17:45 heideman Exp $ */
++/* $Header$ */
+ /*
+  * read.c: Dataset read code
+  *
+  * Routines:
+  *	int ReadData();
+  *
+- * $Log: read.c,v $
++ * $Log$
++ * Revision 1.1  2001-10-08 05:53:13  bap
++ * Initial revision
++ *
+  * Revision 1.2  1999/12/03 23:17:45  heideman
+  * apply xgraph_no_animation.patch
+  *
+@@ -13,9 +16,6 @@
+  * xgraph-12.0
+  *
+  */
+-#ifndef lint
+-static char rcsid[] = "$Id: read.c,v 1.2 1999/12/03 23:17:45 heideman Exp $";
+-#endif
+ 
+ #include "copyright.h"
+ #include <stdio.h>
+--- /dev/null
++++ xgraph-12.1/init.h
+@@ -0,0 +1,3 @@
++extern int ParseArgs(int, char **, int);
++void InitSets(int);
++void ReadDefaults();
+--- xgraph-12.1.orig/xgout.h
++++ xgraph-12.1/xgout.h
+@@ -4,8 +4,10 @@
+  * This file contains definitions for output device interfaces
+  * to the graphing program xgraph.
+  */
+-#ifndef _h_xgout
+-#define _h_xgout
++
++#ifndef _XGOUT_H_
++#define _XGOUT_H_
++
+ /* Passed device option flags */
+ #define D_DOCU		0x01
+ 
+@@ -40,26 +42,26 @@
+ /* Output device information returned by initialization routine */
+ 
+ typedef struct xg_out {
+-    int     dev_flags;		/* Device characteristic flags           */
+-    int     area_w,
+-            area_h;		/* Width and height in pixels            */
+-    int     bdr_pad;		/* Padding from border                   */
+-    int     axis_pad;		/* Extra space around axis labels        */
+-    int     tick_len;		/* Length of tick mark on axis           */
+-    int     legend_pad;		/* Top of legend text to legend line     */
+-    int     axis_width;		/* Width of big character of axis font   */
+-    int     axis_height;	/* Height of big character of axis font  */
+-    int     title_width;	/* Width of big character of title font  */
+-    int     title_height;	/* Height of big character of title font */
+-    int     max_segs;		/* Maximum number of segments in group   */
+-
+-    void    (*xg_text) ();	/* Draws text at a location              */
+-    void    (*xg_seg) ();	/* Draws a series of segments            */
+-    void    (*xg_dot) ();	/* Draws a dot or marker at a location   */
+-    void    (*xg_end) ();	/* Stops the drawing sequence            */
++    int dev_flags;		/* Device characteristic flags           */
++    int area_w, area_h;		/* Width and height in pixels            */
++    int bdr_pad;		/* Padding from border                   */
++    int axis_pad;		/* Extra space around axis labels        */
++    int tick_len;		/* Length of tick mark on axis           */
++    int legend_pad;		/* Top of legend text to legend line     */
++    int axis_width;		/* Width of big character of axis font   */
++    int axis_height;		/* Height of big character of axis font  */
++    int title_width;		/* Width of big character of title font  */
++    int title_height;		/* Height of big character of title font */
++    int max_segs;		/* Maximum number of segments in group   */
++
++    void (*xg_text)();		/* Draws text at a location              */
++    void (*xg_seg)();		/* Draws a series of segments            */
++    void (*xg_dot)();		/* Draws a dot or marker at a location   */
++    void (*xg_end)();		/* Stops the drawing sequence            */
+ 
+-    char   *user_state;		/* User supplied data                    */
+-}       xgOut;
++    char *user_state;		/* User supplied data                    */
++} xgOut;
+ 
+ #define ERRBUFSIZE	2048
+-#endif /* _h_xgout */
++
++#endif
+--- xgraph-12.1.orig/alloc.c
++++ xgraph-12.1/alloc.c
+@@ -1,4 +1,4 @@
+-/* $Header: /usr/src/mash/repository/vint/xgraph/alloc.c,v 1.1.1.1 1999/12/03 23:15:53 heideman Exp $ */
++/* $Header$ */
+ /*
+  *
+  * alloc.c : Memory checked Malloc. This malloc keeps track of memory usage.
+@@ -12,7 +12,10 @@
+  *	unsigned	MemPtr();
+  *	void		MemChain();
+  *
+- * $Log: alloc.c,v $
++ * $Log$
++ * Revision 1.2  2007-12-06 11:55:14  bap
++ * flush compiler warnings of various levels of severity
++ *
+  * Revision 1.1.1.1  1999/12/03 23:15:53  heideman
+  * xgraph-12.0
+  *
+@@ -48,10 +51,7 @@
+  * Initial revision
+  *
+  */
+-#ifndef lint
+-static char rcsid[] = "$Id: alloc.c,v 1.1.1.1 1999/12/03 23:15:53 heideman Exp $";
+ 
+-#endif				/* lint */
+ #include <stdio.h>
+ #ifdef __STDC__
+ #include <stdlib.h>
+@@ -134,7 +134,7 @@ Ptr     tptr;
+ 	if (tptr != (Ptr) 0)
+ 	    *((long *) tptr) = SIG_GOOD;
+ 	(void) fprintf(stderr,
+-		       "*** Out of memory in %s (current allocation %d).\n",
++		       "*** Out of memory in %s (current allocation %d, allocating %d).\n",
+ 		       action, memused, n);
+ 
+ 	abort();
+--- xgraph-12.1.orig/st.h
++++ xgraph-12.1/st.h
+@@ -1,4 +1,4 @@
+-/* $Header: /usr/src/mash/repository/vint/xgraph/st.h,v 1.1.1.1 1999/12/03 23:15:53 heideman Exp $ */
++/* $Header$ */
+ 
+ #ifndef ST_INCLUDED
+ #define ST_INCLUDED
+@@ -17,96 +17,94 @@ extern char st_pkg_name[];
+ #define ST_BAD_RET	1
+ #define ST_BAD_GEN	2
+ 
+-typedef struct st_table_entry st_table_entry;
+-struct st_table_entry {
+-    char   *key;
+-    char   *record;
+-    st_table_entry *next;
+-};
+-
+-typedef struct st_table st_table;
+-struct st_table {
+-    int     (*compare) ();
+-    int     (*hash) ();
+-    int     num_bins;
+-    int     num_entries;
+-    int     max_density;
+-    int     reorder_flag;
+-    double  grow_factor;
+-    st_table_entry **bins;
+-};
+-
+-typedef struct st_generator st_generator;
+-struct st_generator {
+-    st_table *table;
+-    st_table_entry *entry;
+-    int     idx;
+-};
++
++typedef struct st_table_entry {
++    char *key;
++    char *record;
++    struct st_table_entry *next;
++}ST_TABLE_ENTRY;
++
++
++typedef struct st_table {
++    int (*compare)();
++    int (*hash)();
++    int num_bins;
++    int num_entries;
++    int max_density;
++    int reorder_flag;
++    double grow_factor;
++    ST_TABLE_ENTRY **bins;
++}ST_TABLE;
++
++
++typedef struct st_generator {
++    ST_TABLE *table;
++    ST_TABLE_ENTRY *entry;
++    int st_index;
++}ST_GENERATOR;
+ 
+ #define st_is_member(table,key) st_lookup(table,key,(char **) 0)
+ #define st_count(table) ((table)->num_entries)
+ 
+-enum st_retval {
+-    ST_CONTINUE, ST_STOP, ST_DELETE
+-};
+-
+-extern st_table *st_init_table_with_params
+-        ARGS((int (*compare) (), int (*hash) (), int size, int density,
+-	              double grow_factor, int reorder_flag));
++enum st_retval {ST_CONTINUE, ST_STOP, ST_DELETE};
++
++extern ST_TABLE *st_init_table_with_params
++  ARGS((int (*compare)(), int (*hash)(), int size, int density,
++	double grow_factor, int reorder_flag));
+ 
+-extern st_table *st_init_table
+-        ARGS((int (*compare) (), int (*hash) ()));
++extern ST_TABLE *st_init_table
++  ARGS((int (*compare)(), int (*hash)()));
+ 
+ extern void st_free_table
+-        ARGS((st_table * table));
++  ARGS((ST_TABLE *table));
+ 
+ extern int st_lookup
+-        ARGS((st_table * table, char *key, char **value));
++  ARGS((ST_TABLE *table, char *key, char **value));
+ 
+ extern int st_insert
+-        ARGS((st_table * table, char *key, char *value));
++  ARGS((ST_TABLE *table, char *key, char *value));
+ 
+ extern void st_add_direct
+-        ARGS((st_table * table, char *key, char *value));
++  ARGS((ST_TABLE *table, char *key, char *value));
+ 
+ extern int st_find_or_add
+-        ARGS((st_table * table, char *key, char ***slot));
++  ARGS((ST_TABLE *table, char *key, char ***slot));
+ 
+ extern int st_find
+-        ARGS((st_table * table, char *key, char ***slot));
++  ARGS((ST_TABLE *table, char *key, char ***slot));
+ 
+-extern st_table *st_copy
+-        ARGS((st_table * old_table));
++extern ST_TABLE *st_copy
++  ARGS((ST_TABLE *old_table));
+ 
+ extern int st_delete
+-        ARGS((st_table * table, char **keyp, char **value));
++  ARGS((ST_TABLE *table, char **keyp, char **value));
+ 
+ extern int st_foreach
+-        ARGS((st_table * table, enum st_retval(*func) (), char *arg));
++  ARGS((ST_TABLE *table, enum st_retval (*func)(), char *arg));
+ 
+ extern int st_strhash
+-        ARGS((char *string, int modulus));
++  ARGS((char *string, int modulus));
+ 
+ extern int st_numhash
+-        ARGS((char *x, int size));
++  ARGS((char *x, int size));
+ 
+ extern int st_ptrhash
+-        ARGS((char *x, int size));
++  ARGS((char *x, int size));
+ 
+ extern int st_numcmp
+-        ARGS((char *x, char *y));
++  ARGS((char *x, char *y));
+ 
+ extern int st_ptrcmp
+-        ARGS((char *x, char *y));
++  ARGS((char *x, char *y));
+ 
+-extern st_generator *st_init_gen
+-        ARGS((st_table * table));
++extern ST_GENERATOR *st_init_gen
++  ARGS((ST_TABLE *table));
+ 
+ extern int st_gen
+-        ARGS((st_generator * gen, char **key_p, char **value_p));
++  ARGS((ST_GENERATOR *gen, char **key_p, char **value_p));
+ 
+ extern void st_free_gen
+-        ARGS((st_generator * gen));
++  ARGS((ST_GENERATOR *gen));
+ 
+ #define ST_DEFAULT_MAX_DENSITY 5
+ #define ST_DEFAULT_INIT_TABLE_SIZE 11
+@@ -116,4 +114,4 @@ extern void st_free_gen
+ #define st_foreach_item(table, gen, key_p, value_p) \
+     for(gen=st_init_gen(table); st_gen(gen,key_p,value_p) || (st_free_gen(gen),0);)
+ 
+-#endif				/* ST_INCLUDED */
++#endif /* ST_INCLUDED */

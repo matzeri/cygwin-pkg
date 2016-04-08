@@ -1,0 +1,42 @@
+NAME="xgraph"
+VERSION=12.1
+RELEASE=5
+
+CATEGORY="Text Doc"
+DESCRIPTION="Accepts data files or stdin in a form similar to the unix program
+graph and displays line graphs, scatter plots, or bar charts on an X11
+display. Fully annotated with title, axis numbering and labels, and
+legend. Zooming with the mouse is supported. Can generate hardcopy
+output to Postscript printers and HPGL plotters. Output can be
+directly pasted into idraw (drawtool) for further annotation.
+Particularly useful in shell scripts."
+SUMMARY="Plotting program, reads stdin, allows interactive zooming"
+
+HOMEPAGE="http://www.isi.edu/nsnam/xgraph/"
+SRC_URI="http://www.isi.edu/nsnam/dist/xgraph-${PV}.tar.gz"
+PATCH_URI="debian-changes
+params.patch"
+
+DIFF_EXCLUDES="configure.in"
+
+src_compile() {
+	cd ${S}
+	rm -f aclocal.m4 configure configure.in Makefile.in
+	cygautoreconf	
+	cd ${B}
+	cygconf
+    	cygmake
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	dodir /usr/share/man/man1
+	mv ${D}/usr/share/man/manm/xgraph.man ${D}/usr/share/man/man1/xgraph.man
+	insinto /usr/share/doc/xgraph
+	doins ${S}/README.ANNOUNCE
+	doins ${S}/README.NEWFEATURES
+	insinto /usr/share/doc/xgraph/examples
+	doins ${S}/examples/*
+}
+		
