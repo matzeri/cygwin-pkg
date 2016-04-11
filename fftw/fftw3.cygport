@@ -1,6 +1,6 @@
 NAME="fftw3"
 VERSION="3.3.4"
-RELEASE=2
+RELEASE=3
 
 ORIG_PN="fftw"
 
@@ -25,12 +25,15 @@ usr/bin/cygfftw3-3.dll
 usr/bin/cygfftw3_threads-3.dll
 usr/bin/cygfftw3f-3.dll
 usr/bin/cygfftw3f_threads-3.dll
+usr/bin/cygfftw3l-3.dll
+usr/bin/cygfftw3l_threads-3.dll
 '
 libfftw3_3_SUMMARY="${SUMMARY} - runtime"
 
 libfftw3_omp3_CONTENTS='
 usr/bin/cygfftw3_omp-3.dll
 usr/bin/cygfftw3f_omp-3.dll
+usr/bin/cygfftw3l_omp-3.dll
 '
 libfftw_omp3_SUMMARY="${SUMMARY} - OMP runtime"
 
@@ -59,10 +62,21 @@ src_compile() {
 		--enable-openmp \
 		--with-windows-f77-mangling 
 	cygmake
+
+        mkdir -p ${B}/double
+        cd ${B}/double
+        CYGCONF_SOURCE=${S} cygconf \
+		--enable-long-double \
+                --enable-threads \
+                --enable-shared --disable-static \
+                --enable-openmp \
+                --with-windows-f77-mangling
+        cygmake
+
 }
 
 src_test() {
-	for precision in float long
+	for precision in float long double
 	do
 		cd ${B}/${precision}/tests
 		cygtest
@@ -70,7 +84,7 @@ src_test() {
 }
 
 src_install() {
-	for precision in float long
+	for precision in float long double
 	do
 		cd ${B}/${precision}
 		cyginstall
