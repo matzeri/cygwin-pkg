@@ -1,7 +1,7 @@
 inherit font
 NAME="plotutils"
 VERSION=2.6
-RELEASE=4
+RELEASE=5
 
 DESCRIPTION="2-D vector graphics library and scientific data plotting programs"
 HOMEPAGE="http://www.gnu.org/software/plotutils/"
@@ -11,6 +11,11 @@ PATCH_URI="
 	2.5.1-libtool22.patch
 	2.6-no-undefined.patch
 	libpng_longjmp.patch
+	11_manpages_sb_macro
+	14_manpage_spline
+	20_svg_attribute_syntax
+	21_plot2svg_test.diff
+	30_hershey_glyphs
 "
 
 PKG_NAMES="${PN} libplot2 libplot-devel libplotter2 libplotter-devel libxmi0 libxmi-devel font-tektronix-misc"
@@ -39,11 +44,7 @@ libxmi0_SUMMARY="2-D vector graphics rasterization library (runtime)"
 libxmi_devel_CONTENTS="usr/include/xmi.h usr/lib/libxmi.* usr/share/info/libxmi*"
 libxmi_devel_SUMMARY="2-D vector graphics rasterization library (development)"
 
-# obsolete
-# plotutils_devel_CONTENTS=	# compat
-# plotutils_doc_CONTENTS=	# compat
-
-font_tektronix_misc_CONTENTS="etc/ usr/share/fonts/misc/"
+font_tektronix_misc_CONTENTS="etc usr/share/fonts/tektronix"
 font_tektronix_misc_SUMMARY="Tektronix terminal emulator fonts"
 font_tektronix_misc_CATEGORY="X11"
 
@@ -63,7 +64,10 @@ src_install() {
 
 	cd ${S}/fonts
 
-	fontinto misc
+	fontinto tektronix
 	dofont pcf/*.pcf
-	gzip ${D}/usr/share/fonts/misc/*.pcf
+#	gzip ${D}/usr/share/fonts/misc/*.pcf
+	dodir /etc/X11/fontpath.d 
+	dosym /usr/share/fonts/tektronix /etc/X11/fontpath.d/tektronix:unscaled
+
 }
