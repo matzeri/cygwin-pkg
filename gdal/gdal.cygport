@@ -1,0 +1,59 @@
+NAME="gdal"
+VERSION=2.0.2
+RELEASE=1
+
+CATEGORY="Science"
+SUMMARY="Geospatial Data Abstraction Library "
+DESCRIPTION="GDAL is a translator library for raster and vector geospatial data formats"
+HOMEPAGE="http://www.gdal.org/"
+
+SRC_URI="http://download.osgeo.org/gdal/${PV}/gdal-${PV}.tar.xz" 
+SRC_DIR="${PN}-${PV}"
+
+PKG_NAMES="gdal libgdal-devel libgdal20"
+
+gdal_CONTENTS="
+  usr/bin/*.exe
+  usr/share
+"
+
+libgdal20_CONTENTS="
+  usr/bin/cyggdal-20.dll
+"
+
+libgdal_devel_CONTENTS="
+  usr/bin/gdal-config
+  usr/include/
+  usr/lib/
+"
+
+libgdal20_CATEGORY="Science Libs"
+libgdal20_SUMMARY="Geospatial Data Abstraction Library - (C runtime)"
+
+libgdal_devel_CATEGORY="Science Devel Libs"
+libgdal_devel_SUMMARY="Geospatial Data Abstraction Library - (devel)"
+
+RESTRICT="diff"
+KEEP_LA_FILES="none"
+
+
+src_compile() {
+        lndirs
+        cd ${B}
+	./autogen.sh	
+        cygconf
+        cygmake
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	cyginstall install-man
+	rm ${D}/usr/man/man1/_home_rouault_dist_wrk_gdal_apps_.1
+}
+
+src_test() {
+       cd ${B}
+       make check
+}
+
