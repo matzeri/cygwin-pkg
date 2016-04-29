@@ -1,0 +1,43 @@
+--- origsrc/R-3.1.2/configure.ac	2015-01-30 23:01:17.348204700 +0100
++++ configure.ac	2015-01-30 23:04:51.021780000 +0100
+@@ -1324,7 +1324,6 @@ case "${host_os}" in
+     SHLIB_EXT=".dll"
+     dylib_undefined_allowed=no
+     is_cygwin=yes
+-    main_ldflags="${wl}--large-address-aware ${wl}--stack=0xA00000"
+     ;;
+   darwin*)
+     darwin_pic="-fPIC"
+--- origsrc/R-3.1.2/etc/Makeconf.in	2014-07-15 00:15:14.000000000 +0200
++++ etc/Makeconf.in	2015-01-30 23:07:04.573614600 +0100
+@@ -124,7 +124,7 @@ ALL_OBJCFLAGS = $(PKG_OBJCFLAGS) $(CPICF
+ ALL_OBJCXXFLAGS = $(PKG_OBJCXXFLAGS) $(CXXPICFLAGS) $(SHLIB_CXXFLAGS) $(OBJCXXFLAGS)
+ ALL_FFLAGS = $(R_XTRA_FFLAGS) $(PKG_FFLAGS) $(FPICFLAGS) $(SHLIB_FFLAGS) $(FFLAGS)
+ ## LIBR here as a couple of packages use this without SHLIB_LINK
+-ALL_LIBS = $(PKG_LIBS) $(SHLIB_LIBADD) $(LIBR)@DYLIB_UNDEFINED_ALLOWED_FALSE@ $(LIBINTL)
++ALL_LIBS = $(PKG_LIBS) $(SHLIB_LIBADD) $(LIBR)@DYLIB_UNDEFINED_ALLOWED_FALSE@ $(LIBINTL) $(LIBS)
+ 
+ .SUFFIXES:
+ .SUFFIXES: .c .cc .cpp .d .f .f90 .f95 .m .mm .M .o
+--- origsrc/R-3.1.2/src/library/parallel/src/fork.c	2014-08-23 00:15:03.000000000 +0200
++++ src/library/parallel/src/fork.c	2015-01-30 23:37:27.473266700 +0100
+@@ -229,15 +229,16 @@ static void setup_sig_handler() {
+ #else
+ /* sigaction is not viable, so use the "dumb" way
+    to clean up anything that comes our way */
+-static void setup_sig_handler() {
+-    signal(SIGCHLD, parent_sig_handler);
+-}
+ 
+ static void parent_sig_handler(int sig) {
+     /* clean up when a child terminates */
+     if (sig == SIGCHLD)
+ 	clean_zombies();
+ }
++
++static void setup_sig_handler() {
++    signal(SIGCHLD, parent_sig_handler);
++}
+ #endif
+ 
+ /* from Defn.h */

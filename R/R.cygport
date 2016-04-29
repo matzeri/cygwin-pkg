@@ -1,5 +1,5 @@
 NAME="R"
-VERSION=3.1.2
+VERSION="3.2.4"
 RELEASE=1
 
 inherit tcl
@@ -8,11 +8,15 @@ CATEGORY="Math Science"
 DESCRIPTION="GNU statistical computing language"
 SUMMARY="GNU statistical computing language"
 HOMEPAGE="http://www.r-project.org/"
-SRC_URI="mirror://cran/src/base/R-${PV_MAJ}/${P}.tar.gz"
+# SRC_URI="mirror://cran/src/base/R-${PV_MAJ}/${P}.tar.gz"
+SRC_URI="mirror://cran/src/base/R-${PV_MAJ}/${P}-revised.tar.gz"
 PATCH_URI="
 2.7-implib.patch
 2.12-install-arch.patch
-makefile-nojava.patch"
+makefile-nojava.patch
+R-conf.patch"
+
+SRC_DIR="R-revised"
 
 PKG_NAMES="R libRmath libRmath-devel"
 
