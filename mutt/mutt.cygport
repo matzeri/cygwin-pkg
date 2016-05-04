@@ -1,10 +1,10 @@
 NAME="mutt"
-VERSION=1.6.0
+VERSION=1.6.1
 RELEASE=1
 
 CATEGORY="Mail"
-DESCRIPTION="A text mode mail user agent (MUA)."
-SUMMARY="A text mode mail user agent (MUA)."
+DESCRIPTION="A text mode mail user agent (MUA)"
+SUMMARY="A text mode mail user agent (MUA)"
 
 HOMEPAGE="http://www.mutt.org"
 SRC_URI="http://prdownloads.sourceforge.net/mutt/${PN}-${PV}.tar.gz" 
@@ -41,6 +41,7 @@ src_compile() {
 	--enable-gpgme \
 	--with-gss \
 	--with-sasl \
+	--with-slang \
 	MUTT_MD5=mutt_md5
 	cygmake 
 	cygmake -C doc makedoc.exe
