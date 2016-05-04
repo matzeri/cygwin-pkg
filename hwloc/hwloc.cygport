@@ -1,9 +1,9 @@
 NAME="hwloc"
-VERSION="1.11.2"
+VERSION="1.11.3"
 RELEASE=1
 
 CATEGORY="Utils"
-SUMMARY="Portable Hardware Locality (hwloc)"
+SUMMARY="Portable Hardware Locality"
 DESCRIPTION="The Portable Hardware Locality (hwloc) software package provides a portable abstraction of the hierarchical topology of modern architectures"
 HOMEPAGE="http://www.open-mpi.org/projects/hwloc/"
 
