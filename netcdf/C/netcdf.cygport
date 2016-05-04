@@ -1,6 +1,6 @@
 NAME="netcdf"
 VERSION=4.4.0
-RELEASE=2
+RELEASE=3
 
 CATEGORY="Libs"
 SUMMARY="NetCDF (network Common Data Form)"
@@ -10,7 +10,7 @@ HOMEPAGE="http://www.unidata.ucar.edu/software/netcdf/"
 SRC_URI="http://www.unidata.ucar.edu/downloads/netcdf/ftp/${PN}-c-${PV}.tar.gz" 
 SRC_DIR="netcdf-c-${PV}"
 
-#PATCH_URI="configure_noundefined.patch"
+PATCH_URI="oc2-resized.path"
 
 abi=11
 
