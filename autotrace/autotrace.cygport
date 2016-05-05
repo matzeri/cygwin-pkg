@@ -1,6 +1,6 @@
 NAME="autotrace"
 VERSION="0.31.1"
-RELEASE="16"
+RELEASE="17"
 CATEGORY="Graphics Libs"
 SUMMARY="A program for converting bitmap to vector graphics"
 DESCRIPTION="AutoTrace is a program for converting bitmap to vector graphics.
@@ -20,6 +20,7 @@ PATCH_URI="
 
 # Build dependencies only
 DEPEND="pstoedit-devel"
+KEEP_LA_FILES="none"
 
 
 abi=3
