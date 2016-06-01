@@ -1,5 +1,5 @@
 NAME="make"
-VERSION=4.1
+VERSION=4.2
 RELEASE=1
 
 CATEGORY="Devel"
@@ -12,7 +12,7 @@ how the program should be built are provided for make in the program's
 makefile."
 
 HOMEPAGE="http://www.gnu.org/software/make/"
-SRC_URI="http://ftp.gnu.org/gnu/make/${PN}-${PV}.tar.gz"
+SRC_URI="http://ftp.gnu.org/gnu/make/${PN}-${PV}.tar.bz2"
 
 PKG_NAMES="make"
 make_CONTENTS="usr"
