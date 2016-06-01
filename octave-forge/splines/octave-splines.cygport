@@ -1,16 +1,18 @@
+FORGE="splines"
 NAME="octave-splines"
-VERSION=1.2.9
-OV=1.2.9
+VERSION=1.3.0
+OV=1.3.0
 RELEASE=1
 
+ARCH="noarch"
 CATEGORY="Math"
-SUMMARY="Octave-Forge splines: Additional spline functions."
+SUMMARY="Forge: Additional spline functions."
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/splines-${PV}.tar"
-SRC_DIR="splines-${PV}"
+SRC_URI="http://matzeri.altervista.org/octave-forge/${FORGE}-${PV}.tar"
+SRC_DIR="${FORGE}-${PV}"
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
@@ -19,7 +21,6 @@ octave_splines_REQUIRES="octave"
 
 src_compile() {
         cd ${D}
-        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
 
@@ -28,32 +29,52 @@ src_compile() {
         diary ../log/diary
         more off
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg local_list  ${B}/octave_packages	
-	pkg global_list  ${B}/octave_packages	
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/splines-${PV}.tar.gz
+        pkg global_list  ${B}/octave_packages
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/${FORGE}-${PV}.tar.gz
+        echo off
 "
 }
 
 src_test() {
-	: 
+        cd ${D}
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+        testdir="'"${FORGE}-${PV}"'"
+
+        cd ${B}
+        sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
+
+        cd ${D}
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg local_list  ${B}/octave_packages_local
+        pkg load ${FORGE}
+        pkg list
+        cd ${D}/usr/share/octave/packages
+        __run_test_suite__ ({${testdir}}, {})
+        echo off
+"
+        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+
 }
 
 src_install() {
         cd ${D}
-
-        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
+        binpkg=$(find ${B} -name "*gz")
 
-	octave-cli --eval "
-	echo on 
-        diary ../log/diary 
-	more off 
-	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg local_list  ${B}/octave_packages	
-	pkg global_list  ${B}/octave_packages	
-        pkg install -nodeps -noauto -global -verbose  ${B}/splines-${OV}.tar.gz 
-	pkg list
-" 
-
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+        pkg global_list  ${B}/octave_packages
+        pkg install -nodeps -noauto -global -verbose ${binpkg}
+        pkg list
+        echo off
+"
 }
+
