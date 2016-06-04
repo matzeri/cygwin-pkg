@@ -1,5 +1,5 @@
 NAME="onig"
-VERSION=5.9.6
+VERSION=6.0.0
 RELEASE=1
 
 DESCRIPTION="Oniguruma: Regular expressions library for different character encoding" 
@@ -7,10 +7,12 @@ SUMMARY="Oniguruma: Regular expressions library"
 CATEGORY="Libs"
 
 HOMEPAGE="https://github.com/kkos/oniguruma"
-SRC_URI="https://github.com/kkos/oniguruma/releases/download/v5.9.6/onig-5.9.6.tar.gz" 
+SRC_URI="https://github.com/kkos/oniguruma/releases/download/v${PV}/oniguruma-${PV}.tar.gz" 
+SRC_DIR="oniguruma-${PV}"
+
 PATCH_URI="onig-autoconf.patch"
 
-abi=2
+abi=3
 
 PKG_NAMES="onig libonig${abi} libonig-devel"
 

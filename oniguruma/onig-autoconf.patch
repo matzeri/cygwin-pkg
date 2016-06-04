@@ -1,34 +1,34 @@
---- origsrc/onig-5.9.6/Makefile.am	2013-10-21 09:53:41.000000000 +0200
-+++ Makefile.am	2015-03-08 18:16:51.129806600 +0100
-@@ -31,7 +31,7 @@ libonig_la_SOURCES = regint.h regparse.h
- 	$(encdir)/euc_tw.c $(encdir)/euc_kr.c $(encdir)/big5.c \
- 	$(encdir)/gb18030.c $(encdir)/koi8_r.c $(encdir)/cp1251.c
+--- origsrc/oniguruma-6.0.0/configure.ac	2016-05-09 02:30:51.000000000 +0200
++++ configure.ac	2016-05-11 22:39:59.919250100 +0200
+@@ -33,7 +33,7 @@ fi
+ 
+ dnl Checks for programs.
+ AC_PROG_CC
+-AM_PROG_LIBTOOL
++AC_PROG_LIBTOOL
+ LTVERSION="3:0:0"
+ AC_SUBST(LTVERSION)
+ 
+--- origsrc/oniguruma-6.0.0/src/Makefile.am	2016-05-09 02:30:51.000000000 +0200
++++ src/Makefile.am	2016-05-11 22:44:56.032973000 +0200
+@@ -33,7 +33,7 @@ libonig_la_SOURCES = regint.h regparse.h
+ 	gb18030.c koi8_r.c cp1251.c \
+ 	onig_init.c
  
 -libonig_la_LDFLAGS = -version-info $(LTVERSION)
 +libonig_la_LDFLAGS = -version-info $(LTVERSION) -no-undefined
  
- EXTRA_DIST = oniguruma.pc.in HISTORY README.ja index.html index_ja.html \
- 	doc/API doc/API.ja doc/RE doc/RE.ja doc/FAQ doc/FAQ.ja \
-@@ -60,11 +60,6 @@ oniguruma.pc: $(srcdir)/oniguruma.pc.in
- pkgconfigdir   = $(libdir)/pkgconfig
- pkgconfig_DATA = oniguruma.pc
+ EXTRA_DIST = koi8.c mktable.c \
+ 	unicode_fold_data.c unicode_property_data.c \
+@@ -47,11 +47,6 @@ EXTRA_DIST = koi8.c mktable.c \
+ 	unicode-7.0/unicode_property_data_posix.c \
+ 	unicode-7.0/unicode_unfold_key.c
  
 -dll:
 -	$(CXX) -shared -Wl,--output-def,libonig.def -o libonig.dll *.o \
 -	$(LIBS)
 -	strip libonig.dll
 -
- # Ruby TEST
- rtest:
- 	$(RUBYDIR)/ruby -w -Ke $(srcdir)/test.rb
---- origsrc/onig-5.9.6/configure.in	2014-12-12 09:45:59.000000000 +0100
-+++ configure.in	2015-03-08 18:16:51.149806600 +0100
-@@ -40,7 +40,7 @@ fi
  
- dnl Checks for programs.
- AC_PROG_CC
--AM_PROG_LIBTOOL
-+AC_PROG_LIBTOOL
- LTVERSION="2:0:0"
- AC_SUBST(LTVERSION)
- 
+ # character-types-table source generator
+ mktable: mktable.c regenc.h
