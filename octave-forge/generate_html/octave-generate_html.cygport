@@ -1,15 +1,17 @@
+FORGE="generate_html"
 NAME="octave-generate_html"
-VERSION=0.1.10
-OV=0.1.10
+VERSION=0.1.11
+OV=0.1.11
 RELEASE=1
 
+ARCH="noarch"
 CATEGORY="Math"
-SUMMARY="Octave-Forge generate_html : functions for generating HTML pages from help"
+SUMMARY="Forge: functions for generating HTML pages from help"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/generate_html-${PV}.tar"
+SRC_URI="http://matzeri.altervista.org/octave-forge/${FORGE}-${PV}.tar"
 SRC_DIR="generate_html-${PV}"
 PATCH_URI="do-octave-update.patch"
 
@@ -17,10 +19,8 @@ PKG_NAMES="${PN}"
 octave_generate_html_CONTENTS='etc/ usr/'
 octave_generate_html_REQUIRES="octave"
 
-
 src_compile() {
         cd ${D}
-        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
 
@@ -29,32 +29,52 @@ src_compile() {
         diary ../log/diary
         more off
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg local_list  ${B}/octave_packages	
-	pkg global_list  ${B}/octave_packages	
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/generate_html-${PV}.tar.gz
+        pkg global_list  ${B}/octave_packages
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/${FORGE}-${PV}.tar.gz
+        echo off
 "
 }
 
 src_test() {
-	: 
+        cd ${D}
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+        testdir="'"${FORGE}-${PV}"'"
+
+        cd ${B}
+        sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
+
+        cd ${D}
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg local_list  ${B}/octave_packages_local
+        pkg load ${FORGE}
+        pkg list
+        cd ${D}/usr/share/octave/packages
+        __run_test_suite__ ({${testdir}}, {})
+        echo off
+"
+        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+
 }
 
 src_install() {
         cd ${D}
-
-        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
+        binpkg=$(find ${B} -name "*gz")
 
-	octave-cli --eval "
-	echo on 
-        diary ../log/diary 
-	more off 
-	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg local_list  ${B}/octave_packages	
-	pkg global_list  ${B}/octave_packages	
-        pkg install -nodeps -noauto -global -verbose  ${B}/generate_html-${OV}.tar.gz 
-	pkg list
-" 
-
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+        pkg global_list  ${B}/octave_packages
+        pkg install -nodeps -noauto -global -verbose ${binpkg}
+        pkg list
+        echo off
+"
 }
+
