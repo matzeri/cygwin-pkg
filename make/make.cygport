@@ -1,5 +1,5 @@
 NAME="make"
-VERSION=4.2
+VERSION=4.2.1
 RELEASE=1
 
 CATEGORY="Devel"
@@ -19,4 +19,9 @@ make_CONTENTS="usr"
 
 DIFF_EXCLUDES="config-flags.pm"
 KEEP_LA_FILES="none"
+
+src_test() {
+        cd ${B}
+        make -i check
+}
 
