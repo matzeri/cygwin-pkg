@@ -1,5 +1,5 @@
 NAME="openmpi"
-VERSION=1.10.2
+VERSION=1.10.3
 RELEASE=1
 
 CATEGORY="Libs"
@@ -47,10 +47,17 @@ DIFF_EXCLUDES="configure *.in *.guess *.sub *sh *m4 *libltdl* compile depcomp yl
 KEEP_LA_FILES="none"
 
 src_compile() {
+	if [ arch ="x86_64" ]
+	then 
+          ATOMICS="--enable-builtin-atomics" 
+	else 
+          ATOMICS=""  
+	fi
         cd ${S}
 	./autogen.sh
         cd ${B}
 	cygconf \
+		${ATOMICS} \
                 --disable-mca-dso \
 		--disable-sysv-shmem \
 		--enable-cxx-exceptions \
