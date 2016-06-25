@@ -1,5 +1,5 @@
 NAME="lapack"
-VERSION=3.6.0r1730
+VERSION=3.6.1
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -8,7 +8,7 @@ SUMMARY="LAPACK library for linear algebra operations"
 DESCRIPTION="Comprehensive FORTRAN library for linear algebra operations."
 HOMEPAGE="http://www.netlib.org/lapack/"
 SRC_URI="http://www.netlib.org/lapack/${PN}-${PV}.tgz \
-http://www.netlib.org/lapack/manpages-3.6.0.tgz"
+http://www.netlib.org/lapack/manpages-3.6.1a.tgz"
 
 PATCH_URI="
 lapack-pkconfig.patch
@@ -51,8 +51,6 @@ src_compile() {
 	cd ${B}/lib_cygwin
         chmod +x ${S}/lib_cygwin/build.sh
         ${S}/lib_cygwin/build.sh
-
-	
 }
 
 src_test() {
@@ -112,10 +110,8 @@ src_install() {
 #        sed -i -e "s/dlname='..\/bin/dlname='..\/lib\/lapack/" ${D}/usr/lib/liblapack.la
 # ----------------------------------------------
 
-	insinto /usr/share/man/man3
-	doins ${S}/../man/man3/*
-        rm ${D}/usr/share/man/man3/_Users*
-
+        insinto /usr/share/man/man3
+        doins ${S}/../man/man3/*
 
 	inform " *** REMEBER to repack after package      ****"
 	inform " *** see CYGWIN-PATCHES/repack_lapack.sh  ****"
