@@ -1,5 +1,5 @@
 --- origsrc/R-2.12.2/src/library/tools/R/install.R	2011-02-15 17:05:01.000000000 -0600
-+++ src/R-2.12.2/src/library/tools/R/install.R	2011-03-07 20:28:34.946411600 -0600
++++ src/library/tools/R/install.R	2011-03-07 20:28:34.946411600 -0600
 @@ -712,7 +712,7 @@
                          } else {
                              setwd(owd)

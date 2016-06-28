@@ -1,0 +1,35 @@
+--- origsrc/R-3.3.1/etc/Makeconf.in	2016-03-17 00:04:44.000000000 +0100
++++ etc/Makeconf.in	2016-06-26 17:38:05.398615000 +0200
+@@ -123,7 +123,7 @@
+ ALL_OBJCXXFLAGS = $(PKG_OBJCXXFLAGS) $(CXXPICFLAGS) $(SHLIB_CXXFLAGS) $(OBJCXXFLAGS)
+ ALL_FFLAGS = $(R_XTRA_FFLAGS) $(PKG_FFLAGS) $(FPICFLAGS) $(SHLIB_FFLAGS) $(FFLAGS)
+ ## LIBR here as a couple of packages use this without SHLIB_LINK
+-ALL_LIBS = $(PKG_LIBS) $(SHLIB_LIBADD) $(LIBR)@DYLIB_UNDEFINED_ALLOWED_FALSE@ $(LIBINTL)
++ALL_LIBS = $(PKG_LIBS) $(SHLIB_LIBADD) $(LIBR)@DYLIB_UNDEFINED_ALLOWED_FALSE@ $(LIBINTL) $(LIBS)
+ 
+ .SUFFIXES:
+ .SUFFIXES: .c .cc .cpp .d .f .f90 .f95 .m .mm .M .o
+--- origsrc/R-3.3.1/src/main/Makefile.in	2016-03-17 00:04:14.000000000 +0100
++++ src/main/Makefile.in	2016-06-27 09:53:05.263801100 +0200
+@@ -198,7 +198,8 @@
+ 	@$(SHELL) $(top_srcdir)/tools/copy-if-change $(R_binary) "$(DESTDIR)$(Rexecbindir2)/R"
+ install-lib: installdirs
+ 	@$(MKINSTALLDIRS) "$(DESTDIR)$(Rexeclibdir)"
+-	@$(SHELL) $(top_srcdir)/tools/copy-if-change $(libR_la) "$(DESTDIR)$(Rexeclibdir)/$(libR_la)"
++	@$(SHELL) $(top_srcdir)/tools/copy-if-change $(libR_la) "$(DESTDIR)$(bindir)/$(libR_la)"
++	@$(SHELL) $(top_srcdir)/tools/copy-if-change libR.dll.a "$(DESTDIR)$(Rexeclibdir)/libR.dll.a"
+ install-static: installdirs
+ 	@$(MKINSTALLDIRS) "$(DESTDIR)$(Rexeclibdir)"
+ 	@$(SHELL) $(top_srcdir)/tools/copy-if-change libR.a "$(DESTDIR)$(Rexeclibdir)/libR.a"
+--- origsrc/R-3.3.1/src/nmath/standalone/Makefile.in	2015-12-11 00:15:18.000000000 +0100
++++ src/nmath/standalone/Makefile.in	2016-06-27 10:28:26.614932800 +0200
+@@ -134,7 +134,8 @@
+ 	  -L. -lRmath $(LIBM)
+ 
+ install: installdirs install-header @WANT_R_FRAMEWORK_FALSE@ install-pc
+-@WANT_R_FRAMEWORK_FALSE@	@!(test -f $(libRmath_la)) || $(SHELL) $(top_srcdir)/tools/copy-if-change $(libRmath_la) $(DESTDIR)$(libdir)/$(libRmath_la)
++@WANT_R_FRAMEWORK_FALSE@	@!(test -f $(libRmath_la)) || $(SHELL) $(top_srcdir)/tools/copy-if-change $(libRmath_la) $(DESTDIR)$(bindir)/$(libRmath_la)
++@WANT_R_FRAMEWORK_FALSE@	@!(test -f libRmath.dll.a) || $(SHELL) $(top_srcdir)/tools/copy-if-change libRmath.dll.a $(DESTDIR)$(libdir)/libRmath.dll.a
+ @WANT_R_FRAMEWORK_FALSE@	@!(test -f libRmath.a) || $(SHELL) $(top_srcdir)/tools/copy-if-change libRmath.a $(DESTDIR)$(libdir)/libRmath.a
+ @WANT_R_FRAMEWORK_TRUE@	@!(test -f $(libRmath_la)) || cp $(libRmath_la) $(R_FRAMEWORK_DIR)/Versions/$(FW_VERSION)/Resources/lib/$(libRmath_la) && install_name_tool -id $(R_FRAMEWORK_DIR)/Versions/$(FW_VERSION)/Resources/lib/$(libRmath_la) $(R_FRAMEWORK_DIR)/Versions/$(FW_VERSION)/Resources/lib/$(libRmath_la)
+ @WANT_R_FRAMEWORK_TRUE@	@!(test -f libRmath.a) || $(SHELL) $(top_srcdir)/tools/copy-if-change libRmath.a $(R_FRAMEWORK_DIR)/Versions/$(FW_VERSION)/Resources/lib/libRmath.a

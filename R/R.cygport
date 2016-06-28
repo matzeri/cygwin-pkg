@@ -1,5 +1,5 @@
 NAME="R"
-VERSION="3.2.4"
+VERSION="3.3.1"
 RELEASE=1
 
 inherit tcl
@@ -8,15 +8,13 @@ CATEGORY="Math Science"
 DESCRIPTION="GNU statistical computing language"
 SUMMARY="GNU statistical computing language"
 HOMEPAGE="http://www.r-project.org/"
-# SRC_URI="mirror://cran/src/base/R-${PV_MAJ}/${P}.tar.gz"
-SRC_URI="mirror://cran/src/base/R-${PV_MAJ}/${P}-revised.tar.gz"
+SRC_URI="mirror://cran/src/base/R-${PV_MAJ}/${P}.tar.gz"
 PATCH_URI="
-2.7-implib.patch
 2.12-install-arch.patch
 makefile-nojava.patch
-R-conf.patch"
+R-conf.patch
+R-Makeconf.patch"
 
-SRC_DIR="R-revised"
 
 PKG_NAMES="R libRmath libRmath-devel"
 
@@ -37,7 +35,7 @@ NO_AUTOHEADER=1
 CFLAGS+=" -std=gnu99"
 MAKEOPTS+=" -j1"
 
-export PATH="${B}/src/main:/usr/bin:/usr/local/bin"
+export PATH="${B}/src/main:/usr/bin:/usr/lib/lapack"
 
 src_compile() {
 	cd ${S}
@@ -46,6 +44,7 @@ src_compile() {
 	cd ${B}
 	cygconf \
 		--enable-R-shlib \
+		--with-lapack --with-blas \
 		--with-cairo \
 		--with-jpeglib \
 		--with-libpng \
