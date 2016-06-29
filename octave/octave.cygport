@@ -1,6 +1,6 @@
 NAME="octave"
 VERSION="4.0.1"
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Math"
 DESCRIPTION="GNU Octave is a high-level language for numerical computations"
