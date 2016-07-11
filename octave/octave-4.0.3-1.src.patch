@@ -1,0 +1,10 @@
+--- origsrc/octave-4.0.3/libinterp/link-deps.mk	2016-05-06 22:33:25.000000000 +0200
++++ src/octave-4.0.3/libinterp/link-deps.mk	2016-07-11 12:10:44.372917600 +0200
+@@ -10,6 +10,7 @@ LIBOCTINTERP_LINK_DEPS += \
+   $(FT2_LIBS) \
+   $(HDF5_LIBS) \
+   $(MAGICK_LIBS) \
++  $(Z_LIBS) \
+   $(FFTW_XLIBS) \
+   $(OPENGL_LIBS) \
+   $(X11_LIBS) \
