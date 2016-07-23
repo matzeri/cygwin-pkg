@@ -1,22 +1,22 @@
+FORGE="io"
 NAME="octave-io"
-VERSION=2.4.1
-OV=2.4.1
+VERSION=2.4.2
+OV=2.4.2
 RELEASE=1
 
 CATEGORY="Math"
-SUMMARY="Octave-Forge io: Input/Output in external formats."  
+SUMMARY="Forge: Input/Output in external formats."  
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/io-${PV}.tar"
-SRC_DIR="io-${PV}"
+SRC_URI="http://matzeri.altervista.org/octave-forge/${FORGE}-${PV}.tar"
+SRC_DIR="${FORGE}-${PV}"
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
 octave_io_CONTENTS='etc/ usr/'
 octave_io_REQUIRES="octave"
-
 
 src_compile() {
         cd ${D}
@@ -29,32 +29,52 @@ src_compile() {
         diary ../log/diary
         more off
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg local_list  ${B}/octave_packages	
-	pkg global_list  ${B}/octave_packages	
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/io-${PV}.tar.gz
+        pkg global_list  ${B}/octave_packages
+        pkg build -nodeps -noauto -global -verbose ${B} ${S}/${FORGE}-${PV}.tar.gz
+        echo off
 "
 }
 
 src_test() {
-	: 
+        cd ${D}
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+        testdir="'"${FORGE}-${PV}"'"
+
+        cd ${B}
+        sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
+
+        cd ${D}
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg local_list  ${B}/octave_packages_local
+        pkg load ${FORGE}
+        pkg list
+        cd ${D}/usr/share/octave/packages
+        __run_test_suite__ ({${testdir}}, {})
+        echo off
+"
+        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+
 }
 
 src_install() {
         cd ${D}
-
-        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
+        binpkg=$(find ${B} -name "*gz")
 
-	octave-cli --eval "
-	echo on 
-        diary ../log/diary 
-	more off 
-	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg local_list  ${B}/octave_packages	
-	pkg global_list  ${B}/octave_packages	
-        pkg install -nodeps -noauto -global -verbose  ${B}/io-${OV}.tar.gz 
-	pkg list
-" 
-
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+        pkg global_list  ${B}/octave_packages
+        pkg install -nodeps -noauto -global -verbose ${binpkg}
+        pkg list
+        echo off
+"
 }
+
