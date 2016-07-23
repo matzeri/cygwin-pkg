@@ -12,8 +12,13 @@ then
 fi
 
 name=$(basename $1 .tar.gz)
+tempdir=$(mktemp -d -p $PWD)
+cd ${tempdir}
 mkdir ${name}
-cp $1 ${name}
-tar -cf ${name}.tar ${name}
+cp ../$1 ${name}
+tar -cf ../${name}.tar ${name}
 rm ${name}/$1
 rmdir ${name}
+cd ..
+rmdir ${tempdir}
+
