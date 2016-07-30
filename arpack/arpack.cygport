@@ -1,10 +1,10 @@
 NAME="arpack"
-VERSION=3.3.0
-RELEASE=3
+VERSION=3.4.0
+RELEASE=1
 
 CATEGORY="Math Libs"
-DESCRIPTION="ARPACK is a collection to solve large scale eigenvalue problems." 
-SUMMARY="ARPACK libs (large scale eigenvalue problems )." 
+DESCRIPTION="A collection to solve large scale eigenvalue problems." 
+SUMMARY="Library for large scale eigenvalue problems " 
 HOMEPAGE="http://www.gnu.org/software/octave/"
 SRC_URI="http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/${PN}-ng-${PV}.tar.gz" 
 SRC_DIR="arpack-ng-${PV}"
@@ -36,7 +36,7 @@ src_compile() {
 	cd ${B}
 	cygconf --enable-shared \
 		 --enable-mpi \
-		MPILIBS="-lmpi_mpifh -lmpi" F77=gfortran  
+		MPILIBS="-lmpi_mpifh -lmpi" 
 	cygmake 
 }
 
