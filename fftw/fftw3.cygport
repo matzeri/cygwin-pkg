@@ -1,6 +1,6 @@
 NAME="fftw3"
-VERSION="3.3.4"
-RELEASE=3
+VERSION="3.3.5"
+RELEASE=1
 
 ORIG_PN="fftw"
 
