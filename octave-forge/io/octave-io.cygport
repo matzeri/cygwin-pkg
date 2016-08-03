@@ -2,7 +2,7 @@ FORGE="io"
 NAME="octave-io"
 VERSION=2.4.2
 OV=2.4.2
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Math"
 SUMMARY="Forge: Input/Output in external formats."  
