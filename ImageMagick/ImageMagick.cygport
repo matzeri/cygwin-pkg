@@ -1,7 +1,7 @@
 inherit perl
 
 NAME="ImageMagick"
-VERSION="6.9.5.3"
+VERSION="6.9.5.7"
 RELEASE=1
 
 CATEGORY="Graphics"
