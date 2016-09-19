@@ -1,5 +1,5 @@
 NAME="proj"
-VERSION=4.9.2
+VERSION=4.9.3
 RELEASE=1
 
 CATEGORY="Graphics Libs"
@@ -7,9 +7,9 @@ DESCRIPTION="Cartographic projection library and utilities"
 SUMMARY="The PROJ Cartographic Projections Software"
 HOMEPAGE="http://trac.osgeo.org/proj/"
 
-SRC_URI="http://download.osgeo.org/proj/${PN}.4-${PV}.tar.gz 
-http://download.osgeo.org/proj/proj-datumgrid-1.5.zip"
-SRC_DIR="${PN}.4-${PV}"
+SRC_URI="http://download.osgeo.org/proj/${PN}-${PV}.tar.gz 
+http://download.osgeo.org/proj/proj-datumgrid-1.6.zip"
+SRC_DIR="${PN}-${PV}"
 
 
 abi=9
@@ -29,13 +29,13 @@ src_unpack_hook () {
         local fn;
 
         inform "INSTALLING extra grid shift files"
-        for fn in alaska.lla conus.lla FL.lla hawaii.lla \
-                MD.lla ntf_r93.gsb ntv1_can.dat null.lla \
-                nzgd2kgrid0005.gsb prvi.lla README.NADUS \
-                stgeorge.lla stlrnc.lla stpaul.lla TN.lla \
-                WI.lla WO.lla
+        for fn in alaska conus FL hawaii \
+                lla MD ntf_r93.gsb ntv1_can.dat null \
+                nzgd2kgrid0005.gsb prvi README.DATUMGRID \
+                stgeorge stlrnc stpaul TN \
+                WI WO
         do
-                mv ${origsrcdir}/$fn nad/
+                mv ${origsrcdir}/${fn} nad/
         done
 
 }
@@ -57,10 +57,15 @@ src_install() {
 	cyginstall -j1
 	
 	cd ${S}/nad
-	for i in *.lla
-	do
-		${B}/src/nad2bin.exe < ${i} ${D}/usr/share/proj/${i/\.lla/}
-	done
+        for fn in alaska conus FL hawaii \
+                MD ntf_r93.gsb ntv1_can.dat null \
+                nzgd2kgrid0005.gsb prvi README.DATUMGRID \
+                stgeorge stlrnc stpaul TN \
+                WI WO
+        do
+                cp ${fn} ${D}/usr/share/proj 
+        done
+
 	cp *.gsb ${D}/usr/share/proj
 	
 }
