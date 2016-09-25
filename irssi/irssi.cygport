@@ -2,7 +2,7 @@
 inherit perl
 
 NAME="irssi"
-VERSION="0.8.19"
+VERSION="0.8.20"
 RELEASE=1
 CATEGORY="Net"
 SUMMARY="Modular text mode IRC client with Perl scripting"
@@ -17,7 +17,7 @@ PKG_NAMES="irssi irssi-devel"
 irssi_CONTENTS="etc/ usr/bin/ usr/lib/ usr/share"
 
 irssi_devel_CONTENTS="usr/include/"
-irssi_devel_SUMMARY="Irssi - headers"
+irssi_devel_SUMMARY="development headers"
 
 CFLAGS="-DUSEIMPORTLIB"
 CYGCONF_ARGS="--with-perl-staticlib"
