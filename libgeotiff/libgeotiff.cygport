@@ -1,5 +1,5 @@
 NAME="libgeotiff"
-VERSION=1.4.1
+VERSION=1.4.2
 RELEASE=1
 
 CATEGORY="Graphics Libs"
@@ -8,7 +8,7 @@ remote sensing, GIS, cartographic, and surveying related
 companies and organizations to establish a TIFF based
 interchange format for georeferenced raster imagery."
 
-SUMMARY="GeoTIFF - georeferenced raster imagery"
+SUMMARY="georeferenced raster imagery"
 HOMEPAGE="http://trac.osgeo.org/geotiff/"
 SRC_URI="http://download.osgeo.org/geotiff/libgeotiff/${PN}-${PV}.tar.gz" 
 SRC_DIR="${PN}-${PV}"

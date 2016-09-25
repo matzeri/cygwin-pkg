@@ -1,5 +1,5 @@
---- origsrc/libgeotiff-1.4.1/Makefile.am	2014-09-29 15:30:36.000000000 +0200
-+++ Makefile.am	2016-02-26 15:37:08.149342800 +0100
+--- origsrc/libgeotiff-1.4.2/Makefile.am	2016-08-18 20:52:23.000000000 +0200
++++ Makefile.am	2016-09-20 05:44:35.958637000 +0200
 @@ -18,7 +18,7 @@ if TIFF_IS_CONFIG
  TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
  endif
@@ -13,14 +13,14 @@
                               csv/unit_of_measure.c
  endif
  
--libgeotiff_la_LDFLAGS = -version-info 3:1:1
-+libgeotiff_la_LDFLAGS = -version-info 3:1:1 ${NOUNDEFINED}
+-libgeotiff_la_LDFLAGS = -version-info 3:2:1
++libgeotiff_la_LDFLAGS = -version-info 3:2:1 ${NOUNDEFINED}
  
  libgeotiff_la_LIBADD = libxtiff/libxtiff.la
  
---- origsrc/libgeotiff-1.4.1/bin/Makefile.am	2014-09-29 15:30:34.000000000 +0200
-+++ bin/Makefile.am	2016-02-26 15:32:16.818745800 +0100
-@@ -10,7 +10,7 @@ if TIFF_IS_CONFIG
+--- origsrc/libgeotiff-1.4.2/bin/Makefile.am	2016-08-11 17:40:10.000000000 +0200
++++ bin/Makefile.am	2016-09-20 05:44:35.958637000 +0200
+@@ -12,7 +12,7 @@ if TIFF_IS_CONFIG
  TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
  endif
  
@@ -29,9 +29,9 @@
  
  LDADD = ../libgeotiff.la
  
---- origsrc/libgeotiff-1.4.1/configure.ac	2014-09-29 15:30:34.000000000 +0200
-+++ configure.ac	2016-02-26 15:44:39.508327200 +0100
-@@ -280,8 +280,8 @@ elif test "$PROJ_LIB" != "" -a "$PROJ_IN
+--- origsrc/libgeotiff-1.4.2/configure.ac	2016-08-11 17:40:10.000000000 +0200
++++ configure.ac	2016-09-20 05:44:35.974237100 +0200
+@@ -281,8 +281,8 @@ elif test "$PROJ_LIB" != "" -a "$PROJ_IN
    PROJ_INC=-I$PROJ_INC
  
    AC_SUBST(PROJ_INC,$PROJ_INC)
@@ -42,7 +42,7 @@
    AC_SUBST([HAVE_LIBPROJ])
    PROJ_CONFIG="yes"
  
-@@ -316,7 +316,21 @@ fi
+@@ -317,7 +317,21 @@ fi
  AM_CONDITIONAL([CSV_IS_CONFIG], [test ! x$CSV_CONFIG = xno])
  
  
@@ -65,8 +65,8 @@
  
  dnl #########################################################################
  dnl Doxygen settings
---- origsrc/libgeotiff-1.4.1/libxtiff/Makefile.am	2014-09-29 15:30:34.000000000 +0200
-+++ libxtiff/Makefile.am	2016-02-26 15:35:23.901140700 +0100
+--- origsrc/libgeotiff-1.4.2/libxtiff/Makefile.am	2016-08-11 17:40:10.000000000 +0200
++++ libxtiff/Makefile.am	2016-09-20 05:44:36.270637600 +0200
 @@ -4,7 +4,7 @@ if TIFF_IS_CONFIG
  TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
  endif
