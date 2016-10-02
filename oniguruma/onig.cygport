@@ -1,5 +1,5 @@
 NAME="onig"
-VERSION=6.0.0
+VERSION=6.1.1
 RELEASE=1
 
 DESCRIPTION="Oniguruma: Regular expressions library for different character encoding" 
@@ -12,7 +12,7 @@ SRC_DIR="oniguruma-${PV}"
 
 PATCH_URI="onig-autoconf.patch"
 
-abi=3
+abi=4
 
 PKG_NAMES="onig libonig${abi} libonig-devel"
 
