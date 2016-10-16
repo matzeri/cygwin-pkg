@@ -1,6 +1,6 @@
 NAME="4ti2"
 VERSION="1.6.7"
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Libs Math"
 DESCRIPTION="library for algebraic, geometric and combinatorial problems on linear spaces"
