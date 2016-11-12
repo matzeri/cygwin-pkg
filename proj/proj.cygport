@@ -1,6 +1,6 @@
 NAME="proj"
 VERSION=4.9.3
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Graphics Libs"
 DESCRIPTION="Cartographic projection library and utilities"
@@ -12,7 +12,7 @@ http://download.osgeo.org/proj/proj-datumgrid-1.6.zip"
 SRC_DIR="${PN}-${PV}"
 
 
-abi=9
+abi=12
 PKG_NAMES="proj libproj-devel libproj${abi}"
 
 PKG_CONTENTS[0]="--exclude=usr/bin/*.dll usr/bin usr/share"
