@@ -1,5 +1,5 @@
 NAME="mutt"
-VERSION=1.7.0
+VERSION=1.7.2
 RELEASE=1
 
 CATEGORY="Mail"
@@ -13,7 +13,7 @@ SRC_DIR="${PN}-${PV}"
 
 PATCH_URI="mutt-postinstall.patch
 mutt-nogroup.patch
-mutt-1.5.21-cabundle.patch"
+mutt-cabundle.patch"
 
 PKG_NAMES="mutt"
 
@@ -27,6 +27,9 @@ src_compile() {
 	cygautoreconf 
 	cd ${B}
     	export ac_cv_func_mmap_fixed_mapped=yes
+	# workaround for race
+        CFLAGS="-ggdb -O2 -Wimplicit-function-declaration"
+        CXXFLAGS="-ggdb -O2 "
 	cygconf -C \
         --with-mailpath=/var/spool/mail \
         --disable-dependency-tracking \
@@ -34,6 +37,7 @@ src_compile() {
         --enable-fcntl \
         --enable-hcache \
         --enable-iconv \
+	--enable-sidebar \
         --enable-imap \
         --enable-locales-fix \
         --enable-pop \
