@@ -1,5 +1,5 @@
 NAME="leptonica"
-VERSION=1.73
+VERSION=1.74.1
 RELEASE=1
 
 CATEGORY="Libs"
