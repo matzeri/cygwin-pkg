@@ -1,5 +1,5 @@
 NAME="lapack"
-VERSION=3.6.1
+VERSION=3.7.0
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -8,10 +8,9 @@ SUMMARY="LAPACK library for linear algebra operations"
 DESCRIPTION="Comprehensive FORTRAN library for linear algebra operations."
 HOMEPAGE="http://www.netlib.org/lapack/"
 SRC_URI="http://www.netlib.org/lapack/${PN}-${PV}.tgz \
-http://www.netlib.org/lapack/manpages-3.6.1a.tgz"
+http://www.netlib.org/lapack/manpages-${PV}.tgz"
 
 PATCH_URI="
-lapack-pkconfig.patch
 lapack-cblas-on.patch
 lapack-CYGWIN.patch
 lapack-dll.patch"
