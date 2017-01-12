@@ -1,5 +1,5 @@
 NAME="geos"
-VERSION=3.5.0
+VERSION=3.5.1
 RELEASE=1
 
 CATEGORY="Science"
@@ -11,10 +11,10 @@ SRC_URI="http://download.osgeo.org/geos/${PN}-${PV}.tar.bz2"
 PATCH_URI="configure-noansi.patch"
 SRC_DIR="${PN}-${PV}"
 
-PKG_NAMES="libgeos-devel libgeos_3_5 libgeos_c1"
+PKG_NAMES="libgeos-devel libgeos_3_5_1 libgeos_c1"
 
-libgeos_3_5_CONTENTS="
-  usr/bin/cyggeos-3-5-0.dll
+libgeos_3_5_1_CONTENTS="
+  usr/bin/cyggeos-3-5-1.dll
 "
 
 libgeos_c1_CONTENTS="
@@ -28,8 +28,8 @@ libgeos_devel_CONTENTS="
   usr/share
 "
 
-libgeos_3_5_CATEGORY="Science Libs"
-libgeos_3_5_SUMMARY="Geometry Engine for Topology - (C++ runtime)"
+libgeos_3_5_1_CATEGORY="Science Libs"
+libgeos_3_5_1_SUMMARY="Geometry Engine for Topology - (C++ runtime)"
 
 libgeos_c1_CATEGORY="Science Libs"
 libgeos_c1_SUMMARY="Geometry Engine for Topology - (C runtime)"
