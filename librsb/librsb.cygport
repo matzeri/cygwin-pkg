@@ -1,12 +1,12 @@
 NAME="librsb"
 VERSION="1.2.0"
-RELEASE="0.rc4"
+RELEASE="0.rc5"
 
 DESCRIPTION="A shared memory parallel sparse matrix library including Sparse BLAS"
 SUMMARY="A shared memory parallel sparse matrix library"
 HOMEPAGE="http://librsb.sourceforge.net/"
-SRC_URI="https://sourceforge.net/projects/librsb/files/${P}-rc4.tar.gz"
-SRC_DIR="${P}-rc4"
+SRC_URI="https://sourceforge.net/projects/librsb/files/${P}-rc5.tar.gz"
+SRC_DIR="${P}-rc5"
 
 abi="0"
 
@@ -34,7 +34,7 @@ src_compile() {
         cygconf  --with-hwloc CPPFLAGS=-I/usr/include/tirpc LIBS=-ltirpc
 	echo "workaround removing -std=c99"
 	find . -name Makefile -exec sed -i -e "s/-std=c99//" {} \;
-        cygmake
+        cygmake -j1
 }
 
 src_install() {
