@@ -2,7 +2,7 @@ inherit perl
 
 NAME="ImageMagick"
 VERSION="6.9.5.7"
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Graphics"
 SUMMARY="Image processing suite"
@@ -16,6 +16,7 @@ HOMEPAGE="http://www.imagemagick.org/"
 
 SRC_URI="http://www.imagemagick.org/download/${PN}-${PV%.${PV[4]}}-${PV[4]}.tar.xz"
 SRC_DIR=${P%.${PV[4]}}-${PV[4]}
+PATCH_URI="AC_CHECK_SIZEOF.patch"
 
 PKG_NAMES="ImageMagick ImageMagick-doc libMagickCore6_2 libMagickC++6_6 libMagickWand6_2 libMagick-devel perl-Image-Magick"
 
@@ -54,11 +55,10 @@ src_compile() {
 		--disable-static --without-modules --with-quantum-depth=16 \
 		--with-autotrace --with-bzlib --with-dps \
 		--with-fftw --with-fontconfig --with-fpx --with-freetype \
-		--with-gslib --with-gvc --with-jbig --with-jpeg --with-jp2 \
-		--without-lcms --with-lcms2  --with-lzma \
+		--with-gslib --with-gvc --with-jbig --with-jpeg --with-openjp2 \
+		--with-lcms  --with-lzma \
 		--with-pango --with-png --with-rsvg --with-tiff \
 		--without-wmf --with-x --with-xml --with-zlib \
-		--without-included-ltdl --with-ltdl-include=/usr/include --with-ltdl-lib=/usr/lib \
 		--with-fontpath=/usr/share/fonts \
 		--with-gs-font-dir=/usr/share/ghostscript/fonts \
 		--with-windows-font-dir=/usr/share/fonts/TTF \
