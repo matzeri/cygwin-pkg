@@ -1,5 +1,5 @@
 NAME="pure-ftpd"
-VERSION=1.0.42
+VERSION=1.0.44
 RELEASE=1
 
 CATEGORY="Net"
@@ -15,7 +15,7 @@ CYGCONF_ARGS="--with-everything --with-rfc2640 --enable-largefile --with-tls --w
 DOCS="README.*"
 
 PKG_NAMES="pure-ftpd"
-pure_ftpd_CONTENTS="usr"
+pure_ftpd_CONTENTS="usr etc"
 
 src_compile() {
         cd ${S}
