@@ -1,5 +1,5 @@
 NAME="octave"
-VERSION="4.0.3"
+VERSION="4.2.0"
 RELEASE=1
 
 CATEGORY="Math"
@@ -7,11 +7,10 @@ DESCRIPTION="GNU Octave is a high-level language for numerical computations"
 HOMEPAGE="http://www.gnu.org/software/octave/"
 
 OR="${PV}"
-SRC_URI="ftp://ftp.octave.org/gnu/octave/${PN}-${PV}.tar.xz"
+SRC_URI="https://ftp.octave.org/gnu/octave/${PN}-${PV}.tar.lz"
 SRC_DIR="${PN}-${PV}"
 
 PATCH_URI="
-octave-4.0.1-1.pkg.patch
 octave-postinstall.patch"
 
 PKG_NAMES="octave octave-devel octave-doc"
