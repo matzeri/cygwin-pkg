@@ -1,8 +1,8 @@
 FORGE="io"
 NAME="octave-io"
-VERSION=2.4.2
-OV=2.4.2
-RELEASE=2
+VERSION=2.4.5
+OV=2.4.5
+RELEASE=1
 
 CATEGORY="Math"
 SUMMARY="Forge: Input/Output in external formats."  
@@ -19,20 +19,7 @@ octave_io_CONTENTS='etc/ usr/'
 octave_io_REQUIRES="octave"
 
 src_compile() {
-        cd ${D}
-        F77=gfortran
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-
-        octave-cli --eval "
-        echo on
-        diary ../log/diary
-        more off
-        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-        pkg global_list  ${B}/octave_packages
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/${FORGE}-${PV}.tar.gz
-        echo off
-"
+        :
 }
 
 src_test() {
@@ -62,9 +49,11 @@ src_test() {
 
 src_install() {
         cd ${D}
+        unset CXX
+        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        binpkg=$(find ${B} -name "*gz")
+        binpkg=$(find ${S} -name "*gz")
 
         octave-cli --eval "
         echo on
@@ -72,9 +61,8 @@ src_install() {
         more off
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
         pkg global_list  ${B}/octave_packages
-        pkg install -nodeps -noauto -global -verbose ${binpkg}
+        pkg install -nodeps -global -verbose ${binpkg}
         pkg list
         echo off
 "
 }
-

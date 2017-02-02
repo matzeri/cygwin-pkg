@@ -1,7 +1,7 @@
 FORGE="generate_html"
 NAME="octave-generate_html"
-VERSION=0.1.12
-OV=0.1.12
+VERSION=0.1.13
+OV=0.1.13
 RELEASE=1
 
 ARCH="noarch"
@@ -20,19 +20,7 @@ octave_generate_html_CONTENTS='etc/ usr/'
 octave_generate_html_REQUIRES="octave"
 
 src_compile() {
-        cd ${D}
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-
-        octave-cli --eval "
-        echo on
-        diary ../log/diary
-        more off
-        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-        pkg global_list  ${B}/octave_packages
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/${FORGE}-${PV}.tar.gz
-        echo off
-"
+	:
 }
 
 src_test() {
@@ -64,7 +52,7 @@ src_install() {
         cd ${D}
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        binpkg=$(find ${B} -name "*gz")
+        binpkg=$(find ${S} -name "*gz")
 
         octave-cli --eval "
         echo on
@@ -72,7 +60,7 @@ src_install() {
         more off
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
         pkg global_list  ${B}/octave_packages
-        pkg install -nodeps -noauto -global -verbose ${binpkg}
+        pkg install -nodeps -global -verbose ${binpkg}
         pkg list
         echo off
 "

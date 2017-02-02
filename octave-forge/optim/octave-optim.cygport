@@ -1,8 +1,8 @@
 FORGE="optim"
 NAME="octave-optim"
-VERSION=1.5.1
-OV=1.5.1
-RELEASE=1
+VERSION=1.5.2
+OV=1.5.2
+RELEASE=2
 
 CATEGORY="Math"
 SUMMARY="Forge:  Non-linear optimization toolkit"
@@ -19,19 +19,7 @@ octave_optim_CONTENTS='etc/ usr/'
 octave_optim_REQUIRES="octave octave-struct"
 
 src_compile() {
-        cd ${D}
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-
-        octave-cli --eval "
-        echo on
-        diary ../log/diary
-        more off
-        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-        pkg global_list  ${B}/octave_packages
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/${FORGE}-${PV}.tar.gz
-        echo off
-"
+        :
 }
 
 src_test() {
@@ -56,13 +44,16 @@ src_test() {
         echo off
 "
         mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+
 }
 
 src_install() {
         cd ${D}
+        unset CXX
+        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        binpkg=$(find ${B} -name "*gz")
+        binpkg=$(find ${S} -name "*gz")
 
         octave-cli --eval "
         echo on
@@ -70,7 +61,7 @@ src_install() {
         more off
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
         pkg global_list  ${B}/octave_packages
-        pkg install -nodeps -noauto -global -verbose ${binpkg}
+        pkg install -nodeps -global -verbose ${binpkg}
         pkg list
         echo off
 "

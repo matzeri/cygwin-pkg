@@ -1,22 +1,22 @@
-FORGE="mapping"
-NAME="octave-mapping"
-VERSION=1.2.1
-OV=1.2.1
-RELEASE=2
+FORGE="gsl"
+NAME="octave-gsl"
+VERSION=2.0.0
+OV=2.0.0
+RELEASE=1
 
 CATEGORY="Math"
-SUMMARY="Forge: Simple Mapping and GIS .shp file functions."
+SUMMARY="Forge:  Binding to GNU Scientific Library"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/mapping-${PV}.tar"
-SRC_DIR="mapping-${PV}"
+SRC_URI="http://matzeri.altervista.org/octave-forge/${FORGE}-${PV}.tar"
+SRC_DIR="${FORGE}-${PV}"
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_mapping_CONTENTS='etc/ usr/'
-octave_mapping_REQUIRES="octave"
+octave_gsl_CONTENTS='etc/ usr/'
+octave_gsl_REQUIRES="octave"
 
 src_compile() {
         :
@@ -50,7 +50,6 @@ src_test() {
 src_install() {
         cd ${D}
         unset CXX
-        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
         binpkg=$(find ${S} -name "*gz")

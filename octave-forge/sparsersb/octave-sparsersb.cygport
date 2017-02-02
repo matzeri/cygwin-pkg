@@ -1,22 +1,22 @@
-FORGE="mapping"
-NAME="octave-mapping"
-VERSION=1.2.1
-OV=1.2.1
+FORGE="sparsersb"
+NAME="octave-sparsersb"
+VERSION=1.0.2
+OV=1.0.2
 RELEASE=2
 
 CATEGORY="Math"
-SUMMARY="Forge: Simple Mapping and GIS .shp file functions."
+SUMMARY="Forge: RSB sparse matrix format interface"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/mapping-${PV}.tar"
-SRC_DIR="mapping-${PV}"
+SRC_URI="http://matzeri.altervista.org/octave-forge/${FORGE}-${PV}.tar"
+SRC_DIR="${FORGE}-${PV}"
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
-octave_mapping_CONTENTS='etc/ usr/'
-octave_mapping_REQUIRES="octave"
+octave_sparsersb_CONTENTS='etc/ usr/'
+octave_sparsersb_REQUIRES="octave"
 
 src_compile() {
         :
@@ -39,12 +39,11 @@ src_test() {
         pkg local_list  ${B}/octave_packages_local
         pkg load ${FORGE}
         pkg list
-        cd ${D}/usr/share/octave/packages
-        __run_test_suite__ ({${testdir}}, {})
+        cd ${D}/usr/share/octave/packages/${FORGE}-${PV}
+        sparsersbtester
+
         echo off
 "
-        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
-
 }
 
 src_install() {

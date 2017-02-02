@@ -1,8 +1,8 @@
 FORGE="parallel"
 NAME="octave-parallel"
-VERSION=3.1.0
-OV=3.1.0
-RELEASE=1
+VERSION=3.1.1
+OV=3.1.1
+RELEASE=2
 
 CATEGORY="Math"
 SUMMARY="Forge : Parallel execution package"
@@ -19,19 +19,7 @@ octave_parallel_CONTENTS='etc/ usr/'
 octave_parallel_REQUIRES="octave octave-struct"
 
 src_compile() {
-        cd ${D}
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-
-        octave-cli --eval "
-        echo on
-        diary ../log/diary
-        more off
-        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-        pkg global_list  ${B}/octave_packages
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/${FORGE}-${PV}.tar.gz
-        echo off
-"
+        :
 }
 
 src_test() {
@@ -51,21 +39,21 @@ src_test() {
         pkg local_list  ${B}/octave_packages_local
         pkg load ${FORGE}
         pkg list
-	a = parcellfun (2, @ (x) x, num2cell (1:10))
+        cd ${D}/usr/share/octave/packages
+        __run_test_suite__ ({${testdir}}, {})
         echo off
 "
+        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+
 }
-# gen test
-#        cd ${D}/usr/share/octave/packages
-#        __run_test_suite__ ({${testdir}}, {})
-#
-# mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
 
 src_install() {
         cd ${D}
+        unset CXX
+        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        binpkg=$(find ${B} -name "*gz")
+        binpkg=$(find ${S} -name "*gz")
 
         octave-cli --eval "
         echo on
@@ -73,7 +61,7 @@ src_install() {
         more off
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
         pkg global_list  ${B}/octave_packages
-        pkg install -nodeps -noauto -global -verbose ${binpkg}
+        pkg install -nodeps -global -verbose ${binpkg}
         pkg list
         echo off
 "

@@ -1,13 +1,13 @@
+FORGE="control"
 NAME="octave-control"
 VERSION=3.0.0
 OV=3.0.0
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Math"
-SUMMARY="Octave-Forge control: Control System Design (CACSD) Tools for Octave"
+SUMMARY="Forge: Control System Design (CACSD) Tools for Octave"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
-
 HOMEPAGE="http://octave.sourceforge.net/"
 
 SRC_URI="http://matzeri.altervista.org/octave-forge/control-${PV}.tar"
@@ -19,42 +19,50 @@ octave_control_CONTENTS='etc/ usr/'
 octave_control_REQUIRES="octave"
 
 src_compile() {
+	:
+}
+
+src_test() {
         cd ${D}
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+        testdir="'"${FORGE}-${PV}"'"
+
+        cd ${B}
+        sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
+
+        cd ${D}
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg local_list  ${B}/octave_packages_local
+        pkg load ${FORGE}
+        pkg list
+        cd ${D}/usr/share/octave/packages
+        __run_test_suite__ ({${testdir}}, {})
+        echo off
+"
+        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+
+}
+
+src_install() {
+        cd ${D}
+	unset CXX
         F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
+        binpkg=$(find ${S} -name "*gz")
 
         octave-cli --eval "
         echo on
         diary ../log/diary
         more off
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg local_list  ${B}/octave_packages	
-	pkg global_list  ${B}/octave_packages	
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/control-${PV}.tar.gz
+        pkg global_list  ${B}/octave_packages
+        pkg install -nodeps -global -verbose ${binpkg}
+        pkg list
+        echo off
 "
-}
-
-src_test() {
-	: 
-}
-
-src_install() {
-        cd ${D}
-
-        F77=gfortran
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-
-	octave-cli --eval "
-	echo on 
-        diary ../log/diary 
-	more off 
-	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg local_list  ${B}/octave_packages	
-	pkg global_list  ${B}/octave_packages	
-        pkg install -nodeps -noauto -global -verbose  ${B}/control-${OV}.tar.gz 
-	pkg list
-" 
-
 }

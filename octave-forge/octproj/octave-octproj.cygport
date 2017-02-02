@@ -2,10 +2,10 @@ FORGE="octproj"
 NAME="octave-octproj"
 VERSION=1.1.5
 OV=1.1.5
-RELEASE=2
+RELEASE=3
 
 CATEGORY="Math"
-SUMMARY="Octave-Forge octproj: cartographic projections transformations PROJ.4." 
+SUMMARY="Forge: cartographic projections transformations PROJ.4." 
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
@@ -18,62 +18,52 @@ PKG_NAMES="${PN}"
 octave_geometry_CONTENTS='etc/ usr/'
 octave_geometry_REQUIRES="octave"
 
-
 src_compile() {
-        cd ${D}
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-	export DL_LDFLAGS="-shared -fopenmp  -Wl,--allow-multiple-definition"
-
-        octave-cli --eval "
-        echo on
-        diary ../log/diary
-        more off
-        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg global_list  ${B}/octave_packages	
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/${FORGE}-${PV}.tar.gz
-        echo off
-"
+        :
 }
 
 src_test() {
         cd ${D}
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-	testdir="'"${FORGE}-${PV}"'"
+        testdir="'"${FORGE}-${PV}"'"
 
-	cd ${B}
-	sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
+        cd ${B}
+        sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
 
         cd ${D}
-	octave-cli --eval "
+        octave-cli --eval "
         echo on
         diary ../log/diary
         more off
         pkg local_list  ${B}/octave_packages_local
-	pkg load ${FORGE}
-	pkg list
-	cd ${D}/usr/share/octave/packages
-	__run_test_suite__ ({${testdir}}, {})
+        pkg load ${FORGE}
+        pkg list
+        cd ${D}/usr/share/octave/packages
+        __run_test_suite__ ({${testdir}}, {})
         echo off
 "
-	mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+
 }
 
 src_install() {
         cd ${D}
+        unset CXX
+        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        binpkg=$(find ${B} -name "*gz")
+        binpkg=$(find ${S} -name "*gz")
 
-        octave-cli --verbose --eval "
+        octave-cli --eval "
         echo on
         diary ../log/diary
         more off
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
         pkg global_list  ${B}/octave_packages
-        pkg install -nodeps -noauto -global -verbose ${binpkg}
+        pkg install -nodeps -global -verbose ${binpkg}
         pkg list
         echo off
-" 
+"
 }
+                   
