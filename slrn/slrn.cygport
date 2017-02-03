@@ -1,5 +1,5 @@
 NAME="slrn"
-VERSION=1.0.2
+VERSION=1.0.3a
 RELEASE=1
 
 CATEGORY="Mail"
@@ -8,6 +8,7 @@ DESCRIPTION="slrn ('S-Lang read news') is a newsreader. It runs in console mode 
 
 HOMEPAGE="http://www.slrn.org/"
 SRC_URI="ftp://space.mit.edu/pub/davis/slrn/slrn-${PV}.tar.bz2" 
+SRC_DIR=${PN}-1.0.3
 
 PATCH_URI="slrn-1.0.2-configure.diff
 slrn-0.9.9p1-hardcode-inews-path.diff"
