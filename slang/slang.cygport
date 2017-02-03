@@ -1,12 +1,11 @@
 NAME="slang"
-VERSION=2.3.1pre17
+VERSION=2.3.1a
 RELEASE=1
 
 CATEGORY="Libs"
 DESCRIPTION="S-Lang is a multi-platform programmer's library"
 HOMEPAGE="http://www.s-lang.org/"
-# SRC_URI="http://www.jedsoft.org/releases/slang/slang-${PV}.tar.bz2"
-SRC_URI="http://www.jedsoft.org/releases/slang/slang-${PV}.tar.xz"
+SRC_URI="http://www.jedsoft.org/releases/slang/slang-${PV}.tar.bz2"
 PATCH_URI="slang_232.src.patch"
 
 abi=2
@@ -39,7 +38,7 @@ slsh_CONTENTS="
 "
 
 DIFF_EXCLUDES="configure.ac configure acinclude.m4 iconv.m4" 
-
+KEEP_LA_FILES="none"
 
 src_compile() {
         cd ${S}
@@ -47,7 +46,7 @@ src_compile() {
         cd ${B}
 	autoconf -I autoconf autoconf/configure.ac > configure
         cygconf LDFLAGS="-Wl,--export-all-symbols -Wl,--enable-auto-import"
-        cygmake
+        cygmake -j1
 }
 
 src_install() {
