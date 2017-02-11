@@ -1,13 +1,12 @@
 NAME="postgresql"
-VERSION=9.5.3
+VERSION=9.6.2
 RELEASE=1
 
 CATEGORY="Database"
 SUMMARY="object-relational SQL database management system"
 DESCRIPTION="object-relational SQL database management system"
 HOMEPAGE="http://www.postgresql.org/"
-SRC_URI="http://wwwmaster.postgresql.org/redir/7/h/source/v${PV}/${PN}-${PV}.tar.bz2"
-#SRC_URI="ftp://ftp.de.postgresql.org/mirror/postgresql/source/v${PV}/${PN}-${PV}.tar.bz2"
+SRC_URI="https://ftp.postgresql.org/pub/source/v${PV}/${PN}-${PV}.tar.bz2"
 
 PATCH_URI="
 postgresql-cygwin.patch
@@ -66,11 +65,11 @@ usr/lib/postgresql/dict_snowball.dll \
 usr/lib/postgresql/euc2004_sjis2004.dll \
 usr/lib/postgresql/libpqwalreceiver.dll \
 usr/lib/postgresql/plpgsql.dll \
-usr/share/locale/*/LC_MESSAGES/initdb-9.5.mo \
-usr/share/locale/*/LC_MESSAGES/pg_controldata-9.5.mo \
-usr/share/locale/*/LC_MESSAGES/pg_ctl-9.5.mo \
-usr/share/locale/*/LC_MESSAGES/pg_resetxlog-9.5.mo \
-usr/share/locale/*/LC_MESSAGES/postgres-9.5.mo \
+usr/share/locale/*/LC_MESSAGES/initdb-9.6.mo \
+usr/share/locale/*/LC_MESSAGES/pg_controldata-9.6.mo \
+usr/share/locale/*/LC_MESSAGES/pg_ctl-9.6.mo \
+usr/share/locale/*/LC_MESSAGES/pg_resetxlog-9.6.mo \
+usr/share/locale/*/LC_MESSAGES/postgres-9.6.mo \
 usr/share/man/man1/initdb.1.gz \
 usr/share/man/man1/pg_controldata.1.gz \
 usr/share/man/man1/pg_ctl.1.gz \
@@ -81,29 +80,7 @@ usr/share/doc/Cygwin/${PN}.README \
 usr/share/postgresql"
 
 postgresql_devel_CONTENTS=" \
---exclude=usr/include/ecpg*.h \
---exclude=usr/include/postgresql/informix \
---exclude=usr/include/pgtypes_*.h \
---exclude=usr/include/sql3types.h \
---exclude=usr/include/sqlca.h \
---exclude=usr/include/libpq-fe.h \
---exclude=usr/include/libpq/libpq-fs.h \
---exclude=usr/include/pg_config*.h \
---exclude=usr/include/postgres_ext.h \
---exclude=usr/include/postgresql/server/catalog/pg_type.h \
---exclude=usr/include/postgresql/server/nodes/nodes.h \
---exclude=usr/include/postgresql/server/utils/elog.h \
---exclude=usr/include/postgresql/server/utils/errcodes.h \
---exclude=usr/include/postgresql/server/utils/palloc.h \
---exclude=usr/include/postgresql/server/c.h \
---exclude=usr/include/postgresql/server/pg_config.h \
---exclude=usr/include/postgresql/server/pg_config_manual.h \
---exclude=usr/include/postgresql/server/pg_config_os.h \
---exclude=usr/include/postgresql/server/port.h \
---exclude=usr/include/postgresql/server/postgres.h \
---exclude=usr/include/postgresql/server/postgres_fe.h \
---exclude=usr/include/postgresql/server/postgres_ext.h \
-usr/include \
+usr/include/postgresql/server \
 usr/lib/postgresql/pgxs \
 usr/lib/libpostgres.a \
 usr/share/man/man3"
@@ -111,12 +88,12 @@ usr/share/man/man3"
 # TODO: usr/lib/pkgconfig/
 
 postgresql_client_CONTENTS=" \
---exclude=usr/share/locale/*/LC_MESSAGES/initdb-9.5.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_controldata-9.5.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_ctl-9.5.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_resetxlog-9.5.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/postgres-9.5.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_config-9.5.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/initdb-9.6.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_controldata-9.6.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_ctl-9.6.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_resetxlog-9.6.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/postgres-9.6.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_config-9.6.mo \
 usr/bin/clusterdb.exe \
 usr/bin/createdb.exe \
 usr/bin/dropdb.exe \
@@ -196,28 +173,18 @@ libpq5_CONTENTS="usr/bin/cygpq-5.dll"
 libpq_devel_CONTENTS=" \
 usr/bin/pg_config.exe \
 usr/include/libpq-fe.h \
+usr/include/libpq-events.h \
 usr/include/libpq/libpq-fs.h \
 usr/include/pg_config*.h \
 usr/include/postgres_ext.h \
-usr/include/postgresql/server/catalog/pg_type.h \
-usr/include/postgresql/server/nodes/nodes.h \
-usr/include/postgresql/server/utils/elog.h \
-usr/include/postgresql/server/utils/errcodes.h \
-usr/include/postgresql/server/utils/palloc.h \
-usr/include/postgresql/server/c.h \
-usr/include/postgresql/server/pg_config.h \
-usr/include/postgresql/server/pg_config_manual.h \
-usr/include/postgresql/server/pg_config_os.h \
-usr/include/postgresql/server/port.h \
-usr/include/postgresql/server/postgres.h \
-usr/include/postgresql/server/postgres_fe.h \
-usr/include/postgresql/server/postgres_ext.h \
+usr/include/postgresql/internal \
 usr/lib/libpgport.a \
 usr/lib/libpq.a \
 usr/lib/libpgcommon.a \
+usr/lib/libpgfeutils.a \
 usr/lib/pkgconfig/libpq.pc \
 usr/share/man/man1/pg_config.1.gz \
-usr/share/locale/*/LC_MESSAGES/pg_config-9.5.mo"
+usr/share/locale/*/LC_MESSAGES/pg_config-9.6.mo"
 
 libpgtypes3_CONTENTS="usr/bin/cygpgtypes-3.dll"
 
@@ -234,15 +201,13 @@ usr/include/postgresql/informix \
 usr/include/pgtypes_*.h \
 usr/include/sql3types.h \
 usr/include/sqlca.h \
+usr/include/sqlda*.h \
 usr/lib/libecpg.a \
 usr/lib/libecpg_compat.a \
 usr/lib/libpgtypes.a \
 usr/lib/pkgconfig/libecpg.pc \
 usr/lib/pkgconfig/libecpg_compat.pc \
 usr/lib/pkgconfig/libpgtypes.pc" 
-
-# ${PN}-pltcl  
-# PKG_CONTENTS[13]="usr/lib/postgresql/pltcl.dll"
 
 src_compile() {
   cd ${B}
