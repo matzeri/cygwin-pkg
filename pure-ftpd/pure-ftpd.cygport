@@ -1,13 +1,14 @@
 NAME="pure-ftpd"
-VERSION=1.0.44
+VERSION=1.0.45
 RELEASE=1
 
 CATEGORY="Net"
-SUMMARY="A free (BSD), secure, standard-conformant FTP server."
-DESCRIPTION="A free (BSD), secure, standard-conformant FTP server."
+SUMMARY="A free (BSD), secure, standard-conformant FTP server"
+DESCRIPTION="A free (BSD), secure, standard-conformant FTP server"
 HOMEPAGE="http://pureftpd.org/"
 
-SRC_URI="http://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${PV}.tar.bz2"
+SRC_URI="http://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${PV}.tar.bz2
+http://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${PV}.tar.bz2.sig"
 PATCH_URI="pure-ftpd-config.patch
 pure-ftpd-noroot.patch"
 
