@@ -1,0 +1,45 @@
+diff -uNr origsrc/SuperLU_5.2.1/CMakeLists.txt SuperLU_5.2.1/CMakeLists.txt
+--- origsrc/SuperLU_5.2.1/CMakeLists.txt	2016-05-22 17:58:44.000000000 +0200
++++ SuperLU_5.2.1/CMakeLists.txt	2017-02-11 13:46:14.094458200 +0100
+@@ -30,13 +30,6 @@
+ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)    ## ????
+ set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+ 
+-if (BUILD_SHARED_LIBS)
+-  message("-- SuperLU will be built as a shared library.")
+-  set(PROJECT_NAME_LIB_EXPORT libsuperlu.so)
+-else()
+-  message("-- SuperLU will be built as a static library.")
+-  set(PROJECT_NAME_LIB_EXPORT libsuperlu.a)
+-endif()
+ 
+ enable_language(C)
+ enable_language (Fortran)
+diff -uNr origsrc/SuperLU_5.2.1/SRC/CMakeLists.txt SuperLU_5.2.1/SRC/CMakeLists.txt
+--- origsrc/SuperLU_5.2.1/SRC/CMakeLists.txt	2016-05-22 17:58:44.000000000 +0200
++++ SuperLU_5.2.1/SRC/CMakeLists.txt	2017-02-11 13:49:20.192102300 +0100
+@@ -226,7 +226,15 @@
+   )
+ endif()
+ 
+-add_library(superlu ${sources} ${HEADERS})
++if (BUILD_SHARED_LIBS)
++  message("-- SuperLU will be built as a shared library.")
++  add_library(superlu SHARED ${sources} ${HEADERS})
++else()
++  message("-- SuperLU will be built as a static library.")
++  add_library(superlu STATIC ${sources} ${HEADERS})
++endif()
++
++
+ 
+ target_link_libraries(superlu ${BLAS_LIB} m)
+ set_target_properties(superlu PROPERTIES
+diff -uNr origsrc/SuperLU_5.2.1/TESTING/MATGEN/CMakeLists.txt SuperLU_5.2.1/TESTING/MATGEN/CMakeLists.txt
+--- origsrc/SuperLU_5.2.1/TESTING/MATGEN/CMakeLists.txt	2016-05-22 17:58:44.000000000 +0200
++++ SuperLU_5.2.1/TESTING/MATGEN/CMakeLists.txt	2017-02-11 19:07:01.723785100 +0100
+@@ -97,3 +97,4 @@
+ endif()
+ 
+ add_library(matgen ${sources})
++target_link_libraries(matgen superlu)

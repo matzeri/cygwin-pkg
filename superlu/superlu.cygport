@@ -1,0 +1,47 @@
+NAME="superlu"
+VERSION="5.2.1"
+RELEASE="1"
+
+CATEGORY="Libs Math"
+
+HOMEPAGE="http://crd-legacy.lbl.gov/~xiaoye/SuperLU/#superlu"
+SRC_URI="http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_${PV}.tar.gz"
+SRC_DIR="SuperLU_${PV}"
+PATCH_URI="superlu-cmake.patch"
+
+abi=5
+
+SUMMARY="general purpose library for the direct solution of large, sparse, nonsymmetric systems of linear equations"
+DESCRIPTION="SuperLU is a general purpose library for the direct solution of large, sparse, nonsymmetric systems of linear equations. The library is written in C and is callable from either C or Fortran program. It uses MPI, OpenMP and CUDA to support various forms of parallelism. It supports both real and complex datatypes, both single and double precision, and 64-bit integer indexing. "
+
+PKG_NAMES="${PN} lib${PN}-devel lib${PN}_${abi}"
+
+superlu_CONTENTS=""
+
+libsuperlu_devel_CONTENTS='usr/include/ usr/lib/'
+libsuperlu_devel_SUMMARY='${SUMMARI} (development)'
+
+libsuperlu_5_CONTENTS="usr/bin/cyg*-${abi}.dll"
+libsuperlu_5_SUMMARY="${SUMMARY} - (runtime)"
+
+DIFF_EXCLUDES="Makefile make.inc"
+inherit cmake
+
+src_compile() {
+        cd ${B}
+	cygcmake -DBUILD_SHARED_LIBS=1 -Denable_blaslib=0
+        cygmake 
+}
+
+
+src_test() {
+	cd ${B}
+	cygmake test
+}
+
+src_install() {
+        cd ${B}
+	cyginstall
+	dodir /usr/bin
+	mv ${D}/usr/lib/cyg*-${abi}.dll ${D}/usr/bin
+}
