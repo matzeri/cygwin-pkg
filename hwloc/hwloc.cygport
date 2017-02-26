@@ -1,6 +1,6 @@
 NAME="hwloc"
 VERSION="1.11.6"
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Utils"
 SUMMARY="Portable Hardware Locality"
@@ -13,9 +13,10 @@ PKG_NAMES="hwloc libhwloc-devel libhwloc5"
 libhwloc_devel_SUMMARY="${SUMMARY} - devel"
 libhwloc5_SUMMARY="${SUMMARY} - runtime"
 
-hwloc_CONTENTS="--exclude=usr/bin/cyg*dll usr/bin usr/share/doc usr/share/man/man1"
+hwloc_CONTENTS="--exclude=usr/bin/cyg*dll usr/bin usr/share/doc 
+usr/share/man/man1 usr/share/man/man7"
 libhwloc_devel_CONTENTS="usr/include usr/lib usr/share/hwloc
-usr/share/man/man3 usr/share/man/man7"
+usr/share/man/man3"
 libhwloc5_CONTENTS="usr/bin/cyghwloc-5.dll"
 
 KEEP_LA_FILES="none"
