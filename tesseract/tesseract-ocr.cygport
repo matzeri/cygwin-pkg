@@ -1,5 +1,5 @@
 NAME="tesseract-ocr"
-VERSION=3.04.01
+VERSION=3.05.00
 RELEASE=1
 
 CATEGORY="Text"
@@ -11,7 +11,6 @@ HOMEPAGE="https://github.com/tesseract-ocr"
 SRC_URI="https://github.com/tesseract-ocr/tesseract/archive/tesseract-${PV}.tar.gz"
 SRC_DIR="tesseract-${PV}"
 PATCH_URI="
-tesseract-training.patch
 tesseract-undefined.patch"
 
 PKG_NAMES="tesseract-ocr tesseract-training-util libtesseract-ocr_3 tesseract-ocr-devel"
