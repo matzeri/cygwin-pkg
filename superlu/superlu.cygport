@@ -18,8 +18,8 @@ PKG_NAMES="${PN} lib${PN}-devel lib${PN}_${abi}"
 
 superlu_CONTENTS=""
 
-libsuperlu_devel_CONTENTS='usr/include/ usr/lib/'
-libsuperlu_devel_SUMMARY='${SUMMARI} (development)'
+libsuperlu_devel_CONTENTS='usr/include/ usr/lib/ usr/share/'
+libsuperlu_devel_SUMMARY="${SUMMARY} (development)"
 
 libsuperlu_5_CONTENTS="usr/bin/cyg*-${abi}.dll"
 libsuperlu_5_SUMMARY="${SUMMARY} - (runtime)"
