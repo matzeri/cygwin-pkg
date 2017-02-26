@@ -1,5 +1,5 @@
 NAME="mutt"
-VERSION=1.7.2
+VERSION=1.8.0
 RELEASE=1
 
 CATEGORY="Mail"
@@ -7,8 +7,8 @@ DESCRIPTION="A text mode mail user agent (MUA)"
 SUMMARY="A text mode mail user agent (MUA)"
 
 HOMEPAGE="http://www.mutt.org"
-SRC_URI="http://prdownloads.sourceforge.net/mutt/${PN}-${PV}.tar.gz 
-http://prdownloads.sourceforge.net/mutt/${PN}-${PV}.tar.gz.asc" 
+SRC_URI="ftp://ftp.mutt.org/pub/mutt/${PN}-${PV}.tar.gz 
+ftp://ftp.mutt.org/pub/mutt/${PN}-${PV}.tar.gz.asc" 
 SRC_DIR="${PN}-${PV}"
 
 PATCH_URI="mutt-postinstall.patch
@@ -27,9 +27,6 @@ src_compile() {
 	cygautoreconf 
 	cd ${B}
     	export ac_cv_func_mmap_fixed_mapped=yes
-	# workaround for race
-        CFLAGS="-ggdb -O2 -Wimplicit-function-declaration"
-        CXXFLAGS="-ggdb -O2 "
 	cygconf -C \
         --with-mailpath=/var/spool/mail \
         --disable-dependency-tracking \
