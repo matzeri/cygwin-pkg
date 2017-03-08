@@ -1,11 +1,11 @@
 FORGE="io"
 NAME="octave-io"
-VERSION=2.4.5
-OV=2.4.5
+VERSION=2.4.6
+OV=2.4.6
 RELEASE=1
 
 CATEGORY="Math"
-SUMMARY="Forge: Input/Output in external formats."  
+SUMMARY="Forge: Input/Output in external formats"  
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
