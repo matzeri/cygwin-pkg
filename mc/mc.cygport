@@ -1,5 +1,5 @@
 NAME="mc"
-VERSION=4.8.17
+VERSION=4.8.19
 RELEASE=1
 
 CATEGORY="Shells Utils Editors"
@@ -13,7 +13,7 @@ PATCH_URI="4.7.5.2-ncursesw-term.h.patch
 "
 
 CYGCONF_ARGS="
-	--with-screen=ncursesw
+	--with-screen=slang
 	--enable-charset
 	--enable-vfs-undelfs
 "
