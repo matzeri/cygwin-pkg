@@ -1,6 +1,6 @@
 NAME="R"
 VERSION="3.3.3"
-RELEASE=1
+RELEASE=2
 
 inherit tcl
 
@@ -50,10 +50,6 @@ src_compile() {
 		--with-libpng \
 		--with-readline \
 		--with-recommended-packages \
-		--with-system-bzlib \
-		--with-system-pcre \
-		--with-system-xz \
-		--with-system-zlib \
 		--with-tcltk \
 		--with-tcl-config=/usr/lib/tclConfig.sh \
 		--with-tk-config=/usr/lib/tkConfig.sh \
