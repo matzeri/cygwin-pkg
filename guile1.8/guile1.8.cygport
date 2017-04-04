@@ -1,0 +1,73 @@
+NAME="guile1.8"
+VERSION=1.8.8
+RELEASE=3
+CATEGORY="Interpreters"
+SUMMARY="GNU Scheme interpreter library"
+DESCRIPTION="Guile is an interpreter for Scheme, packaged as a library that
+you can link into your applications to give them their own scripting language."
+HOMEPAGE="http://www.gnu.org/software/guile/guile.html"
+SRC_URI="mirror://gnu/guile/guile-${VERSION}.tar.gz
+         mirror://gnu/guile/guile-${VERSION}.tar.gz.sig"
+SRC_DIR="guile-${VERSION}"
+PATCH_URI="
+	http://pkgs.fedoraproject.org/cgit/rpms/compat-guile18.git/plain/guile-1.8.8-cve-2016-8605.patch
+	1.8.5-export-symbols.patch
+	1.8.5-module-ldflags.patch
+"
+
+PKG_NAMES="guile1.8 libguile17 libguile1.8-devel"
+guile1_8_CONTENTS="
+	usr/bin/guile-1.8.exe
+	usr/bin/guile-tools-1.8
+	usr/share/doc/${NAME}/
+	usr/share/man/man1/guile-1.8.1*
+"
+libguile17_CONTENTS="
+	usr/bin/cygguile-17.dll
+	usr/lib/*guile-srfi*
+	usr/lib/*guilereadline-v-17*
+	usr/share/guile/1.8/
+"
+libguile1_8_devel_REQUIRES=${NAME}
+libguile1_8_devel_CONTENTS="
+	usr/bin/guile-config-1.8
+	usr/bin/guile-snarf-1.8
+	usr/include/guile/1.8/
+	usr/lib/libguile.*
+	usr/lib/pkgconfig/guile-1.8.pc
+	usr/share/aclocal/guile-1.8.m4
+"
+
+DIFF_EXCLUDES="ref test-suite"
+
+CYGCONF_ARGS="
+	--program-suffix=-1.8
+	--includedir=/usr/include/guile/1.8
+	--disable-debug-freelist \
+	--disable-debug-malloc \
+	--disable-guile-debug \
+	--disable-error-on-warning \
+	--disable-rpath \
+	--disable-static \
+	--enable-deprecated \
+	--enable-elisp \
+	--enable-networking \
+	--enable-nls \
+	--enable-posix \
+	--enable-regex \
+	--with-threads \
+	--with-modules
+"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	sed -i -e '1s|/bin/guile|&-1.8|' ${D}/usr/bin/guile-config-1.8
+
+	# avoid collisions with guile-2.0
+	mv ${D}/usr/share/aclocal/guile{,-1.8}.m4
+	rm -f ${D}/usr/share/info/*
+}
+
+KEEP_LA_FILES="module"
