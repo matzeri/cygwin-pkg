@@ -1,10 +1,9 @@
 FORGE="geometry"
 NAME="octave-geometry"
-VERSION=2.1.1
-OV=2.1.1
-RELEASE=2
+VERSION=3.0.0
+OV=3.0.0
+RELEASE=1
 
-ARCH="noarch"
 CATEGORY="Math"
 SUMMARY="Forge: Library for geometric computing"
 DESCRIPTION="${SUMMARY} 
