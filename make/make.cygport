@@ -1,6 +1,6 @@
 NAME="make"
 VERSION=4.2.1
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Devel"
 SUMMARY="The GNU version of the 'make' utility"
