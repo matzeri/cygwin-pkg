@@ -1,0 +1,75 @@
+NAME="guile"
+VERSION=2.0.14
+RELEASE=1
+CATEGORY="Interpreters"
+SUMMARY="GNU Scheme interpreter library"
+DESCRIPTION="Guile is an interpreter for Scheme, packaged as a library that
+you can link into your applications to give them their own scripting language."
+HOMEPAGE="http://www.gnu.org/software/guile/guile.html"
+SRC_URI="mirror://gnu/guile/guile-${VERSION}.tar.xz
+         mirror://gnu/guile/guile-${VERSION}.tar.xz.sig"
+SRC_DIR="guile-${VERSION}"
+PATCH_URI="
+	2.0.9-module-ldflags.patch
+	test-ffi.patch
+"
+
+PKG_NAMES="${NAME} libguile2.0_22 libguile2.0-devel"
+libguile2_0_devel_OBSOLETES="guile-devel"
+guile_CONTENTS="
+	usr/bin/guild
+	usr/bin/guile.exe
+	usr/bin/guile-tools
+	usr/share/doc/
+	usr/share/info/
+	usr/share/man/man1/guile.1*
+"
+libguile2_0_22_CONTENTS="
+	usr/bin/cygguile-2.0-22.dll
+	usr/lib/guile/2.0/
+	usr/lib/*guilereadline-v-18*
+	usr/share/guile/2.0/
+"
+libguile2_0_devel_REQUIRES=${NAME}
+libguile2_0_devel_CONTENTS="
+	usr/bin/guile-config
+	usr/bin/guile-snarf
+	usr/include/guile/2.0/
+	usr/lib/libguile-2.0.*
+	usr/lib/pkgconfig/guile-2.0.pc
+	usr/share/aclocal/guile-2.0.m4
+"
+
+DIFF_EXCLUDES="ref test-suite"
+
+CYGCONF_ARGS="
+	--disable-debug-freelist \
+	--disable-debug-malloc \
+	--disable-guile-debug \
+	--disable-error-on-warning \
+	--disable-rpath \
+	--enable-deprecated \
+	--enable-elisp \
+	--enable-networking \
+	--enable-nls \
+	--enable-posix \
+	--enable-regex \
+	--with-threads \
+	--with-modules
+"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+#	sed -i -e '1s|/bin/guile|&-2.0|' ${D}/usr/bin/guile-config-2.0
+
+	# avoid collisions
+	mv ${D}/usr/share/aclocal/guile{,-2.0}.m4
+
+	dodir /usr/share/gdb/auto-load/usr/bin
+	mv ${D}/usr/lib/libguile-2.0.dll.a-gdb.scm \
+		${D}/usr/share/gdb/auto-load/usr/bin/$(${DLLTOOL} -I ${D}/usr/lib/libguile-2.0.dll.a)-gdb.scm
+}
+
+KEEP_LA_FILES="module"
