@@ -1,8 +1,8 @@
 FORGE="stk"
 NAME="octave-stk"
-VERSION=2.3.4
-OV=2.3.4
-RELEASE=2
+VERSION=2.4.0
+OV=2.4.0
+RELEASE=1
 
 CATEGORY="Math"
 SUMMARY="Forge: Small Toolbox for Kriging"
