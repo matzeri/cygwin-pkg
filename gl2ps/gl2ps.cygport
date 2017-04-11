@@ -1,6 +1,6 @@
 NAME="gl2ps"
-VERSION=1.3.8
-RELEASE=2
+VERSION=1.4.0
+RELEASE=1
 
 CATEGORY="Libs Graphics"
 
@@ -11,13 +11,13 @@ SRC_DIR="${PN}-${PV}-source"
 
 abi=1
 
-PKG_NAMES="gl2ps libgl2ps-devel libgl2ps${abi}"
+PKG_NAMES="libgl2ps-devel libgl2ps${abi}"
 
-gl2ps_CONTENTS=''
+# gl2ps_CONTENTS=''
 libgl2ps_devel_CONTENTS='usr/include/ usr/lib/ usr/share/'
 libgl2ps1_CONTENTS='usr/bin/cyg*'
 
-gl2ps_SUMMARY="GL2PS a OpenGL to PostScript - source only"
+# gl2ps_SUMMARY="GL2PS a OpenGL to PostScript - source only"
 libgl2ps1_SUMMARY="GL2PS a OpenGL to PostScript- shared library"
 libgl2ps_devel_SUMMARY="GL2PS a OpenGL to PostScript- development"
 
