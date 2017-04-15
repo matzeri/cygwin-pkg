@@ -1,5 +1,5 @@
 NAME="less"
-VERSION=481
+VERSION=487
 RELEASE=1
 
 CATEGORY="Text"
@@ -11,9 +11,6 @@ before it starts, less starts up more quickly than text editors (for
 example, vi)."
 HOMEPAGE="http://www.greenwoodsoftware.com/less/"
 SRC_URI="http://www.greenwoodsoftware.com/less/${PN}-${PV}.tar.gz"
-
-SRC_PATCH="less-471-out_of_bounds_read.patch"
-
 
 PKG_NAMES="less"
 
