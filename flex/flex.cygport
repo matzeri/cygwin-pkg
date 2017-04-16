@@ -1,6 +1,6 @@
 NAME="flex"
-VERSION=2.6.3
-RELEASE=1
+VERSION=2.6.4
+RELEASE=0.1
 
 CATEGORY="Devel"
 
@@ -14,11 +14,16 @@ both Yacc and Bison, and is used by many programs as part of their
 build processx."
 SUMMARY="A fast lexical analyzer generator"
 HOMEPAGE="https://github.com/westes/flex"
-SRC_URI="https://github.com/westes/flex/releases/download/v${PV}/flex-${PV}.tar.lz"
+#SRC_URI="https://github.com/westes/flex/releases/download/v${PV}/flex-${PV}.tar.lz"
+SRC_URI="flex-2.6.4.git20170416.tar.lz"
+SRC_DIR="flex-2.6.4"
 
 # PATCH_URI=" "
+DIFF_EXCLUDES="flex.info* stamp-vti version.texi *po"
 
 src_compile() {
+	cd ${S}
+	cygautoreconf
 	cd ${B}
 	cygconf --disable-shared
 	cygmake
