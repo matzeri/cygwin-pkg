@@ -1,6 +1,6 @@
 NAME="hwloc"
-VERSION="1.11.6"
-RELEASE=2
+VERSION="1.11.7"
+RELEASE=1
 
 CATEGORY="Utils"
 SUMMARY="Portable Hardware Locality"
