@@ -10,6 +10,7 @@ HOMEPAGE="http://pureftpd.org/"
 SRC_URI="http://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${PV}.tar.bz2
 http://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${PV}.tar.bz2.sig"
 PATCH_URI="pure-ftpd-config.patch
+pure-ftpd-nodynamicbase.patch
 pure-ftpd-noroot.patch"
 
 CYGCONF_ARGS="--with-everything --with-rfc2640 --enable-largefile --with-tls --without-privsep"
@@ -27,7 +28,20 @@ src_compile() {
 }
 
 src_test() {
-	:
+	echo "TEST on build tree"
+	cd ${B}/src
+	./pure-ftpd.exe -B
+	if [ $? ] ; then echo "pure-ftpd started correctly" ; fi
+	PID=$( ps -a |grep ftpd | awk '{ print $1}' )
+	kill ${PID}
+	if [ $? ] ; then echo "pure-ftpd stopped correctly" ; fi
+	echo "TEST on install  tree"
+	cd ${D}/usr/sbin
+	./pure-ftpd.exe -B
+	if [ $? ] ; then echo "pure-ftpd started correctly" ; fi
+	PID=$( ps -a |grep ftpd | awk '{ print $1}' )
+	kill ${PID}
+	if [ $? ] ; then echo "pure-ftpd stopped correctly" ; fi
 }
 
 src_install() {
