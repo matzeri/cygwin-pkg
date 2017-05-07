@@ -1,7 +1,7 @@
 inherit perl
 NAME="GraphicsMagick"
 VERSION="1.3.25"
-RELEASE=1
+RELEASE=2
 
 DESCRIPTION="GraphicsMagick is the swiss army knife of image processing"
 HOMEPAGE="http://www.graphicsmagick.org/"
