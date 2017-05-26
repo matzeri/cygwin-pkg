@@ -1,7 +1,7 @@
 FORGE="stk"
 NAME="octave-stk"
-VERSION=2.4.0
-OV=2.4.0
+VERSION=2.4.2
+OV=2.4.2
 RELEASE=1
 
 CATEGORY="Math"
