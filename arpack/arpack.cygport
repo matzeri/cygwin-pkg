@@ -1,5 +1,5 @@
 NAME="arpack"
-VERSION=3.4.0
+VERSION=3.5.0
 RELEASE=1
 
 CATEGORY="Math Libs"
@@ -10,10 +10,7 @@ SRC_URI="http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/${PN}-ng-${
 SRC_DIR="arpack-ng-${PV}"
 PATCH_URI="arpack-lib0.patch"
 
-PKG_NAMES="arpack libarpack-devel libarpack0 libparpack-devel libparpack0"
-
-arpack_CONTENTS=''
-arpack_SUMMARY="${SUMMARY} - empty"  
+PKG_NAMES="libarpack-devel libarpack0 libparpack-devel libparpack0"
 
 libarpack_devel_CONTENTS='usr/lib/libarpack.dll.a usr/lib/pkgconfig usr/share'
 libarpack_devel_SUMMARY="${SUMMARY} - development libraries"
@@ -42,8 +39,6 @@ src_compile() {
 
 src_test() {
 	cd ${B}
-	cygmake -i check
-	cd ${B}/EXAMPLES
 	cygmake -i check
 }
 
