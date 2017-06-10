@@ -1,12 +1,12 @@
 NAME="librsb"
 VERSION="1.2.0"
-RELEASE="0.rc6"
+RELEASE="0.rc7"
 
 DESCRIPTION="A shared memory parallel sparse matrix library including Sparse BLAS"
 SUMMARY="A shared memory parallel sparse matrix library"
 HOMEPAGE="http://librsb.sourceforge.net/"
-SRC_URI="https://sourceforge.net/projects/librsb/files/${P}-rc6.tar.gz"
-SRC_DIR="${P}-rc6"
+SRC_URI="https://sourceforge.net/projects/librsb/files/${P}-rc7.tar.gz"
+SRC_DIR="${P}-rc7"
 
 abi="0"
 
