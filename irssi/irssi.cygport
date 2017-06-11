@@ -2,7 +2,7 @@
 inherit perl
 
 NAME="irssi"
-VERSION="1.0.2"
+VERSION="1.0.3"
 RELEASE=1
 CATEGORY="Net"
 SUMMARY="Modular text mode IRC client with Perl scripting"
@@ -10,8 +10,8 @@ DESCRIPTION="Irssi is a modular IRC client with Perl scripting. Only text-mode
 frontend is currently supported. The GTK/GNOME frontend is no
 longer being maintained."
 HOMEPAGE="http://irssi.org/"
-SRC_URI="http://irssi.org/files/irssi-${PV}.tar.xz
-http://irssi.org/files/irssi-${PV}.tar.xz.asc"
+SRC_URI="https://github.com/irssi/irssi/releases/download/${PV}/irssi-${PV}.tar.xz
+https://github.com/irssi/irssi/releases/download/${PV}/irssi-${PV}.tar.xz.asc"
 
 PKG_NAMES="irssi irssi-devel"
 
