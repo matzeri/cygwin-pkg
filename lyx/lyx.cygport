@@ -1,6 +1,6 @@
 NAME="lyx"
 VERSION=2.2.3
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Publishing Editors Graphics"
 DESCRIPTION="A document processor that encourages an approach to writing based
@@ -19,6 +19,7 @@ SRC_DIR="${PN}-${PV}"
 PATCH_URI="lyx-postinstall.patch"
 
 PKG_NAMES="lyx"
+lyx_REQUIRES="hunspell libQtSvg4"
 
 lyx_CONTENTS='usr etc'
 
