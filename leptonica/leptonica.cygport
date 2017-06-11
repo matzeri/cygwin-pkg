@@ -1,5 +1,5 @@
 NAME="leptonica"
-VERSION=1.74.1
+VERSION=1.74.4
 RELEASE=1
 
 CATEGORY="Libs"
@@ -14,7 +14,7 @@ leptonica_CONTENTS="usr/bin/*.exe "
 libleptonica_5_SUMMARY="${SUMMARY} (C runtime)"
 libleptonica_5_CONTENTS="usr/bin/cyglept-5.dll"  
 libleptonica_devel_SUMMARY="${SUMMARY} (development)"
-libleptonica_devel_CONTENTS="usr/include/ usr/lib/"
+libleptonica_devel_CONTENTS="usr/include/ usr/lib/ usr/share/doc/"
 
 
 DIFF_EXCLUDES=""
