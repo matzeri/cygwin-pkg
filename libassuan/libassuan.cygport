@@ -1,0 +1,26 @@
+NAME="libassuan"
+VERSION=2.4.3
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="GnuPG IPC library"
+DESCRIPTION="Libassuan is a small library implementing the so-called Assuan
+protocol. This protocol is used for IPC between most newer GnuPG components.
+Both, server and client side functions are provided."
+HOMEPAGE="https://www.gnupg.org/related_software/libassuan/index.en.html"
+SRC_URI="https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-${VERSION}.tar.bz2"
+PATCH_URI="2.4.3-cygwin.patch"
+
+PKG_NAMES="libassuan0 libassuan-devel"
+libassuan0_CONTENTS="
+	usr/bin/cygassuan-0.dll
+	usr/share/doc/${NAME}
+"
+libassuan_devel_CONTENTS="
+	usr/bin/libassuan-config
+	usr/include/assuan.h
+	usr/lib/libassuan.dll.a
+	usr/share/aclocal/libassuan.m4
+	usr/share/info/assuan.info.gz
+"
+
+MAKEOPTS+=" no_undefined=-no-undefined"

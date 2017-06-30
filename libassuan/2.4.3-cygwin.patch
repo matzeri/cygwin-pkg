@@ -1,0 +1,12 @@
+--- origsrc/libassuan-2.4.3/configure.ac	2016-07-14 03:04:37.000000000 -0500
++++ src/libassuan-2.4.3/configure.ac	2017-06-28 16:25:45.641292100 -0500
+@@ -346,6 +346,9 @@ AC_CHECK_MEMBER(struct cmsghdr.cmsg_len,
+ #include <sys/uio.h>
+ #endif
+ #include <unistd.h>
++#ifdef __CYGWIN__
++#error no fd passing on Cygwin
++#endif
+        ])
+ if test "$use_descriptor_passing" = "yes"; then
+  AC_DEFINE(USE_DESCRIPTOR_PASSING, 1,
