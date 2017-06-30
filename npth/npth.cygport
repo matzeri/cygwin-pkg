@@ -1,0 +1,25 @@
+NAME="npth"
+VERSION=1.5
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="Portable threads library"
+DESCRIPTION="nPth is a library to provide the GNU Pth API and thus a non-
+preemptive threads implementation. In contrast to GNU Pth, it is based on
+the system's standard threads implementation."
+HOMEPAGE="https://www.gnupg.org/related_software/npth/index.en.html"
+SRC_URI="https://www.gnupg.org/ftp/gcrypt/npth/npth-${VERSION}.tar.bz2"
+
+PKG_NAMES="libnpth0 libnpth-devel"
+libnpth0_CONTENTS="
+	usr/bin/cygnpth-0.dll
+	usr/share/doc/${NAME}
+"
+libnpth_devel_CONTENTS="
+	usr/bin/npth-config
+	usr/include/npth.h
+	usr/lib/libnpth.dll.a
+	usr/share/aclocal/npth.m4
+"
+
+MAKEOPTS+=" no_undefined=-no-undefined"
+DIFF_EXCLUDES="npth.h"
