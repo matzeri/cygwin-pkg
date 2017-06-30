@@ -1,0 +1,42 @@
+--- origsrc/pinentry-1.0.0/gnome3/Makefile.am	2016-04-14 09:39:51.000000000 -0500
++++ src/pinentry-1.0.0/gnome3/Makefile.am	2017-06-29 02:03:20.084229300 -0500
+@@ -32,6 +32,6 @@ endif
+ AM_CPPFLAGS = $(COMMON_CFLAGS) $(GNOME3CFLAGS) \
+ 	$(ncurses_include) -I$(top_srcdir)/secmem -I$(top_srcdir)/pinentry
+ LDADD = ../pinentry/libpinentry.a ../secmem/libsecmem.a \
+-	$(COMMON_LIBS) $(LIBCAP) $(GNOME3LIBS) $(libcurses)
++	$(COMMON_LIBS) $(LIBCAP) $(GNOME3LIBS) $(libcurses) $(LIBICONV)
+ 
+ pinentry_gnome3_SOURCES = pinentry-gnome3.c
+--- origsrc/pinentry-1.0.0/gtk+-2/Makefile.am	2016-04-14 09:39:51.000000000 -0500
++++ src/pinentry-1.0.0/gtk+-2/Makefile.am	2017-06-29 02:02:29.062185500 -0500
+@@ -32,6 +32,6 @@ endif
+ AM_CPPFLAGS = $(COMMON_CFLAGS) $(GTK2CFLAGS) $(ncurses_include) \
+ 	-I$(top_srcdir)/secmem -I$(top_srcdir)/pinentry
+ LDADD = ../pinentry/libpinentry.a ../secmem/libsecmem.a \
+-	$(COMMON_LIBS) $(LIBCAP) $(GTK2LIBS) $(libcurses)
++	$(COMMON_LIBS) $(LIBCAP) $(GTK2LIBS) $(libcurses) $(LIBICONV)
+ 
+ pinentry_gtk_2_SOURCES = pinentry-gtk-2.c
+--- origsrc/pinentry-1.0.0/qt/Makefile.am	2016-11-03 12:59:10.000000000 -0500
++++ src/pinentry-1.0.0/qt/Makefile.am	2017-06-29 02:04:09.669447300 -0500
+@@ -40,7 +40,7 @@ AM_CPPFLAGS = $(COMMON_CFLAGS) \
+ AM_CXXFLAGS = $(PINENTRY_QT_CFLAGS)
+ pinentry_qt_LDADD = \
+ 	../pinentry/libpinentry.a $(top_builddir)/secmem/libsecmem.a \
+-	$(COMMON_LIBS) $(PINENTRY_QT_LIBS) $(libcurses) $(LIBCAP)
++	$(COMMON_LIBS) $(PINENTRY_QT_LIBS) $(libcurses) $(LIBICONV) $(LIBCAP)
+ 
+ BUILT_SOURCES = \
+ 	pinentryconfirm.moc pinentrydialog.moc
+--- origsrc/pinentry-1.0.0/w32/Makefile.am	2016-04-14 09:39:51.000000000 -0500
++++ src/pinentry-1.0.0/w32/Makefile.am	2017-06-29 02:06:33.906651400 -0500
+@@ -35,7 +35,7 @@ pinentry_w32_SOURCES = main.c pinentry-w
+ pinentry_w32_LDFLAGS = -mwindows
+ pinentry_w32_LDADD = pinentry-w32.o \
+ 	../pinentry/libpinentry.a ../secmem/libsecmem.a \
+-        $(COMMON_LIBS)
++        $(COMMON_LIBS) $(LIBICONV)
+ 
+ pinentry-w32.o: pinentry-w32.rc resource.h $(logos)
+ 	$(WINDRES) -I.. -v -o $@ $<
