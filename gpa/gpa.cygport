@@ -1,0 +1,18 @@
+inherit gnome2
+
+NAME="gpa"
+VERSION=0.9.10
+RELEASE=1
+CATEGORY="Utils"
+SUMMARY="GnuPG GTK+ frontend"
+DESCRIPTION="The GNU Privacy Assistant (GPA) is a GTK user interface for the
+GnuPG  (GNU Privacy Guard)."
+HOMEPAGE="https://www.gnupg.org/software/gpa/"
+
+SRC_URI="https://www.gnupg.org/ftp/gcrypt/gpa/${PN}-${PV}.tar.bz2
+         https://www.gnupg.org/ftp/gcrypt/gpa/${PN}-${PV}.tar.bz2.sig"
+SRC_DIR="${PN}-${PV}"
+
+PATCH_URI="not-mingw.patch"
+
+MAKEOPTS+=" mkinstalldirs=\$(top_srcdir)/mkinstalldirs"

@@ -1,0 +1,11 @@
+--- origsrc/gpa-0.9.10/src/hidewnd.c	2013-12-19 17:43:50.000000000 +0100
++++ src/hidewnd.c	2017-06-30 11:41:47.028135800 +0200
+@@ -21,7 +21,7 @@
+ #include <config.h>
+ 
+ /* This module is only used in this environment */
+-#if defined(__MINGW32__) || defined(__CYGWIN__)
++#if defined(__MINGW32__) 
+ #include <stdio.h>
+ 
+ #include <windows.h>
