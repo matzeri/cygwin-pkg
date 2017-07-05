@@ -2,7 +2,7 @@ FORGE="parallel"
 NAME="octave-parallel"
 VERSION=3.1.1
 OV=3.1.1
-RELEASE=2
+RELEASE=3
 
 CATEGORY="Math"
 SUMMARY="Forge : Parallel execution package"
