@@ -1,7 +1,7 @@
 FORGE="generate_html"
 NAME="octave-generate_html"
-VERSION=0.3.0
-OV=0.3.0
+VERSION=0.3.1
+OV=0.3.1
 RELEASE=1
 
 ARCH="noarch"
