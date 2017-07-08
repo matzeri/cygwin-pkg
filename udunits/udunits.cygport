@@ -1,12 +1,12 @@
 NAME="udunits"
-VERSION=2.2.20
+VERSION=2.2.25
 RELEASE=1
 
 DESCRIPTION="The UDUNITS-2 package provides support for units of physical quantities "
 HOMEPAGE="http://www.unidata.ucar.edu/software/udunits/"
 SRC_URI="http://www.unidata.ucar.edu/downloads/udunits/UDUNITS-2-${PV}.tar.gz" 
 PATCH_URI="udunits-undefined.patch"
-SRC_DIR="UDUNITS-2-2.2.20"
+SRC_DIR="UDUNITS-2-${PV}"
 
 abi=0
 
