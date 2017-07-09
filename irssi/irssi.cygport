@@ -2,7 +2,7 @@
 inherit perl
 
 NAME="irssi"
-VERSION="1.0.3"
+VERSION="1.0.4"
 RELEASE=1
 CATEGORY="Net"
 SUMMARY="Modular text mode IRC client with Perl scripting"
@@ -29,7 +29,7 @@ src_compile() {
         cygautoreconf
         cd ${B}
         cygconf
-        cygmake CFLAGS="-g ${CFLAGS}"
+        cygmake CFLAGS="-ggdb ${CFLAGS}"
 }
 
 src_install() {
