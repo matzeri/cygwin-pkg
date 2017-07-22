@@ -1,8 +1,8 @@
 inherit python-distutils.cygclass perl
 
 NAME="gdal"
-VERSION=2.1.3
-RELEASE=1
+VERSION=2.2.1
+RELEASE=2
 
 CATEGORY="Science"
 SUMMARY="Geospatial Data Abstraction Library "
@@ -70,7 +70,6 @@ python_gdal_CATEGORY="Science Python"
 python_gdal_SUMMARY="Geospatial Data Abstraction Library - (Python)"
 python_gdal_CONTENTS="
   usr/bin/*.py
-  usr/bin/*.dox
   usr/lib/python2.7
   usr/share/man/man1/gdal_calc.1.gz
   usr/share/man/man1/gdal_edit.1.gz
@@ -84,6 +83,7 @@ python_gdal_CONTENTS="
   usr/share/man/man1/gdal2tiles.1.gz
   usr/share/man/man1/gdalcompare.1.gz
   usr/share/man/man1/gdalmove.1.gz
+  usr/share/man/man1/ogrmerge.1.gz
   usr/share/man/man1/pct2rgb.1.gz
   usr/share/man/man1/rgb2pct.1.gz
 "
@@ -97,6 +97,8 @@ src_compile() {
         cd ${B}
 	./autogen.sh	
 	unset CC CXX
+	CFLAGS="-gdwarf ${CFLAGS}"
+	CXXFLAGS="-gdwarf ${CXXFLAGS}"
         cygconf --with-static-proj4 --with-python --with-perl --without-jasper
 	cygmake 
 		
