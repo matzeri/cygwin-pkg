@@ -9,6 +9,18 @@
  test $have_w32_system = yes && pinentry_w32=yes
  AM_CONDITIONAL(BUILD_PINENTRY_W32, test "$pinentry_w32" = "yes")
  
+--- origsrc/pinentry-1.0.0/pinentry-wrapper	2017-07-11 13:21:07.322322700 -0500
++++ src/pinentry-1.0.0/pinentry-wrapper	2017-07-11 13:25:35.921442500 -0500
+@@ -82,6 +82,9 @@ then
+ elif [ -n "$DISPLAY" -a -x /usr/bin/pinentry-qt ]
+ then
+ 	export PINENTRY_BINARY="/usr/bin/pinentry-qt"
++elif [ -x /usr/bin/pinentry-w32 ]
++then
++	export PINENTRY_BINARY="/usr/bin/pinentry-w32"
+ # pinentry-curses is installed by default
+ else
+ 	export PINENTRY_BINARY="/usr/bin/pinentry-curses"
 --- origsrc/pinentry-1.0.0/w32/main.c	2016-11-07 03:55:43.000000000 -0600
 +++ src/pinentry-1.0.0/w32/main.c	2017-06-29 02:06:13.671512800 -0500
 @@ -19,6 +19,7 @@
