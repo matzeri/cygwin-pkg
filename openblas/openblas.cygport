@@ -1,5 +1,5 @@
 NAME="openblas"
-VERSION=0.2.16
+VERSION=0.2.20
 RELEASE=1
 
 CATEGORY="Math"
@@ -7,14 +7,11 @@ DESCRIPTION="OpenBLAS is an optimized BLAS library based on GotoBLAS2"
 SUMMARY="OpenBLAS is an optimized BLAS library"
 HOMEPAGE="http://xianyi.github.com/OpenBLAS/"
 
-SRC_URI="https://github.com/xianyi/OpenBLAS/archive/${PN}-${PV}.tar.gz"
+SRC_URI="https://github.com/xianyi/OpenBLAS/archive/v${PV}.tar.gz"
 SRC_DIR="OpenBLAS-${PV}"
 
 # PKG_NAMES="openblas libopenblas libopenblas-devel"
-PKG_NAMES="openblas libopenblas"
-
-openblas_SUMMARY="OpenBLAS is an optimized BLAS library (source only)"
-openblas_CONTENTS=""
+PKG_NAMES="libopenblas"
 
 libopenb_SUMMARY="OpenBLAS is an optimized BLAS library (dynamic library)"
 libopenblas_CONTENTS="usr/bin/*.dll"
