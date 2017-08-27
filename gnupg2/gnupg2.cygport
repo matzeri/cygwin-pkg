@@ -1,5 +1,5 @@
 NAME="gnupg2"
-VERSION=2.1.21
+VERSION=2.1.23
 RELEASE=1
 CATEGORY="Utils"
 SUMMARY="GNU tool for secure communication and data storage"
@@ -21,6 +21,6 @@ src_compile() {
 	cygautoreconf
 	sed -i -e '/^development_version=/s/yes/no/' configure
 	cd ${B}
-	cygconf
+	cygconf --enable-gpg-is-gpg2
 	cygmake
 }
