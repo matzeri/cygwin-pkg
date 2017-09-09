@@ -1,0 +1,11 @@
+--- origsrc/hdf5-1.8.19/config/gnu-flags	2017-06-15 17:47:13.000000000 +0200
++++ src/hdf5-1.8.19/config/gnu-flags	2017-09-09 21:51:48.995960400 +0200
+@@ -92,7 +92,7 @@ case "$cc_vendor-$cc_version" in
+     esac
+ 
+     # General
+-    H5_CFLAGS="$H5_CFLAGS $arch -std=c99 -pedantic -Wall -W -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline"
++    H5_CFLAGS="$H5_CFLAGS $arch  -pedantic -Wall -W -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline"
+ 
+     # Production
+     case "$cc_vendor-$cc_version" in

@@ -1,5 +1,5 @@
 NAME="hdf5"
-VERSION=1.8.18
+VERSION=1.8.19
 RELEASE=1
 
 DESCRIPTION="Hierarchical Data Format ver.5 API interface"
@@ -7,7 +7,7 @@ HOMEPAGE="http://www.hdfgroup.org/HDF5/"
 SRC_DIR=${PN}-${PV}
 SRC_URI="ftp://ftp.hdfgroup.org/HDF5/current/src/${SRC_DIR}.tar.bz2"
 
-PKG_NAMES="hdf5 libhdf5_10 libhdf5hl_10 libhdf5cpp_13 libhdf5hlcpp_11 libhdf5-devel"
+PKG_NAMES="hdf5 libhdf5_10 libhdf5hl_10 libhdf5cpp_14 libhdf5hlcpp_11 libhdf5-devel"
 
 hdf5_CATEGORY="Archive Utils"
 hdf5_SUMMARY="HDF5 Hierarchical Data Format"
@@ -23,10 +23,10 @@ libhdf5hl_10_SUMMARY="Hierarchical Data Format - (HL runtime)"
 libhdf5hl_10_CONTENTS="
  usr/bin/cyghdf5_hl-10.dll"
 
-libhdf5cpp_13_CATEGORY="Libs Archive Utils"
-libhdf5cpp_13_SUMMARY="Hierarchical Data Format - (C++ runtime)"
-libhdf5cpp_13_CONTENTS="
- usr/bin/cyghdf5_cpp-13.dll"
+libhdf5cpp_14_CATEGORY="Libs Archive Utils"
+libhdf5cpp_14_SUMMARY="Hierarchical Data Format - (C++ runtime)"
+libhdf5cpp_14_CONTENTS="
+ usr/bin/cyghdf5_cpp-14.dll"
 
 libhdf5hlcpp_11_CATEGORY="Libs Archive Utils"
 libhdf5hlcpp_11_SUMMARY="Hierarchical Data Format - (HL C++ runtime)"
