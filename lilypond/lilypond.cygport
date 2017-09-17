@@ -1,6 +1,6 @@
 # lilypond.cygport
 NAME="lilypond"
-VERSION=2.19.59
+VERSION=2.19.65
 RELEASE=1
 SUMMARY="A typesetting system for music notation"
 DESCRIPTION="LilyPond is an automated music engraving system. It formats music beautifully and automatically, and has a friendly syntax for its input files"
@@ -9,7 +9,7 @@ CATEGORY="Interpreters"
 MAJOR_VERSION="$(echo ${VERSION} | cut -d '.' -f 1)"
 MINOR_VERSION="$(echo ${VERSION} | cut -d '.' -f 2)"
 
-PATCH_URI="issue320830043_1_10001.diff"
+#PATCH_URI=""
 
 HOMEPAGE="http://www.lilypond.org/"
 SRC_URI="http://download.linuxaudio.org/${PN}/sources/v${MAJOR_VERSION}.${MINOR_VERSION}/${P}.tar.gz
