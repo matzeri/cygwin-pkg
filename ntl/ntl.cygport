@@ -1,25 +1,25 @@
 NAME="ntl"
-VERSION=8.1.2
+VERSION=10.5.0
 RELEASE=1
 
 CATEGORY="Math"
-SUMMARY="NTL: A Library for doing Number Theory "
-DESCRIPTION="NTL: A Library for doing Number Theory"
+SUMMARY="A Library for doing Number Theory"
+DESCRIPTION="A Library for doing Number Theory"
 
 HOMEPAGE="http://www.shoup.net/ntl/"
 SRC_URI="http://www.shoup.net/ntl/${PN}-${PV}.tar.gz"
 
 PATCH_URI="ntl-undefined.patch"
 
-PKG_NAMES="libntl9 libntl-devel"
+PKG_NAMES="libntl35 libntl-devel"
 
-libntl9_CONTENTS="usr/bin"
-libntl9_SUMMARY="${SUMMARY} - runtime"
+libntl35_CONTENTS="usr/bin/cygntl-35.dll"
+libntl35_SUMMARY="${SUMMARY} - runtime"
 
 libntl_devel_CONTENTS="usr/lib usr/include usr/share"
 libntl_devel_SUMMARY="${SUMMARY} - devel"
 
-DIFF_EXCLUDES="config.h makefile"
+DIFF_EXCLUDES="config.h makefile HAVE*.h"
 KEEP_LA_FILES="none"
 
 
@@ -33,7 +33,8 @@ src_compile() {
 
 src_install() {
         cd ${B}/src
-        cyginstall PREFIX=${D}/usr
+        cyginstall 
+        cd ${B}
 }
 
 src_test() {

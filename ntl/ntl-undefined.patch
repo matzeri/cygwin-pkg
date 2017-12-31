@@ -1,11 +1,11 @@
---- origsrc/ntl-8.1.2/src/mfile	2015-01-31 14:07:38.000000000 +0100
-+++ src/mfile	2015-04-07 22:23:58.164852800 +0200
-@@ -361,7 +361,7 @@ setup4:
+--- origsrc/ntl-10.5.0/src/mfile	2017-07-07 17:05:14.000000000 +0200
++++ src/mfile	2017-12-28 12:25:48.361012000 +0100
+@@ -342,7 +342,7 @@ setup4:
  ntl.a:	$(OBJ) 
  @{LSTAT}	$(AR) $(ARFLAGS) ntl.a $(OBJ) #LSTAT
  @{LSTAT}	- $(RANLIB) ntl.a #LSTAT
--@{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) -rpath $(LIBDIR) -version-info `cat VERSION_INFO` #LSHAR
-+@{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) -rpath $(LIBDIR) -no-undefined -version-info `cat VERSION_INFO` #LSHAR
+-@{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) $(LIBTOOL_LINK_FLAGS) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) -rpath $(LIBDIR) -version-info `cat VERSION_INFO` #LSHAR
++@{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) $(LIBTOOL_LINK_FLAGS) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) -rpath $(LIBDIR) -no-undefined -version-info `cat VERSION_INFO` #LSHAR
  
  @{LSTAT}LCOMP= #LSTAT
  @{LSHAR}LCOMP=$(LIBTOOL) --tag=CXX --mode=compile #LSHAR
