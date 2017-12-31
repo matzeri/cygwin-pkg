@@ -1,22 +1,23 @@
 NAME="flint"
-VERSION=2.4.5
+VERSION=2.5.2
 RELEASE=1
 
 CATEGORY="Math"
-SUMMARY="FLINT: Fast Library for Number Theory"
-DESCRIPTION="FLINT: Fast Library for Number Theory"
+SUMMARY="Fast Library for Number Theory"
+DESCRIPTION="Fast Library for Number Theory"
 
 HOMEPAGE="http://flintlib.org/"
 SRC_URI="http://flintlib.org/${PN}-${PV}.tar.gz"
 
 PATCH_URI="
 flint-cygwin.patch
-NTL-interface.patch"
+configure-prefix.patch
+t-NTL-interface.patch"
 
-PKG_NAMES="libflint libflint-devel"
+PKG_NAMES="libflint13 libflint-devel"
 
-libflint_CONTENTS="usr/bin"
-libflint_SUMMARY="${SUMMARY} - runtime"
+libflint13_CONTENTS="usr/bin/cygflint-13.dll"
+libflint13_SUMMARY="${SUMMARY} - runtime"
 
 libflint_devel_CONTENTS="usr/lib usr/include usr/share"
 libflint_devel_SUMMARY="${SUMMARY} - devel"
@@ -30,6 +31,7 @@ src_compile() {
 	lndirs
         cd ${B}
         ${S}/configure  --disable-static \
+        --enable-shared \
 	--with-gmp \
 	--with-mpfr \
 	--with-blas \
