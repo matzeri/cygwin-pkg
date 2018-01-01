@@ -1,0 +1,22 @@
+--- origsrc/GraphicsMagick-1.3.27a/magick/version.h	2017-12-11 15:14:11.000000000 +0100
++++ src/GraphicsMagick-1.3.27a/magick/version.h	2018-01-01 18:31:08.752570400 +0100
+@@ -36,7 +36,7 @@ extern "C" {
+ #define MagickPackageName "GraphicsMagick"
+ #define MagickCopyright  "Copyright (C) 2002-2017 GraphicsMagick Group.\nAdditional copyrights and licenses apply to this software.\nSee http://www.GraphicsMagick.org/www/Copyright.html for details."
+ #define MagickLibVersion  0x201701
+-#define MagickLibVersionText  "1.3.27a"
++#define MagickLibVersionText  "1.3.27"
+ #define MagickLibVersionNumber 20,17,1
+ #define MagickChangeDate   "20171211"
+ #define MagickReleaseDate  "2017-12-11"
+--- origsrc/GraphicsMagick-1.3.27a/version.sh	2017-12-11 15:13:34.000000000 +0100
++++ src/GraphicsMagick-1.3.27a/version.sh	2018-01-01 18:27:03.513543500 +0100
+@@ -17,7 +17,7 @@ PACKAGE_BUGREPORT='graphicsmagick-bugs@l
+ 
+ # Package base version.  This is is the numeric version suffix applied to
+ # PACKAGE_NAME (e.g. "1.2").
+-PACKAGE_VERSION='1.3.27a'
++PACKAGE_VERSION='1.3.27'
+ 
+ #
+ # Package name plus version string.
