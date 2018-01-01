@@ -1,5 +1,5 @@
 NAME="glpk"
-VERSION=4.63
+VERSION=4.64
 RELEASE=1
 
 DESCRIPTION="The GNU Linear Programming Kit package is intended for solving large-scale linear programming problems"
