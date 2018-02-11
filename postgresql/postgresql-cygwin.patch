@@ -1,7 +1,7 @@
---- origsrc/postgresql-9.3.3/CYGWIN-PATCHES/README	1970-01-01 01:00:00.000000000 +0100
-+++ CYGWIN-PATCHES/README	2014-03-13 17:13:11.085294200 +0100
-@@ -0,0 +1,45 @@
-+postgresql-9.3.x
+--- /dev/null	2017-11-18 08:28:16.000000000 +0100
++++ CYGWIN-PATCHES/README	2017-11-18 08:23:10.760758800 +0100
+@@ -0,0 +1,343 @@
++postgresql-9.x
 +------------------------------------------
 +PostgreSQL is an advanced Object-Relational database management system
 +(DBMS) that supports almost all SQL constructs (including transactions,
@@ -46,8 +46,306 @@
 +    pg_ctl start -D /usr/share/postgresql/data -l /var/log/postgresql.log
 +    createdb
 +    psql
---- origsrc/postgresql-9.3.3/CYGWIN-PATCHES/postgresql.initd	1970-01-01 01:00:00.000000000 +0100
-+++ CYGWIN-PATCHES/postgresql.initd	2014-02-24 23:06:15.262726400 +0100
++
++#############################################################
++
++Additional install notes
++
++#############################################################
++
++Author: Henry S. Thompson.
++29 Oct 2017
++
++
++I was eventually able to follow a modified version of
++"For the impatient: install as service (hard)" from
++/usr/share/doc/Cygwin/postgresql.README, as follows:
++
++* Dump your old database, if you had a previous installation
++
++* Adjust any other (e.g. PATH) settings in /etc/rc.d/init.d/postgresql
++
++* If you had an old installation, move the data directory
++  (e.g. /usr/share/postgresql/data) elsewhere, or at least save
++  .../data/postgresql.conf somewhere before you delete .../data
++
++* If you don't already have cygserver running as a service:
++    > /usr/bin/cygserver-config
++    > cygrunsrv --start cygserver
++
++* Initialise Postgresql
++    > /etc/rc.d/init.d/postgresql initdb # in an elevated shell
++     The files belonging to this database system will be owned by user "[you]".
++     This user must also own the server process.
++
++     The database cluster will be initialized with locale "C".
++     The default text search configuration will be set to "english".
++
++     Data page checksums are disabled.
++
++     creating directory /usr/share/postgresql/data ... ok
++     creating subdirectories ... ok
++     selecting default max_connections ... 30
++     selecting default shared_buffers ... 128MB
++     selecting dynamic shared memory implementation ... posix
++     creating configuration files ... ok
++     running bootstrap script ... ok
++     performing post-bootstrap initialization ... ok
++     syncing data to disk ... ok
++
++     WARNING: enabling "trust" authentication for local connections
++     You can change this by editing pg_hba.conf or using the option -A, or
++     --auth-local and --auth-host, the next time you run initdb.
++
++     [Success. You can now start the database server using:
++
++	 /usr/sbin/pg_ctl -D /usr/share/postgresql/data -l logfile start # ignore this!]
++
++     done.
++
++* If you had a previous install, do a diff between your saved
++  postgresql.conf and the new .../data/postgresql.conf and copy over
++  any substantive changes you had made and wish to keep
++
++* Install as a service
++  > /etc/rc.d/init.d/postgresql install
++   - cygserver OK - Installing PostgreSQL daemon: done.
++  > /etc/rc.d/init.d/postgresql start
++
++* Cleanup up the initial odd role situation
++  > psql -U SYSTEM postgres
++   postgres=# ALTER ROLE "SYSTEM" WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION;
++   postgres=# CREATE ROLE [yourCygwinLogin];
++   postgres=# ALTER ROLE [yourCygwinLogin] WITH SUPERUSER INHERIT NOCREATEROLE CREATEDB LOGIN NOREPLICATION;
++   postgres=# \q
++
++* Create a database for yourself
++  > psql -U [yourCygwinLogin] postgres
++   postgres=# CREATE DATABASE xyzzy WITH TEMPLATE=template0 OWNER=[yourCygwinLogin] ENCODING=....;
++   postgres=# \q
++  > psql -U [yourCygwinLogin] xyzzy
++   [off you go]
++
++
++#############################################################
++
++Author: Keith Christian 
++Date: 30 Oct 2017 
++
++
++Commands (only) which run in the verbose section below:
++
++		$ locate postgresql.conf
++		$ vi /etc/rc.d/init.d/postgresql
++		$ cp -pv /etc/rc.d/init.d/postgresql /etc/rc.d/init.d/orig.postgresql
++		$ vi /etc/rc.d/init.d/postgresql
++		$ diff -w /etc/rc.d/init.d/orig.postgresql /etc/rc.d/init.d/postgresql
++		$ cygrunsrv -L
++		$ cygrunsrv -Q cygserver
++		$ /etc/rc.d/init.d/postgresql initdb
++		$ /etc/rc.d/init.d/postgresql install
++		$ /etc/rc.d/init.d/postgresql start
++		$ pgrep -fl postgres
++		$ handle -a postgres
++		$ psql -U SYSTEM postgres
++		postgres=# ALTER ROLE "SYSTEM" WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION;
++		postgres=# CREATE ROLE keith;
++		postgres=# ALTER ROLE keith WITH SUPERUSER INHERIT NOCREATEROLE CREATEDB LOGIN NOREPLICATION;
++		postgres=# \q
++		$ psql -U keith postgres
++		postgres=# \l
++		postgres=# CREATE DATABASE kcdb WITH TEMPLATE=template0 OWNER=keith;
++		postgres=# \q
++		$ psql -U keith kcdb
++		kcdb=# \l
++		kcdb=# \d+
++		kcdb=# \l+
++		kcdb=# select now();
++		kcdb=# select version();
++		kcdb=# select 1.00/0.3;
++		kcdb=# \q
++
++Mon Oct 30 16:03:07 pty2 (keith@somemachine) ~>locate postgresql.conf
++/cygdrive/c/cygwin/usr/share/amanda/example/amanda-client-postgresql.conf
++/cygdrive/c/cygwin/usr/share/postgresql/postgresql.conf.sample
++
++Mon Oct 30 16:06:02 pty2 (keith@somemachine) ~>vi /etc/rc.d/init.d/postgresql
++
++Mon Oct 30 16:07:07 pty2 (keith@somemachine) ~>cp -pv /etc/rc.d/init.d/postgresql /etc/rc.d/init.d/orig.postgresql
++'/etc/rc.d/init.d/postgresql' -> '/etc/rc.d/init.d/orig.postgresql'
++
++Mon Oct 30 16:07:15 pty2 (keith@somemachine) ~>vi /etc/rc.d/init.d/postgresql
++
++Mon Oct 30 16:17:37 pty2 (keith@somemachine) ~>diff -w /etc/rc.d/init.d/orig.postgresql /etc/rc.d/init.d/postgresql
++32c32
++< DAEMON="$progdir/$prog.exe"
++---
++> DAEMON="$progdir/$prog"
++
++
++Mon Oct 30 16:08:44 pty2 (keith@somemachine) ~>cygrunsrv -L
++BrlAPI
++cygserver
++
++Mon Oct 30 16:09:10 pty2 (keith@somemachine) ~>cygrunsrv -Q cygserver
++Service             : cygserver
++Display name        : CYGWIN cygserver
++Current State       : Running
++Controls Accepted   : Stop
++Command             : /usr/sbin/cygserver
++
++
++Mon Oct 30 16:09:22 pty2 (keith@somemachine) ~>/etc/rc.d/init.d/postgresql initdb
++The files belonging to this database system will be owned by user "keith".
++This user must also own the server process.
++
++The database cluster will be initialized with locale "C".
++The default text search configuration will be set to "english".
++
++Data page checksums are disabled.
++
++creating directory /usr/share/postgresql/data ... ok
++creating subdirectories ... ok
++selecting default max_connections ... 30
++selecting default shared_buffers ... 128MB
++selecting dynamic shared memory implementation ... posix
++creating configuration files ... ok
++running bootstrap script ... ok
++performing post-bootstrap initialization ... ok
++syncing data to disk ... ok
++
++WARNING: enabling "trust" authentication for local connections
++You can change this by editing pg_hba.conf or using the option -A, or
++--auth-local and --auth-host, the next time you run initdb.
++
++Success. You can now start the database server using:
++
++    /usr/sbin/pg_ctl -D /usr/share/postgresql/data -l logfile start
++
++done.
++
++Mon Oct 30 16:10:40 pty2 (keith@somemachine) ~>/etc/rc.d/init.d/postgresql install
++- cygserver OK - Installing PostgreSQL daemon: done.
++
++Mon Oct 30 16:11:41 pty2 (keith@somemachine) ~>/etc/rc.d/init.d/postgresql start
++Starting PostgreSQL: - cygserver OK - done.
++
++Mon Oct 30 16:11:54 pty2 (keith@somemachine) ~>pgrep -fl postgres
++13248 postgres
++31360 postgres
++31524 postgres
++17572 postgres
++31372 postgres
++10520 postgres
++
++Mon Oct 30 16:12:02 pty2 (keith@somemachine) ~>handle -a postgres
++
++Nthandle v4.1 - Handle viewer
++Copyright (C) 1997-2016 Mark Russinovich
++Sysinternals - www.sysinternals.com
++
++postgres.exe       pid: 29628  type: File           124: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 29628  type: File           12C: C:\cygwin\usr\share\postgresql\data
++postgres.exe       pid: 29628  type: File           130: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 31360  type: File           124: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 31360  type: File           12C: C:\cygwin\usr\share\postgresql\data
++postgres.exe       pid: 31360  type: File           130: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 10520  type: File           124: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 10520  type: File           12C: C:\cygwin\usr\share\postgresql\data
++postgres.exe       pid: 10520  type: File           130: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 17572  type: File           124: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 17572  type: File           12C: C:\cygwin\usr\share\postgresql\data
++postgres.exe       pid: 17572  type: File           130: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 31372  type: File           124: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 31372  type: File           12C: C:\cygwin\usr\share\postgresql\data
++postgres.exe       pid: 31372  type: File           130: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 31372  type: File           1A4: C:\cygwin\usr\share\postgresql\data\global\1262
++postgres.exe       pid: 13248  type: File           124: C:\cygwin\var\log\postgresql.log
++postgres.exe       pid: 13248  type: File           12C: C:\cygwin\usr\share\postgresql\data
++postgres.exe       pid: 13248  type: File           130: C:\cygwin\var\log\postgresql.log
++
++Mon Oct 30 16:12:09 pty2 (keith@somemachine) ~>psql -U SYSTEM postgres
++psql (9.6.5)
++Type "help" for help.
++
++postgres=# ALTER ROLE "SYSTEM" WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION;
++ALTER ROLE
++postgres=# CREATE ROLE keith;
++CREATE ROLE
++postgres=# ALTER ROLE keith WITH SUPERUSER INHERIT NOCREATEROLE CREATEDB LOGIN NOREPLICATION;
++ALTER ROLE
++postgres=# \q
++
++Mon Oct 30 16:14:15 pty2 (keith@somemachine) ~>psql -U keith postgres
++psql (9.6.5)
++Type "help" for help.
++
++postgres=# \l
++                          List of databases
++   Name    | Owner  | Encoding  | Collate | Ctype | Access privileges
++-----------+--------+-----------+---------+-------+-------------------
++ postgres  | SYSTEM | SQL_ASCII | C       | C     |
++ template0 | SYSTEM | SQL_ASCII | C       | C     | =c/SYSTEM        +
++           |        |           |         |       | SYSTEM=CTc/SYSTEM
++ template1 | SYSTEM | SQL_ASCII | C       | C     | =c/SYSTEM        +
++           |        |           |         |       | SYSTEM=CTc/SYSTEM
++(3 rows)
++
++postgres=# CREATE DATABASE kcdb WITH TEMPLATE=template0 OWNER=keith;
++CREATE DATABASE
++postgres=# \q
++
++Mon Oct 30 16:21:38 pty2 (keith@somemachine) ~>psql -U keith kcdb
++psql (9.6.5)
++Type "help" for help.
++
++kcdb=# \l
++                            List of databases
++   Name    |   Owner    | Encoding  | Collate | Ctype | Access privileges
++-----------+------------+-----------+---------+-------+-------------------
++ kcdb      | keith      | SQL_ASCII | C       | C     |
++ postgres  | SYSTEM     | SQL_ASCII | C       | C     |
++ template0 | SYSTEM     | SQL_ASCII | C       | C     | =c/SYSTEM        +
++           |            |           |         |       | SYSTEM=CTc/SYSTEM
++ template1 | SYSTEM     | SQL_ASCII | C       | C     | =c/SYSTEM        +
++           |            |           |         |       | SYSTEM=CTc/SYSTEM
++(4 rows)
++
++kcdb=# \l+
++                                                              List of databases
++   Name    |   Owner    | Encoding  | Collate | Ctype | Access privileges |  Size   | Tablespace |                Description
++-----------+------------+-----------+---------+-------+-------------------+---------+------------+--------------------------------------------
++ kcdb      | keith      | SQL_ASCII | C       | C     |                   | 7245 kB | pg_default |
++ postgres  | SYSTEM     | SQL_ASCII | C       | C     |                   | 7245 kB | pg_default | default administrative connection database
++ template0 | SYSTEM     | SQL_ASCII | C       | C     | =c/SYSTEM        +| 7153 kB | pg_default | unmodifiable empty database
++           |            |           |         |       | SYSTEM=CTc/SYSTEM |         |            |
++ template1 | SYSTEM     | SQL_ASCII | C       | C     | =c/SYSTEM        +| 7153 kB | pg_default | default template for new databases
++           |            |           |         |       | SYSTEM=CTc/SYSTEM |         |            |
++(4 rows)
++
++kcdb=# select now();
++              now
++-------------------------------
++ 2017-10-30 16:22:11.230924-06
++(1 row)
++
++kcdb=# select version();
++                                 version
++-------------------------------------------------------------------------
++ PostgreSQL 9.6.5 on i686-pc-cygwin, compiled by gcc (GCC) 6.3.0, 32-bit
++(1 row)
++
++kcdb=# select 1.00/0.3;
++      ?column?
++--------------------
++ 3.3333333333333333
++(1 row)
++
++kcdb=# \q
++
++
+--- /dev/null	2017-11-18 08:28:29.000000000 +0100
++++ CYGWIN-PATCHES/postgresql.initd	2017-11-18 08:10:40.899512700 +0100
 @@ -0,0 +1,168 @@
 +#! /bin/bash
 +#
@@ -80,7 +378,7 @@
 +name="PostgreSQL"
 +prog="postmaster"
 +progdir="/usr/sbin"
-+DAEMON="$progdir/$prog.exe"
++DAEMON="$progdir/$prog"
 +POSTMASTER_ARGS="-D $PGDATA -k $SOCKETDIR -i"
 +INITDB_ARGS="-E SQL_ASCII --locale=C -D $PGDATA"
 +
