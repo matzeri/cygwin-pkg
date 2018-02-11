@@ -1,5 +1,5 @@
 NAME="postgresql"
-VERSION=9.6.7
+VERSION=10.2
 RELEASE=1
 
 CATEGORY="Database"
@@ -57,7 +57,7 @@ etc \
 usr/sbin/initdb.exe \
 usr/sbin/pg_controldata.exe \
 usr/sbin/pg_ctl.exe \
-usr/sbin/pg_resetxlog.exe \
+usr/bin/pg_waldump.exe \
 usr/sbin/postgres.exe \
 usr/sbin/postmaster \
 usr/lib/postgresql/*_and_*.dll \
@@ -65,15 +65,15 @@ usr/lib/postgresql/dict_snowball.dll \
 usr/lib/postgresql/euc2004_sjis2004.dll \
 usr/lib/postgresql/libpqwalreceiver.dll \
 usr/lib/postgresql/plpgsql.dll \
-usr/share/locale/*/LC_MESSAGES/initdb-9.6.mo \
-usr/share/locale/*/LC_MESSAGES/pg_controldata-9.6.mo \
-usr/share/locale/*/LC_MESSAGES/pg_ctl-9.6.mo \
-usr/share/locale/*/LC_MESSAGES/pg_resetxlog-9.6.mo \
-usr/share/locale/*/LC_MESSAGES/postgres-9.6.mo \
+usr/share/locale/*/LC_MESSAGES/initdb-10.mo \
+usr/share/locale/*/LC_MESSAGES/pg_controldata-10.mo \
+usr/share/locale/*/LC_MESSAGES/pg_ctl-10.mo \
+usr/share/locale/*/LC_MESSAGES/pg_waldump-10.mo \
+usr/share/locale/*/LC_MESSAGES/postgres-10.mo \
 usr/share/man/man1/initdb.1.gz \
 usr/share/man/man1/pg_controldata.1.gz \
 usr/share/man/man1/pg_ctl.1.gz \
-usr/share/man/man1/pg_resetxlog.1.gz \
+usr/share/man/man1/pg_waldump.1.gz \
 usr/share/man/man1/postgres.1.gz \
 usr/share/man/man1/postmaster.1.gz \
 usr/share/doc/Cygwin/${PN}.README \
@@ -88,12 +88,12 @@ usr/share/man/man3"
 # TODO: usr/lib/pkgconfig/
 
 postgresql_client_CONTENTS=" \
---exclude=usr/share/locale/*/LC_MESSAGES/initdb-9.6.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_controldata-9.6.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_ctl-9.6.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_resetxlog-9.6.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/postgres-9.6.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_config-9.6.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/initdb-10.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_controldata-10.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_ctl-10.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_waldump-10.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/postgres-10.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_config-10.mo \
 usr/bin/clusterdb.exe \
 usr/bin/createdb.exe \
 usr/bin/dropdb.exe \
@@ -102,35 +102,32 @@ usr/bin/pg_basebackup.exe \
 usr/bin/pg_dump.exe \
 usr/bin/pg_dumpall.exe \
 usr/bin/pg_isready.exe \
-usr/bin/pg_receivexlog.exe \
+usr/bin/pg_receivewal.exe \
 usr/bin/pg_recvlogical.exe \
+usr/bin/pg_resetwal.exe \
 usr/bin/pg_rewind.exe \
 usr/bin/pg_test_fsync.exe \
 usr/bin/pg_test_timing.exe \
 usr/bin/pg_upgrade.exe \
-usr/bin/pg_xlogdump.exe \
 usr/bin/pgbench.exe \
 usr/bin/psql.exe \
 usr/bin/reindexdb.exe \
-usr/sbin/createlang.exe \
 usr/sbin/createuser.exe \
-usr/sbin/droplang.exe \
 usr/sbin/dropuser.exe \
 usr/sbin/pg_restore.exe \
 usr/sbin/vacuumdb.exe \
 usr/share/man/man1/clusterdb.1.gz \
 usr/share/man/man1/createdb.1.gz \
-usr/share/man/man1/createlang.1.gz \
 usr/share/man/man1/createuser.1.gz \
 usr/share/man/man1/dropdb.1.gz \
-usr/share/man/man1/droplang.1.gz \
 usr/share/man/man1/dropuser.1.gz \
 usr/share/man/man1/pg_dump.1.gz \
 usr/share/man/man1/pg_dumpall.1.gz \
 usr/share/man/man1/pg_basebackup.1.gz \
-usr/share/man/man1/pg_isready.1.gz
-usr/share/man/man1/pg_receivexlog.1.gz \
+usr/share/man/man1/pg_isready.1.gz \
+usr/share/man/man1/pg_receivewal.1.gz \
 usr/share/man/man1/pg_recvlogical.1.gz \
+usr/share/man/man1/pg_resetwal.1.gz \
 usr/share/man/man1/pg_restore.1.gz \
 usr/share/man/man1/pg_rewind.1.gz \
 usr/share/man/man1/psql.1.gz \
@@ -156,7 +153,6 @@ usr/share/man/man1/pg_standby.1.gz \
 usr/share/man/man1/pg_test_fsync.1.gz \
 usr/share/man/man1/pg_test_timing.1.gz \
 usr/share/man/man1/pg_upgrade.1.gz \
-usr/share/man/man1/pg_xlogdump.1.gz \
 usr/share/man/man1/pgbench.1.gz
 "
 
@@ -184,7 +180,7 @@ usr/lib/libpgcommon.a \
 usr/lib/libpgfeutils.a \
 usr/lib/pkgconfig/libpq.pc \
 usr/share/man/man1/pg_config.1.gz \
-usr/share/locale/*/LC_MESSAGES/pg_config-9.6.mo"
+usr/share/locale/*/LC_MESSAGES/pg_config-10.mo"
 
 libpgtypes3_CONTENTS="usr/bin/cygpgtypes-3.dll"
 
