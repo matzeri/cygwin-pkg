@@ -1,12 +1,11 @@
 FORGE="financial"
 NAME="octave-financial"
-VERSION=0.5.0
-OV=0.5.0
-RELEASE=2
+VERSION=0.5.1
+RELEASE=1
 
 ARCH="noarch"
 CATEGORY="Math"
-SUMMARY="Forge: Financial manipulation, plotting and date tools."
+SUMMARY="Forge: Financial manipulation, plotting and date tools"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
