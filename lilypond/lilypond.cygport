@@ -1,6 +1,6 @@
 # lilypond.cygport
 NAME="lilypond"
-VERSION=2.19.65
+VERSION=2.19.81
 RELEASE=1
 SUMMARY="A typesetting system for music notation"
 DESCRIPTION="LilyPond is an automated music engraving system. It formats music beautifully and automatically, and has a friendly syntax for its input files"
@@ -12,7 +12,7 @@ MINOR_VERSION="$(echo ${VERSION} | cut -d '.' -f 2)"
 #PATCH_URI=""
 
 HOMEPAGE="http://www.lilypond.org/"
-SRC_URI="http://download.linuxaudio.org/${PN}/sources/v${MAJOR_VERSION}.${MINOR_VERSION}/${P}.tar.gz
+SRC_URI="http://lilypond.org/downloads/source/v2.19/${P}.tar.gz
 http://www.lilypond.org/doc/v2.19/Documentation/learning.pdf"
 DIFF_EXCLUDES="configure"
 
@@ -34,12 +34,9 @@ lilypond_doc_CATEGORY="Doc"
 
 src_compile() {
 	cd "${S}"
-	lndirs
-	cd "${B}"
 	./autogen.sh --noconfigure
-	mkdir -p build
-	cd build
-	../configure --prefix=/usr --exec-prefix=/usr \
+	cd "${B}"
+	cygconf --prefix=/usr --exec-prefix=/usr \
 		--with-texgyre-dir=/usr/share/texmf-dist/fonts/opentype/public/tex-gyre
 
 	# lilypond doesn't compile with parallel builds.
@@ -53,10 +50,10 @@ src_compile() {
 
 
 src_install() {
-	local vimdir=/usr/share/vim/vim74
+	local vimdir=/usr/share/vim/vim80
 	mkdir -p "${D}${vimdir}"
 
-	cd "${B}/build"
+	cd "${B}"
 #	make install DESTDIR="${D}" vimdir="${vimdir}"
 	cyginstall vimdir="${vimdir}"
 
