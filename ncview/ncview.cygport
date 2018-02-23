@@ -1,6 +1,6 @@
 NAME="ncview"
 VERSION=2.1.6
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Graphics Science"
 SUMMARY="NetCDF X-viewer"
