@@ -1,0 +1,11 @@
+--- origsrc/netcdf-c-4.5.0-rc1/liblib/Makefile.am	2017-06-05 18:33:40.000000000 +0200
++++ liblib/Makefile.am	2017-09-16 19:12:22.045825700 +0200
+@@ -18,7 +18,7 @@ lib_LTLIBRARIES = libnetcdf.la
+ # for information regarding incrementing `-version-info`.
+ ##
+ 
+-libnetcdf_la_LDFLAGS = -version-info 13:0:0
++libnetcdf_la_LDFLAGS = -version-info 13:0:0 ${NOUNDEFINED}
+ 
+ libnetcdf_la_CPPFLAGS = ${AM_CPPFLAGS}
+ libnetcdf_la_LIBADD =
