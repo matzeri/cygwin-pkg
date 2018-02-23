@@ -1,8 +1,7 @@
 FORGE="gsl"
 NAME="octave-gsl"
-VERSION=2.0.0
-OV=2.0.0
-RELEASE=2
+VERSION=2.1.0
+RELEASE=1
 
 CATEGORY="Math"
 SUMMARY="Forge:  Binding to GNU Scientific Library"
