@@ -1,5 +1,5 @@
 NAME="gnupg2"
-VERSION=2.2.4
+VERSION=2.2.5
 RELEASE=1
 CATEGORY="Utils"
 SUMMARY="GNU tool for secure communication and data storage"
@@ -13,7 +13,7 @@ SRC_URI="https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-${VERSION}.tar.bz2
 https://www.gnupg.org/ftp/gcrypt/gnupg/gnupg-${VERSION}.tar.bz2.sig"
 SRC_DIR="gnupg-${VERSION}"
 
-#REQUIRES="pinentry"
+REQUIRES="pinentry"
 DIFF_EXCLUDES="VERSION"
 
 src_compile() {
