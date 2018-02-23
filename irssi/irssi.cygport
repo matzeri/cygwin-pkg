@@ -2,7 +2,7 @@
 inherit perl
 
 NAME="irssi"
-VERSION="1.0.4"
+VERSION="1.1.1"
 RELEASE=1
 CATEGORY="Net"
 SUMMARY="Modular text mode IRC client with Perl scripting"
@@ -36,4 +36,9 @@ src_install() {
 	cd ${B}
 	cyginstall
 	make_etc_defaults /etc/irssi.conf
+}
+
+src_test() {
+	cd ${B}
+	cygmake check
 }
