@@ -1,7 +1,6 @@
 FORGE="doctest"
 NAME="octave-doctest"
-VERSION=0.5.0
-OV=0.5.0
+VERSION=0.6.1
 RELEASE=1
 
 CATEGORY="Math"
