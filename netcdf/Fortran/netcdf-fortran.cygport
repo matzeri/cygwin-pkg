@@ -1,6 +1,6 @@
 NAME="netcdf-fortran"
 VERSION=4.4.4
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Libs"
 SUMMARY="NetCDF (network Common Data Form)"
