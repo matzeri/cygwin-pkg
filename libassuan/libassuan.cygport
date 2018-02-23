@@ -1,5 +1,5 @@
 NAME="libassuan"
-VERSION=2.4.4
+VERSION=2.5.1
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="GnuPG IPC library"
