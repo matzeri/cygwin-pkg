@@ -1,0 +1,111 @@
+--- ../../origsrc/OpenBLAS-0.2.20/Makefile	2017-07-24 06:03:35.000000000 +0200
++++ Makefile	2018-02-13 09:11:37.643864000 +0100
+@@ -28,7 +28,7 @@
+ .PHONY : all libs netlib $(RELA) test ctest shared install
+ .NOTPARALLEL : all libs $(RELA) prof lapack-test install blas-test
+ 
+-all :: libs netlib $(RELA) tests shared
++all :: libs netlib $(RELA) shared
+ 	@echo
+ 	@echo " OpenBLAS build complete. ($(LIB_COMPONENTS))"
+ 	@echo
+@@ -108,6 +108,10 @@
+ endif
+ ifeq ($(OSNAME), CYGWIN_NT)
+ 	@$(MAKE) -C exports dll
++	gcc $(CFLAGS) -shared -Wl,--enable-auto-import -Wl,--enable-auto-image-base \
++	    -o cygblas-0.dll -Wl,--out-implib=libblas.dll.a \
++	    -Wl,--whole-archive exports/dllinit.o  libopenblas.a \
++	    -Wl,--no-whole-archive -shared-libgcc -lgfortran
+ endif
+ endif
+ 
+--- ../../origsrc/OpenBLAS-0.2.20/ctest/Makefile	2017-07-24 06:03:35.000000000 +0200
++++ ctest/Makefile	2018-02-12 12:34:57.261121900 +0100
+@@ -7,7 +7,7 @@
+ 
+ override CFLAGS += -DADD$(BU) -DCBLAS
+ 
+-LIB = $(TOPDIR)/$(LIBNAME)
++LIB = $(TOPDIR)/libblas.dll.a
+ 
+ stestl1o = c_sblas1.o
+ 
+--- ../../origsrc/OpenBLAS-0.2.20/test/Makefile	2017-07-24 06:03:35.000000000 +0200
++++ test/Makefile	2018-02-12 12:31:49.911721900 +0100
+@@ -126,49 +126,49 @@
+ 
+ 
+ sblat1 : sblat1.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o sblat1 sblat1.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o sblat1 sblat1.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ dblat1 : dblat1.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o dblat1 dblat1.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o dblat1 dblat1.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ qblat1 : qblat1.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o qblat1 qblat1.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o qblat1 qblat1.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ cblat1 : cblat1.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o cblat1 cblat1.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o cblat1 cblat1.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ zblat1 : zblat1.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o zblat1 zblat1.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o zblat1 zblat1.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ sblat2 : sblat2.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o sblat2 sblat2.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o sblat2 sblat2.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ dblat2 : dblat2.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o dblat2 dblat2.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o dblat2 dblat2.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ cblat2 : cblat2.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o cblat2 cblat2.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o cblat2 cblat2.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ zblat2 : zblat2.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o zblat2 zblat2.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o zblat2 zblat2.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ sblat3 : sblat3.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o sblat3 sblat3.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o sblat3 sblat3.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ dblat3 : dblat3.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o dblat3 dblat3.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o dblat3 dblat3.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ cblat3 : cblat3.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o cblat3 cblat3.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o cblat3 cblat3.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ zblat3 : zblat3.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o zblat3 zblat3.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o zblat3 zblat3.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ cblat3_3m : cblat3_3m.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o cblat3_3m cblat3_3m.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o cblat3_3m cblat3_3m.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ zblat3_3m : zblat3_3m.$(SUFFIX) ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o zblat3_3m zblat3_3m.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o zblat3_3m zblat3_3m.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ 
+ 
+ 
+--- ../../origsrc/OpenBLAS-0.2.20/utest/Makefile	2018-02-13 00:19:52.580821900 +0100
++++ utest/Makefile	2018-02-12 12:32:15.386521900 +0100
+@@ -26,7 +26,7 @@
+ all : run_test
+ 
+ $(UTESTBIN): $(OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ ../$(LIBNAME) $(EXTRALIB) $(FEXTRALIB)
++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ ../libblas.dll.a $(EXTRALIB) $(FEXTRALIB)
+ 
+ run_test: $(UTESTBIN)
+ ifndef CROSS
