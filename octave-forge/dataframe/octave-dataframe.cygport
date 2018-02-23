@@ -1,8 +1,7 @@
 FORGE="dataframe"
 NAME="octave-dataframe"
-VERSION=1.1.0r244
-OV=1.1.0
-RELEASE=2
+VERSION=1.2.0
+RELEASE=1
 
 ARCH="noarch"
 CATEGORY="Math"
