@@ -1,7 +1,6 @@
 FORGE="instrument-control"
 NAME="octave-instrument-control"
-VERSION=0.2.3
-OV=0.2.3
+VERSION=0.3.0
 RELEASE=1
 
 CATEGORY="Math"
