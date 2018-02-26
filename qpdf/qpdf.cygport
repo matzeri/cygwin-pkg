@@ -1,22 +1,22 @@
 NAME="qpdf"
-VERSION=7.1.0
+VERSION=8.0.0
 RELEASE=1
 
 DESCRIPTION="command-line program that does structural, content-preserving transformations on PDF files"
 HOMEPAGE="http://qpdf.sourceforge.net/"
 SRC_URI="https://sourceforge.net/projects/qpdf/files/qpdf/${PV}/qpdf-${PV}.tar.gz"
 
-abi="18"
+abi="21"
 
 CATEGORY="Graphics"
 PKG_NAMES="qpdf libqpdf${abi} libqpdf-devel"
 
 qpdf_SUMMARY="PDF transformation tool"
-libqpdf18_SUMMARY="PDF transformation tool - shared library"
+libqpdf21_SUMMARY="PDF transformation tool - shared library"
 libqpdf_devel_SUMMARY="PDF transformation tool -  development"
 
 qpdf_CONTENTS="usr/bin/*.exe usr/bin/fix-qdf usr/share/"
-libqpdf18_CONTENTS="usr/bin/cygqpdf-${abi}.dll"
+libqpdf21_CONTENTS="usr/bin/cygqpdf-${abi}.dll"
 libqpdf_devel_CONTENTS="usr/include/ usr/lib/"
 
 KEEP_LA_FILES="none"
