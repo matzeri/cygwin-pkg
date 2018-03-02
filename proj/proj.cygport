@@ -1,6 +1,6 @@
 NAME="proj"
-VERSION=4.9.3
-RELEASE=2
+VERSION=5.0.0
+RELEASE=1
 
 CATEGORY="Graphics Libs"
 DESCRIPTION="Cartographic projection library and utilities"
@@ -8,11 +8,11 @@ SUMMARY="The PROJ Cartographic Projections Software"
 HOMEPAGE="http://trac.osgeo.org/proj/"
 
 SRC_URI="http://download.osgeo.org/proj/${PN}-${PV}.tar.gz 
-http://download.osgeo.org/proj/proj-datumgrid-1.6.zip"
+http://download.osgeo.org/proj/proj-datumgrid-1.7.tar.gz"
 SRC_DIR="${PN}-${PV}"
 
 
-abi=12
+abi=13
 PKG_NAMES="proj libproj-devel libproj${abi}"
 
 PKG_CONTENTS[0]="--exclude=usr/bin/*.dll usr/bin usr/share"
@@ -29,15 +29,13 @@ src_unpack_hook () {
         local fn;
 
         inform "INSTALLING extra grid shift files"
-        for fn in alaska conus FL hawaii \
-                lla MD ntf_r93.gsb ntv1_can.dat null \
-                nzgd2kgrid0005.gsb prvi README.DATUMGRID \
-                stgeorge stlrnc stpaul TN \
-                WI WO
+        for fn in alaska egm96_15.gtx ntf_r93.gsb conus \
+		stpaul BETA2007.gsb prvi README.DATUMGRID \
+		FL nzgd2kgrid0005.gsb null ntv1_can.dat \
+		MD hawaii stgeorge stlrnc WI TN WO
         do
                 mv ${origsrcdir}/${fn} nad/
         done
-
 }
 
 
@@ -45,55 +43,29 @@ src_compile() {
 	cd ${S}
 	export WANT_AUTOMAKE=1.10
 	cygautoreconf
-
 	cd ${B}
 	cygconf --without-jni --enable-shared --enable-static
 	cygmake -j1
 }
 
 src_install() {
-
 	cd ${B}
 	cyginstall -j1
-	
 	cd ${S}/nad
-        for fn in alaska conus FL hawaii \
-                MD ntf_r93.gsb ntv1_can.dat null \
-                nzgd2kgrid0005.gsb prvi README.DATUMGRID \
-                stgeorge stlrnc stpaul TN \
-                WI WO
+        for fn in alaska egm96_15.gtx ntf_r93.gsb conus \
+                stpaul BETA2007.gsb prvi README.DATUMGRID \
+                FL nzgd2kgrid0005.gsb null ntv1_can.dat \
+                MD hawaii stgeorge stlrnc WI TN WO
         do
                 cp ${fn} ${D}/usr/share/proj 
         done
-
 	cp *.gsb ${D}/usr/share/proj
 	
 }
 
 src_test() {
-	cd ${S}/nad
-
-	./test27 ${B}/src/proj.exe
-	./test83 ${B}/src/proj.exe
-
-	if [ -f ${D}/usr/share/proj/nad27 ]
-	then
-		export PROJ_LIB=${D}/usr/share/proj
-		./testvarious ${B}/src/cs2cs.exe
-		unset PROJ_LIB
-	else
-		warning "Can't run 'testvarious' test until after install step"
-	fi
-
-	if [ -f ${D}/usr/share/proj/null -a -f ${D}/usr/share/proj/IGNF ] 
-	then
-		export PROJ_LIB=${D}/usr/share/proj
-		./testIGNF ${B}/src/cs2cs.exe
-		unset PROJ_LIB
-	else
-		warning "Can't run 'testIGNF' test until after install step"
-	fi
-
-	warning "Can't run testntv2 because required files are not part of this package"
+	cd ${B}
+	export PROJ_LIB=${D}/usr/share/proj
+	cygmake -i check
 }
 
