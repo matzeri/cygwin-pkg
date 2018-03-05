@@ -1,7 +1,7 @@
 inherit python-distutils.cygclass perl
 
 NAME="gdal"
-VERSION=2.2.1
+VERSION=2.2.3
 RELEASE=2
 
 CATEGORY="Science"
