@@ -1,6 +1,6 @@
 NAME="libgeotiff"
 VERSION=1.4.2
-RELEASE=2
+RELEASE=3
 
 CATEGORY="Graphics Libs"
 DESCRIPTION="GeoTIFF represents an effort by over 160 different
