@@ -1,5 +1,5 @@
 NAME="slang"
-VERSION=2.3.1a
+VERSION=2.3.2
 RELEASE=1
 
 CATEGORY="Libs"
@@ -10,7 +10,7 @@ PATCH_URI="slang_232.src.patch"
 
 abi=2
 
-PKG_NAMES="slang libslang${abi} libslang-devel slsh"
+PKG_NAMES="libslang${abi} libslang-devel slsh"
 
 slang_SUMMARY="S-Lang interpreter library (source)"
 slang_CONTENTS=""
