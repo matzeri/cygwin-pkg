@@ -2,7 +2,7 @@ inherit python-distutils.cygclass perl
 
 NAME="gdal"
 VERSION=2.2.3
-RELEASE=2
+RELEASE=3
 
 CATEGORY="Science"
 SUMMARY="Geospatial Data Abstraction Library "
