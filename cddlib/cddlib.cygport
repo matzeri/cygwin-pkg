@@ -1,10 +1,10 @@
 NAME="cddlib"
-VERSION="094g"
+VERSION="094i"
 RELEASE=1
 
 CATEGORY="Libs Math"
-DESCRIPTION="cddlib: general convex polyhedron library"
-SUMMARY="cddlib: general convex polyhedron library"
+DESCRIPTION="general convex polyhedron library"
+SUMMARY="general convex polyhedron library"
 
 HOMEPAGE="http://www.inf.ethz.ch/personal/fukudak/cdd_home/cdd.html"
 SRC_URI="ftp://ftp.ifor.math.ethz.ch/pub/fukuda/cdd/${PN}-${PV}.tar.gz"
