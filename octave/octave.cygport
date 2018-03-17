@@ -1,5 +1,5 @@
 NAME="octave"
-VERSION="4.2.1"
+VERSION="4.2.2"
 RELEASE=1
 
 CATEGORY="Math"
@@ -7,7 +7,7 @@ DESCRIPTION="GNU Octave is a high-level language for numerical computations"
 HOMEPAGE="http://www.gnu.org/software/octave/"
 
 OR="${PV}"
-SRC_URI="https://ftp.octave.org/gnu/octave/${PN}-${PV}.tar.lz"
+SRC_URI="https://ftp.gnu.org/gnu/octave/${PN}-${PV}.tar.lz"
 SRC_DIR="${PN}-${PV}"
 
 PATCH_URI="
