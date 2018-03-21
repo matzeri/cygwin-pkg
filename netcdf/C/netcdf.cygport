@@ -1,5 +1,5 @@
 NAME="netcdf"
-VERSION=4.6.0
+VERSION=4.6.1
 RELEASE=1
 
 CATEGORY="Libs"
