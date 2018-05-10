@@ -1,0 +1,75 @@
+NAME="sundials"
+VERSION="2.7.0"
+RELEASE="1"
+
+CATEGORY="Libs Math"
+
+HOMEPAGE="https://computation.llnl.gov/projects/sundials"
+SRC_URI="https://computation.llnl.gov/projects/sundials/download/${PN}-${PV}.tar.gz"
+SRC_DIR="${PN}-${PV}"
+
+#PATCH_URI=""
+
+SUMMARY="SUite of Nonlinear and DIfferential/ALgebraic equation Solvers"
+DESCRIPTION="SUite of Nonlinear and DIfferential/ALgebraic equation Solvers
+SUNDIALS is implemented with the goal of providing robust time 
+integrators and nonlinear solvers that can easily be incorporated 
+into existing simulation codes"
+
+PKG_NAMES="lib${PN}-devel libsundials_arkode1 libsundials_cvode2
+libsundials_cvodes2 libsundials_ida2 libsundials_idas1 libsundials_kinsol2 
+libsundials_nvecopenmp2 libsundials_nvecpthreads2 libsundials_nvecserial2" 
+
+libsundials_devel_CONTENTS='usr/include/ usr/lib/ usr/share/'
+libsundials_devel_SUMMARY="${SUMMARY} (development)"
+
+libsundials_arkode1_CONTENTS="usr/bin/cygsundials_arkode-1.dll"
+libsundials_cvode2_CONTENTS="usr/bin/cygsundials_cvode-2.dll"
+libsundials_cvodes2_CONTENTS="usr/bin/cygsundials_cvodes-2.dll"
+libsundials_ida2_CONTENTS="usr/bin/cygsundials_ida-2.dll"
+libsundials_idas1_CONTENTS="usr/bin/cygsundials_idas-1.dll"
+libsundials_kinsol2_CONTENTS="usr/bin/cygsundials_kinsol-2.dll"
+libsundials_nvecopenmp2_CONTENTS="usr/bin/cygsundials_nvecopenmp-2.dll"
+libsundials_nvecpthreads2_CONTENTS="usr/bin/cygsundials_nvecpthreads-2.dll"
+libsundials_nvecserial2_CONTENTS="usr/bin/cygsundials_nvecserial-2.dll"
+
+libsundials_arkode1_SUMMARY="differential equation solver"
+libsundials_cvode2_SUMMARY="ordinary differential equation solver"
+libsundials_cvodes2_SUMMARY="ODE solver with sensistivity analysis"
+libsundials_ida2_SUMMARY="differential-algebraic system solver"
+libsundials_idas1_SUMMARY="IDA solver with sensitivity capabilities"
+libsundials_kinsol2_SUMMARY="KINSOL solver"
+libsundials_nvecopenmp2_SUMMARY="Openmp vector operations library"
+libsundials_nvecpthreads2_SUMMARY="Pthread vector operations library"
+libsundials_nvecserial2_SUMMARY="Non-parallel vector operations library"
+
+# We do not use the standard src_compile and src_test.
+
+DIFF_EXCLUDES="Makefile"
+inherit cmake
+
+src_compile() {
+        cd ${B}
+	cygcmake  -DKLU_INCLUDE_DIR:PATH="/usr/include/suitesparse/" \
+	  -DKLU_LIBRARY_DIR:PATH="/usr/lib/"
+        cygmake 
+}
+
+
+src_test() {
+	cd ${B}
+	for program in $(find ${B}"/examples" -name "*.exe")
+	do 
+	   echo ${program}
+	   PATH=${D}/usr/bin/:${PATH} ${program}
+	done
+}
+
+src_install() {
+        cd ${B}
+	cyginstall
+	mkdir ${D}/usr/bin
+	mv ${D}/usr/lib/*.dll ${D}/usr/bin
+	mkdir -p ${D}/usr/share/sundials
+	mv ${D}/usr/examples ${D}/usr/share/sundials
+}

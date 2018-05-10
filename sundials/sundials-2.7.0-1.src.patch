@@ -1,0 +1,171 @@
+--- origsrc/sundials-2.7.0/CMakeLists.txt	2016-09-27 00:16:46.000000000 +0200
++++ src/sundials-2.7.0/CMakeLists.txt	2018-05-01 00:34:51.214600700 +0200
+@@ -209,7 +209,7 @@ ENDIF(IS_DIRECTORY "${sundials_SOURCE_DI
+ # Option that allows users to build static and/or shared libraries
+ # ----------------------------------------------------------------
+ 
+-OPTION(BUILD_STATIC_LIBS "Build static libraries" ON)
++OPTION(BUILD_STATIC_LIBS "Build static libraries" OFF)
+ OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON)
+ 
+ # Prepare substitution variable SUNDIALS_EXPORT for sundials_config.h
+@@ -322,7 +322,7 @@ ENDIF(BUILD_ARKODE AND EXAMPLES_ENABLE)
+ # Enable BLAS/LAPACK support?
+ # -------------------------------------------------------------
+ 
+-OPTION(LAPACK_ENABLE "Enable Lapack support" OFF)
++OPTION(LAPACK_ENABLE "Enable Lapack support" ON)
+ 
+ IF(NOT LAPACK_ENABLE)
+   HIDE_VARIABLE(SUNDIALS_F77_FUNC_CASE)
+@@ -347,7 +347,7 @@ ENDIF(NOT SUPERLUMT_ENABLE)
+ # Enable KLU support?
+ # -------------------------------------------------------------
+ 
+-OPTION(KLU_ENABLE "Enable KLU support" OFF)
++OPTION(KLU_ENABLE "Enable KLU support" ON)
+ 
+ IF(NOT KLU_ENABLE)
+   HIDE_VARIABLE(KLU_LIBRARY_DIR)
+@@ -386,7 +386,7 @@ ENDIF(NOT MPI_ENABLE)
+ # Enable OpenMP support?
+ # -------------------------------------------------------------
+ 
+-OPTION(OPENMP_ENABLE "Enable OpenMP support" OFF)
++OPTION(OPENMP_ENABLE "Enable OpenMP support" ON)
+ 
+ IF(OPENMP_ENABLE)
+   FIND_PACKAGE(OpenMP)
+@@ -399,7 +399,7 @@ ENDIF(OPENMP_ENABLE)
+ # Enable Pthread support?
+ # -------------------------------------------------------------
+ 
+-OPTION(PTHREAD_ENABLE "Enable Pthreads support" OFF)
++OPTION(PTHREAD_ENABLE "Enable Pthreads support" ON)
+ 
+ IF(PTHREAD_ENABLE)
+   FIND_PACKAGE(Threads)
+--- origsrc/sundials-2.7.0/examples/nvector/test_nvector.c	2016-09-27 00:16:51.000000000 +0200
++++ src/sundials-2.7.0/examples/nvector/test_nvector.c	2018-04-29 20:00:32.259000000 +0200
+@@ -1819,7 +1819,7 @@ void SetTiming(int onoff)
+ 
+ #if defined( SUNDIALS_HAVE_POSIX_TIMERS) && defined(_POSIX_TIMERS)
+   struct timespec spec;  
+-  clock_gettime( CLOCK_MONOTONIC_RAW, &spec );
++  clock_gettime( CLOCK_MONOTONIC, &spec );
+   base_time_tv_sec = spec.tv_sec;
+ #endif
+ }
+@@ -1831,7 +1831,7 @@ static double get_time()
+ {
+ #if defined( SUNDIALS_HAVE_POSIX_TIMERS) && defined(_POSIX_TIMERS)
+   struct timespec spec;  
+-  clock_gettime( CLOCK_MONOTONIC_RAW, &spec );
++  clock_gettime( CLOCK_MONOTONIC, &spec );
+   double time = (double)(spec.tv_sec - base_time_tv_sec) + ((double)(spec.tv_nsec) / 1E9);
+ #else
+   double time = 0;
+--- origsrc/sundials-2.7.0/src/arkode/CMakeLists.txt	2016-09-27 00:16:52.000000000 +0200
++++ src/sundials-2.7.0/src/arkode/CMakeLists.txt	2018-04-30 23:55:46.085600700 +0200
+@@ -138,6 +138,14 @@ IF(BUILD_SHARED_LIBS)
+   ADD_LIBRARY(sundials_arkode_shared SHARED 
+     ${arkode_SOURCES}  ${arkode_BL_SOURCES}  ${shared_SOURCES})
+ 
++  IF(KLU_FOUND)
++    target_link_libraries(sundials_arkode_shared PRIVATE ${KLU_LIBRARIES})
++  ENDIF()
++
++  IF(LAPACK_FOUND)
++    target_link_libraries(sundials_arkode_shared PRIVATE ${LAPACK_LIBRARIES} )
++  ENDIF()
++
+   # Set the library name and make sure it is not deleted
+   SET_TARGET_PROPERTIES(sundials_arkode_shared
+     PROPERTIES OUTPUT_NAME sundials_arkode CLEAN_DIRECT_OUTPUT 1)
+--- origsrc/sundials-2.7.0/src/cvode/CMakeLists.txt	2016-09-27 00:17:07.000000000 +0200
++++ src/sundials-2.7.0/src/cvode/CMakeLists.txt	2018-05-01 00:02:49.003600700 +0200
+@@ -145,6 +145,14 @@ IF(BUILD_SHARED_LIBS)
+   ADD_LIBRARY(sundials_cvode_shared SHARED 
+     ${cvode_SOURCES}  ${cvode_BL_SOURCES}  ${shared_SOURCES})
+ 
++  IF(KLU_FOUND)
++    target_link_libraries(sundials_cvode_shared PRIVATE ${KLU_LIBRARIES})
++  ENDIF()
++
++  IF(LAPACK_FOUND)
++    target_link_libraries(sundials_cvode_shared PRIVATE ${LAPACK_LIBRARIES} )
++  ENDIF()
++
+   # Set the library name and make sure it is not deleted
+   SET_TARGET_PROPERTIES(sundials_cvode_shared
+     PROPERTIES OUTPUT_NAME sundials_cvode CLEAN_DIRECT_OUTPUT 1)
+--- origsrc/sundials-2.7.0/src/cvodes/CMakeLists.txt	2016-09-27 00:17:15.000000000 +0200
++++ src/sundials-2.7.0/src/cvodes/CMakeLists.txt	2018-05-01 00:08:08.320600700 +0200
+@@ -132,6 +132,15 @@ IF(BUILD_SHARED_LIBS)
+   ADD_LIBRARY(sundials_cvodes_shared SHARED 
+     ${cvodes_SOURCES}  ${cvodes_BL_SOURCES}  ${shared_SOURCES})
+ 
++  IF(KLU_FOUND)
++    target_link_libraries(sundials_cvodes_shared PRIVATE ${KLU_LIBRARIES})
++  ENDIF()
++
++  IF(LAPACK_FOUND)
++    target_link_libraries(sundials_cvodes_shared PRIVATE ${LAPACK_LIBRARIES} )
++  ENDIF()
++
++
+   # Set the library name and make sure it is not deleted
+   SET_TARGET_PROPERTIES(sundials_cvodes_shared
+     PROPERTIES OUTPUT_NAME sundials_cvodes CLEAN_DIRECT_OUTPUT 1)
+--- origsrc/sundials-2.7.0/src/ida/CMakeLists.txt	2016-09-27 00:17:26.000000000 +0200
++++ src/sundials-2.7.0/src/ida/CMakeLists.txt	2018-05-01 00:03:24.756600700 +0200
+@@ -135,6 +135,14 @@ IF(BUILD_SHARED_LIBS)
+   ADD_LIBRARY(sundials_ida_shared SHARED
+     ${ida_SOURCES}  ${ida_BL_SOURCES} ${shared_SOURCES})
+ 
++  IF(KLU_FOUND)
++    target_link_libraries(sundials_ida_shared PRIVATE ${KLU_LIBRARIES})
++  ENDIF()
++
++  IF(LAPACK_FOUND)
++    target_link_libraries(sundials_ida_shared PRIVATE ${LAPACK_LIBRARIES} )
++  ENDIF()
++
+   # Set the library name and make sure it is not deleted
+   SET_TARGET_PROPERTIES(sundials_ida_shared
+     PROPERTIES OUTPUT_NAME sundials_ida CLEAN_DIRECT_OUTPUT 1)
+--- origsrc/sundials-2.7.0/src/idas/CMakeLists.txt	2016-09-27 00:17:32.000000000 +0200
++++ src/sundials-2.7.0/src/idas/CMakeLists.txt	2018-05-01 00:04:26.958600700 +0200
+@@ -137,6 +137,14 @@ IF(BUILD_SHARED_LIBS)
+   ADD_LIBRARY(sundials_idas_shared SHARED 
+     ${idas_SOURCES}  ${idas_BL_SOURCES} ${idas_SLU_SOURCES} ${shared_SOURCES})
+ 
++  IF(KLU_FOUND)
++    target_link_libraries(sundials_idas_shared PRIVATE ${KLU_LIBRARIES})
++  ENDIF()
++
++  IF(LAPACK_FOUND)
++    target_link_libraries(sundials_idas_shared PRIVATE ${LAPACK_LIBRARIES} )
++  ENDIF()
++
+   # Set the library name and make sure it is not deleted
+   SET_TARGET_PROPERTIES(sundials_idas_shared
+     PROPERTIES OUTPUT_NAME sundials_idas CLEAN_DIRECT_OUTPUT 1)
+--- origsrc/sundials-2.7.0/src/kinsol/CMakeLists.txt	2016-09-27 00:17:39.000000000 +0200
++++ src/sundials-2.7.0/src/kinsol/CMakeLists.txt	2018-05-01 00:06:59.553600700 +0200
+@@ -145,6 +145,15 @@ IF(BUILD_SHARED_LIBS)
+   ADD_LIBRARY(sundials_kinsol_shared SHARED
+     ${kinsol_SOURCES} ${kinsol_BL_SOURCES} ${kinsol_SLU_SOURCES} ${kinsol_KLU_SOURCES} ${shared_SOURCES})
+ 
++  IF(KLU_FOUND)
++    target_link_libraries(sundials_kinsol_shared PRIVATE ${KLU_LIBRARIES})
++  ENDIF()
++
++  IF(LAPACK_FOUND)
++    target_link_libraries(sundials_kinsol_shared PRIVATE ${LAPACK_LIBRARIES} )
++  ENDIF()
++
++
+   # Set the library name and make sure it is not deleted
+   SET_TARGET_PROPERTIES(sundials_kinsol_shared
+     PROPERTIES OUTPUT_NAME sundials_kinsol CLEAN_DIRECT_OUTPUT 1)
