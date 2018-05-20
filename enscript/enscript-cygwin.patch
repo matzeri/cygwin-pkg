@@ -1,0 +1,101 @@
+--- origsrc/enscript-1.6.4/CYGWIN-PATCHES/README	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/README	2013-04-29 07:18:32.000636400 +0200
+@@ -0,0 +1,98 @@
++enscript
++-------------------------------------------------------------------------------
++A free replacement for the Adobe's enscript program
++
++  Canonical homepage:
++  https://www.gnu.org/software/enscript/
++
++Canonical download:
++  ftp://ftp.gnu.org/gnu/enscript/enscript-1.6.6.tar.gz
++
++License:
++  GPL
++
++Language:
++  C
++
++----------------------------- original README -----------------------------
++GNU ENSCRIPT for Cygwin
++=======================
++
++GNU Enscript WWW home page:
++        <http://www.iki.fi/~mtr/genscript/>
++
++Version:
++        1.6.4-1
++
++Common:
++        Enscript is configured with the following user-definable
++        options which can be changed in /etc/enscript.cfg
++
++        Option     Change with configure's option   Current value
++        ---------------------------------------------------------
++        Media      --with-media=MEDIA               A4
++        Spooler    --with-spooler=SPOOLER           lpr
++        PS level   --with-ps-level=LEVEL            2
++        QueueParam --with-queue-param=PARAM         -P
++
++Print:
++        - Charles Wilson explained the usage of lpr.exe:
++
++          Currently, lpr.exe from the cygutils package is not
++          documented (at all), and it expects printer shares
++          to be specified using backslash notation:
++
++          \\computer\share
++
++          of course, since those are backslashes, they have to
++          be escaped:
++
++          \\\\computer\\share
++
++          and what's odd, is that sometimes they must be escaped
++          twice
++
++          \\\\\\\\computer\\\\share
++
++          because two shells parse it.
++
++Docs in:
++        /usr/doc/enscript-1.6.4
++
++Info files:
++        $ info enscript
++
++Man files:
++        $ man enscript
++        $ man states
++        $ man diffpp
++        $ man sliceprint
++
++To rebuild enscript:
++        Unpack the source package in /usr/src:
++                $ tar zxvf enscript-1.6.4-1.tar.bz2
++        Then use the script:
++                $ ./enscript-1.6.4-1.sh prep
++                $ ./enscript-1.6.4-1.sh conf
++                $ ./enscript-1.6.4-1.sh build
++                $ ./enscript-1.6.4-1.sh check
++                  ...
++                  ===================
++                  All 20 tests passed
++                  ===================
++                  ...
++                  ===================
++                  All 25 tests passed
++                  ===================
++                  ...
++                $ ./enscript-1.6.4-1.sh install
++                $ ./enscript-1.6.4-1.sh strip
++                $ ./enscript-1.6.4-1.sh pkg
++                $ ./enscript-1.6.4-1.sh spkg
++        That ends with two packages in /usr/src:
++        binary package: enscript-1.6.4-1.tar.bz2
++        source package: enscript-1.6.4-1-src.tar.bz2
++
++Packaged by:
++        Gerrit P. Haase, 2003-04-14
++         <gp@familiehaase.de>

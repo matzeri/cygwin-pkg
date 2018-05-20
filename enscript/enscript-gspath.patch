@@ -1,0 +1,11 @@
+--- origsrc/enscript-1.6.4/lib/enscript.cfg.in	2003-03-05 08:26:29.000000000 +0100
++++ src/enscript-1.6.4/lib/enscript.cfg.in	2013-04-28 19:59:44.234652200 +0200
+@@ -29,7 +29,7 @@
+ AcceptCompositeCharacters: 0
+ 
+ # Lookup path for the AFM files.
+-AFMPath: @DATADIR@/enscript/afm:/usr/local/lib/ps:/usr/lib/ps
++AFMPath: @DATADIR@/enscript/afm:/usr/share/ghostscript/fonts:/usr/local/lib/ps:/usr/lib/ps
+ 
+ # Append ^D character to the end of the output.  Some printers like HP
+ # LaserJet 5 require this but the default is `false'.
