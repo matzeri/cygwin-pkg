@@ -1,6 +1,6 @@
 NAME="enscript"
 VERSION="1.6.6"
-RELEASE="1"
+RELEASE="2"
 CATEGORY="Text"
 SUMMARY="A free replacement for the Adobe's enscript program"
 DESCRIPTION="GNU enscript is a free replacement for the Adobe's enscript program.
@@ -21,7 +21,7 @@ PATCH_URI="
   enscript-gspath.patch
 "
 
-PKG_NAMES="ensript"
+PKG_NAMES="enscript"
 
 REQUIRES="less perl"
 DIFF_EXCLUDES="ansi2knr.c docs"
