@@ -1,0 +1,11 @@
+--- origsrc/lapack-3.8.0/CMakeLists.txt	2018-05-20 14:02:22.687500600 +0200
++++ CMakeLists.txt	2018-05-20 16:32:31.533000000 +0200
+@@ -121,7 +121,7 @@ set(PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDI
+ 
+ # --------------------------------------------------
+ # Testing
+-option(BUILD_TESTING "Build tests" OFF)
++option(BUILD_TESTING "Build tests" ON)
+ enable_testing()
+ include(CTest)
+ enable_testing()
