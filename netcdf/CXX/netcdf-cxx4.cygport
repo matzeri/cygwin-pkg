@@ -1,9 +1,9 @@
 NAME="netcdf-cxx4"
 VERSION=4.3.0
-RELEASE=2
+RELEASE=3
 
 CATEGORY="Libs"
-SUMMARY="NetCDF C++ (network Common Data Form)"
+SUMMARY="C++ (Network Common Data Form)"
 DESCRIPTION="NetCDF (network Common Data Form) are libraries for array-oriented scientific data"
 HOMEPAGE="http://www.unidata.ucar.edu/software/netcdf/"
 SRC_URI="http://www.unidata.ucar.edu/downloads/netcdf/ftp/${PN}-${PV}.tar.gz" 
@@ -12,18 +12,14 @@ PATCH_URI="cxx4_noundefined.patch"
 
 abi=1
 
-PKG_NAMES="${PN} lib${PN}_${abi} lib${PN}-devel"
+PKG_NAMES="lib${PN}_${abi} lib${PN}-devel"
 
 KEEP_LA_FILES="none"
-PKG_SUMMARY[1]="${SUMMARY} (runtime)"
-PKG_SUMMARY[2]="${SUMMARY} (development)"
+libnetcdf_cxx4_1_SUMMARY="${SUMMARY} (runtime)"
+libnetcdf_cxx4_devel_SUMMARY="${SUMMARY} (development)"
 
-PKG_CONTENTS[0]=""
-
-PKG_CONTENTS[1]="
-  usr/bin/*.dll
-"
-PKG_CONTENTS[2]="
+libnetcdf_cxx4_1_CONTENTS="usr/bin/cygnetcdf_c++4-1.dll"
+libnetcdf_cxx4_devel_CONTENTS="
   usr/include/
   usr/lib/
   usr/bin/ncxx4-config
