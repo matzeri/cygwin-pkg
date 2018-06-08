@@ -1,10 +1,10 @@
 NAME="arpack"
 VERSION=3.5.0
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Math Libs"
 DESCRIPTION="A collection to solve large scale eigenvalue problems." 
-SUMMARY="Library for large scale eigenvalue problems " 
+SUMMARY="Library for large scale eigenvalue problems" 
 HOMEPAGE="http://www.gnu.org/software/octave/"
 SRC_URI="http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/${PN}-ng-${PV}.tar.gz" 
 SRC_DIR="arpack-ng-${PV}"
