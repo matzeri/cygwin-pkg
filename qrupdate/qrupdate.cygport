@@ -1,9 +1,9 @@
 NAME="qrupdate"
 VERSION=1.1.2
-RELEASE=2
+RELEASE=3
 
 CATEGORY="Libs Math"
-SUMMARY="QRUPDATE : library for QR and  Cholensky decompositions"
+SUMMARY="library for QR and Cholensky decompositions"
 DESCRIPTION="A LIBRARY FOR FAST UPDATING OF QR AND CHOLESKY DECOMPOSITIONS"
 HOMEPAGE="http://qrupdate.sourceforge.net/"
 SRC_URI="http://downloads.sourceforge.net/qrupdate/${PN}-${PV}.tar.gz"
@@ -11,10 +11,7 @@ SRC_DIR="${PN}-${PV}"
 PATCH_URI="qrupdate-configure.patch"
 
 api="0"
-PKG_NAMES="qrupdate libqrupdate-devel libqrupdate0"
-PKG_HINTS="setup devel lib"
-qrupdate_CONTENTS=''
-qrupdate_SUMMARY="${SUMMARY} - empty source only"
+PKG_NAMES="libqrupdate-devel libqrupdate0"
 libqrupdate_devel_CONTENTS='usr/lib usr/share'
 libqrupdate_devel_SUMMARY="${SUMMARY} - development"
 libqrupdate0_CONTENTS='usr/bin'
