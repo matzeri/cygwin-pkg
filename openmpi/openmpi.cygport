@@ -1,5 +1,5 @@
 NAME="openmpi"
-VERSION=1.10.7
+VERSION=3.1.0
 RELEASE=1
 
 CATEGORY="Libs"
@@ -9,32 +9,30 @@ typically used for parallel and/or distributed computing. Open MPI is an open
 source, freely available, high performance implementation of the MPI spec."
 
 HOMEPAGE="http://www.open-mpi.org"
-SRC_URI="http://www.open-mpi.org/software/ompi/v1.10/downloads/${P}.tar.bz2"
+SRC_URI="http://www.open-mpi.org/software/ompi/v3.1/downloads/${P}.tar.bz2"
 
 PATCH_URI="pre-install.patch
 openmpi-README.patch
 "
 
-PKG_NAMES="openmpi libopenmpi12 libopenmpicxx1 libopenmpifh12  
-libopenmpiusef08_11 libopenmpiusetkr6 libopenmpi-devel"
+PKG_NAMES="openmpi libopenmpi40 libopenmpifh40  
+libopenmpiusef08_40 libopenmpiusetkr40 libopenmpi-devel"
 
-openmpi_CONTENTS="usr/bin/cygopen* usr/bin/[smo]* usr/share/doc usr/share/man/man[17]/"
+openmpi_CONTENTS="usr/bin/cygopen* usr/bin/[spmo]* usr/share/doc usr/share/man/man[17]/"
 
-libopenmpi12_SUMMARY="${SUMMARY} (C runtime)"
-libopenmpi12_CONTENTS="usr/bin/cygmpi-12.dll  
-usr/lib/openmpi/ etc/ usr/share/openmpi/"
+libopenmpi40_SUMMARY="${SUMMARY} (C runtime)"
+libopenmpi40_CONTENTS="usr/bin/cygmpi-40.dll  
+usr/lib/openmpi/ etc/ usr/share/openmpi/ usr/share/pmix/"
 
-libopenmpicxx1_SUMMARY="${SUMMARY} (C++ runtime)"
-libopenmpicxx1_CONTENTS="usr/bin/cygmpi_cxx-1.dll"
 
-libopenmpifh12_SUMMARY="${SUMMARY} (Fortran runtime)"
-libopenmpifh12_CONTENTS="usr/bin/cygmpi_mpifh-12.dll"
+libopenmpifh40_SUMMARY="${SUMMARY} (Fortran runtime)"
+libopenmpifh40_CONTENTS="usr/bin/cygmpi_mpifh-40.dll"
 
-libopenmpiusef08_11_SUMMARY="${SUMMARY} (Fortran use  F2008 runtime)"
-libopenmpiusef08_11_CONTENTS="usr/bin/cygmpi_usempif08-11.dll"
+libopenmpiusef08_40_SUMMARY="${SUMMARY} (Fortran use  F4008 runtime)"
+libopenmpiusef08_40_CONTENTS="usr/bin/cygmpi_usempif08-40.dll"
 
-libopenmpiusetkr6_SUMMARY="${SUMMARY} (Fortran use  tkr runtime)"
-libopenmpiusetkr6_CONTENTS="usr/bin/cygmpi_usempi_ignore_tkr-6.dll"
+libopenmpiusetkr40_SUMMARY="${SUMMARY} (Fortran use  tkr runtime)"
+libopenmpiusetkr40_CONTENTS="usr/bin/cygmpi_usempi_ignore_tkr-40.dll"
 
 libopenmpi_devel_SUMMARY="${SUMMARY} (development)"
 libopenmpi_devel_CONTENTS="usr/include/ usr/lib/libmpi* usr/lib/*.mod
@@ -44,7 +42,7 @@ libopenmpi_devel_CONTENTS="usr/include/ usr/lib/libmpi* usr/lib/*.mod
 # opal, orte libraries for internal use only, headers not installed by default
 PKG_IGNORE="usr/lib/pkgconfig/orte.pc"
 
-DIFF_EXCLUDES="configure *.in *.guess *.sub *sh *m4 *libltdl* compile depcomp ylwrap py-compile"
+DIFF_EXCLUDES="configure *.in *.guess *.sub *sh *m4 *libltdl* compile depcomp ylwrap py-compile missing test-driver ar-lib frameworks.h"
 KEEP_LA_FILES="none"
 
 src_compile() {
@@ -55,8 +53,9 @@ src_compile() {
           ATOMICS=""  
 	fi
         cd ${S}
-	./autogen.sh
+	./autogen.pl --force
         cd ${B}
+	export LIBS="-levent"
 	cygconf \
 		${ATOMICS} \
                 --disable-mca-dso \
@@ -66,7 +65,7 @@ src_compile() {
                 --without-cs-fs \
                 --with-mpi-param_check=always \
 		--enable-contrib-no-build=vt,libompitrace \
-		--enable-mca-no-build=paffinity,installdirs-windows,timer-windows,shmem-sysv 
+		--enable-mca-no-build=paffinity,installdirs-windows,timer-windows,shmem-sysv,patcher
 
         cygmake 
 }
