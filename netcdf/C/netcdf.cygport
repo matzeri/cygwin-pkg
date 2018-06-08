@@ -1,6 +1,6 @@
 NAME="netcdf"
 VERSION=4.6.1
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Libs"
 SUMMARY="NetCDF (network Common Data Form)"
