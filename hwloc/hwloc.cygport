@@ -1,5 +1,5 @@
 NAME="hwloc"
-VERSION="1.11.8"
+VERSION="1.11.10"
 RELEASE=1
 
 CATEGORY="Utils"
