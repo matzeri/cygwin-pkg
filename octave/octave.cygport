@@ -1,6 +1,6 @@
 NAME="octave"
-VERSION="4.2.2"
-RELEASE=1
+VERSION="4.4.0"
+RELEASE=2
 
 CATEGORY="Math"
 DESCRIPTION="GNU Octave is a high-level language for numerical computations"
@@ -17,7 +17,7 @@ PKG_NAMES="octave octave-devel octave-doc"
 
 octave_SUMMARY="GNU Octave language for numerical computations"
 octave_devel_SUMMARY="GNU Octave (development)"
-octave_doc_SUMMARY="GNU Octave:  additional docs in html and pdf"
+octave_doc_SUMMARY="GNU Octave additional docs in html and pdf"
 
 octave_CONTENTS='etc var usr/bin/cyg* usr/bin/oct* usr/lib/octave/'${OR}'/[eos]* usr/lib/octave/[as]*  usr/share/[aimos]* usr/share/doc/octave/[ABCINPRTe]*'
 
@@ -25,7 +25,8 @@ octave_devel_CONTENTS=' usr/bin/mk* usr/include/ usr/lib/octave/'${OR}'/lib*'
 
 octave_doc_CONTENTS='usr/share/doc/octave/[hp]*'
 
-DIFF_EXCLUDES="*octave.info* config.in.h version.texi stamp-vti" 
+DIFF_EXCLUDES="*octave.info* config.in.h version.texi stamp-vti 
+  version-octave.texi stamp-1 version-liboctave.texi"
 
 src_compile() {
 	cd ${S}
@@ -54,29 +55,28 @@ src_install() {
 
 	keepdir /usr/lib/octave/${OR}/site/exec/${ARC}
 	keepdir /usr/lib/octave/${OR}/site/oct/${ARC}
-	keepdir /usr/lib/octave/api-v50+/site/exec/${ARC}
- 	keepdir /usr/lib/octave/site/oct/api-v50+/${ARC} 
+	keepdir /usr/lib/octave/api-v52/site/exec/${ARC}
+ 	keepdir /usr/lib/octave/site/oct/api-v52/${ARC} 
         keepdir /usr/lib/octave/${OR}/site/exec
         keepdir /usr/lib/octave/${OR}/site/oct
-        keepdir /usr/lib/octave/api-v50+/site/exec
+        keepdir /usr/lib/octave/api-v52/site/exec
         keepdir /usr/lib/octave/site/exec/${ARC}
-        keepdir /usr/lib/octave/site/oct/api-v50+
+        keepdir /usr/lib/octave/site/oct/api-v52
         keepdir /usr/lib/octave/site/oct/${ARC}
         keepdir /usr/share/octave/${OR}/site/m
-        keepdir /usr/share/octave/site/api-v50+/m
+        keepdir /usr/share/octave/site/api-v52/m
         keepdir /usr/lib/octave/${OR}/site
-        keepdir /usr/lib/octave/api-v50+/site
+        keepdir /usr/lib/octave/api-v52/site
         keepdir /usr/lib/octave/site/exec
         keepdir /usr/lib/octave/site/oct
         keepdir /usr/share/octave/${OR}/site
-        keepdir /usr/share/octave/site/api-v50+
-        keepdir /usr/lib/octave/api-v50+
+        keepdir /usr/share/octave/site/api-v52
+        keepdir /usr/lib/octave/api-v52
         keepdir /usr/lib/octave/site
 
 	cyginstall 
 	
 	insinto /usr/share/doc/${PN}/etc
-	doins ${S}/etc/README.Cygwin
 	doins ${S}/etc/PROJECTS
 	insinto /usr/share/doc/${PN}
 	doins ${S}/NEWS
