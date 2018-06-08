@@ -1,11 +1,11 @@
---- origsrc/hdf5-1.8.19/config/gnu-flags	2017-06-15 17:47:13.000000000 +0200
-+++ config/gnu-flags	2017-08-05 23:45:05.478130100 +0200
-@@ -92,7 +92,7 @@ case "$cc_vendor-$cc_version" in
-     esac
- 
-     # General
--    H5_CFLAGS="$H5_CFLAGS $arch -std=c99 -pedantic -Wall -W -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline"
-+    H5_CFLAGS="$H5_CFLAGS $arch  -pedantic -Wall -W -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline"
- 
-     # Production
-     case "$cc_vendor-$cc_version" in
+--- origsrc/hdf5-1.10.2/config/gnu-flags	2018-03-24 05:06:07.000000000 +0100
++++ config/gnu-flags	2018-05-21 21:02:40.294000000 +0200
+@@ -101,7 +101,7 @@ case "$cc_vendor-$cc_version" in
+     # NOTE: Don't add -Wpadded here since we can't/won't fix the (many)
+     # warnings that are emitted. If you need it, add it from the 
+     # environment variable at configure time.
+-    H5_CFLAGS="$H5_CFLAGS $arch -std=c99 -pedantic -Wall -Wextra -Wbad-function-cast -Wc++-compat -Wcast-align"
++    H5_CFLAGS="$H5_CFLAGS $arch -pedantic -Wall -Wextra -Wbad-function-cast -Wc++-compat -Wcast-align"
+     H5_CFLAGS="$H5_CFLAGS -Wcast-qual -Wconversion -Wdeclaration-after-statement -Wdisabled-optimization -Wfloat-equal"
+     H5_CFLAGS="$H5_CFLAGS -Wformat=2 -Winit-self -Winvalid-pch -Wmissing-declarations -Wmissing-include-dirs"
+     H5_CFLAGS="$H5_CFLAGS -Wmissing-prototypes -Wnested-externs -Wold-style-definition -Wpacked -Wpointer-arith"

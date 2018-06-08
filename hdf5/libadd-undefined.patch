@@ -1,0 +1,22 @@
+--- origsrc/hdf5-1.10.2/test/Makefile.am	2018-03-24 05:06:07.000000000 +0100
++++ test/Makefile.am	2018-05-22 10:39:43.574135400 +0200
+@@ -114,6 +114,8 @@ if HAVE_SHARED_CONDITIONAL
+   libfilter_plugin2_dsets_la_LDFLAGS=$(AM_LDFLAGS) -avoid-version -module -shared -export-dynamic -rpath /nowhere
+   libfilter_plugin3_dsets_la_LDFLAGS=$(AM_LDFLAGS) -avoid-version -module -shared -export-dynamic -rpath /nowhere
+   libfilter_plugin4_groups_la_LDFLAGS=$(AM_LDFLAGS) -avoid-version -module -shared -export-dynamic -rpath /nowhere
++  libfilter_plugin3_dsets_la_LIBADD=$(LIBHDF5)
++  libfilter_plugin4_groups_la_LIBADD=$(LIBHDF5)
+ else
+   # The libh5test library provides common support code for the tests.
+   noinst_LTLIBRARIES=libh5test.la
+--- origsrc/hdf5-1.10.2/tools/test/h5repack/Makefile.am	2018-03-24 05:06:08.000000000 +0100
++++ tools/test/h5repack/Makefile.am	2018-05-22 12:42:45.745135400 +0200
+@@ -50,6 +50,8 @@ if HAVE_SHARED_CONDITIONAL
+   libdynlibvers_la_SOURCES=dynlib_vrpk.c
+   libdynlibadd_la_LDFLAGS=$(AM_LDFLAGS) -avoid-version -module -shared -export-dynamic -rpath /nowhere
+   libdynlibvers_la_LDFLAGS=$(AM_LDFLAGS) -avoid-version -module -shared -export-dynamic -rpath /nowhere
++  libdynlibadd_la_LIBADD=$(LIBH5TOOLS) $(LIBH5TEST) $(LIBHDF5)
++  libdynlibvers_la_LIBADD=$(LIBH5TOOLS) $(LIBH5TEST) $(LIBHDF5)
+ endif
+ 
+ 
