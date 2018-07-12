@@ -1,5 +1,5 @@
 NAME="qpdf"
-VERSION=8.0.2
+VERSION=8.1.0
 RELEASE=1
 
 DESCRIPTION="command-line program that does structural, content-preserving transformations on PDF files"
