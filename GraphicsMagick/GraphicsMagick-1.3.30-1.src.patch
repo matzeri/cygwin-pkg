@@ -1,0 +1,11 @@
+--- origsrc/GraphicsMagick-1.3.30/PerlMagick/Makefile.PL.in	2018-01-20 15:31:41.000000000 +0100
++++ src/GraphicsMagick-1.3.30/PerlMagick/Makefile.PL.in	2018-07-08 11:51:23.203719500 +0200
+@@ -78,7 +78,7 @@ WriteMakefile
+    'INSTALLBIN'	=> $magick_BIN_DIR,
+ 
+    # Library specification
+-   'LIBS'	=> ["-L$magick_LIB_DIR -lGraphicsMagick $magick_LDFLAGS $magick_DEP_LIBS"],
++   'LIBS'	=> ["-L$magick_LIB_DIR -L../magick/.libs -lGraphicsMagick $magick_LDFLAGS $magick_DEP_LIBS"],
+ 
+    # Perl binary name (if a Perl binary is built)
+    'MAP_TARGET'	=> 'PerlMagick',
