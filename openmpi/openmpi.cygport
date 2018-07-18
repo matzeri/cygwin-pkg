@@ -1,6 +1,6 @@
 NAME="openmpi"
-VERSION=3.1.0
-RELEASE=1
+VERSION=3.1.1
+RELEASE=2
 
 CATEGORY="Libs"
 SUMMARY="Open Message Passing Interface API"
@@ -28,10 +28,10 @@ usr/lib/openmpi/ etc/ usr/share/openmpi/ usr/share/pmix/"
 libopenmpifh40_SUMMARY="${SUMMARY} (Fortran runtime)"
 libopenmpifh40_CONTENTS="usr/bin/cygmpi_mpifh-40.dll"
 
-libopenmpiusef08_40_SUMMARY="${SUMMARY} (Fortran use  F4008 runtime)"
+libopenmpiusef08_40_SUMMARY="${SUMMARY} (Fortran use F2008 runtime)"
 libopenmpiusef08_40_CONTENTS="usr/bin/cygmpi_usempif08-40.dll"
 
-libopenmpiusetkr40_SUMMARY="${SUMMARY} (Fortran use  tkr runtime)"
+libopenmpiusetkr40_SUMMARY="${SUMMARY} (Fortran use tkr runtime)"
 libopenmpiusetkr40_CONTENTS="usr/bin/cygmpi_usempi_ignore_tkr-40.dll"
 
 libopenmpi_devel_SUMMARY="${SUMMARY} (development)"
@@ -55,7 +55,6 @@ src_compile() {
         cd ${S}
 	./autogen.pl --force
         cd ${B}
-	export LIBS="-levent"
 	cygconf \
 		${ATOMICS} \
                 --disable-mca-dso \
