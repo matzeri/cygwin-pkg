@@ -1,6 +1,6 @@
 # lilypond.cygport
 NAME="lilypond"
-VERSION=2.19.81
+VERSION=2.19.82
 RELEASE=1
 SUMMARY="A typesetting system for music notation"
 DESCRIPTION="LilyPond is an automated music engraving system. It formats music beautifully and automatically, and has a friendly syntax for its input files"
