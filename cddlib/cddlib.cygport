@@ -1,5 +1,7 @@
 NAME="cddlib"
-VERSION="094i"
+VERSION="094j"
+OV="0.94j"
+
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -7,7 +9,8 @@ DESCRIPTION="general convex polyhedron library"
 SUMMARY="general convex polyhedron library"
 
 HOMEPAGE="http://www.inf.ethz.ch/personal/fukudak/cdd_home/cdd.html"
-SRC_URI="ftp://ftp.ifor.math.ethz.ch/pub/fukuda/cdd/${PN}-${PV}.tar.gz"
+SRC_URI="https://github.com/cddlib/cddlib/releases/download/${OV}/cddlib-${OV}.tar.gz"
+SRC_DIR="${PN}-${OV}"
 PATCH_URI="cddlib-undefined.patch"
 
 PKG_NAMES="cddlib-tools cddlib0 cddlibgmp0 cddlib-devel"
