@@ -1,15 +1,14 @@
 NAME="gnupg"
-VERSION=1.4.22
+VERSION=1.4.23
 RELEASE=1
 
 CATEGORY="Utils"
 
-SUMMARY="GNU\'s tool for secure communication and data storage."
+SUMMARY="GNU\'s tool for secure communication and data storage"
 DESCRIPTION="GNU Privacy Guard is GNU's tool for secure communication and data storage. It can be used to encrypt data and to create digital signatures.  GnuPG is a complete and free replacement for PGP. It includes an advanced key management facility and is compliant with the proposed OpenPGP Internet standard as described in RFC 2440."
 CATEGORY="Utils"
 REQUIRES="bash tar"
 
-DESCRIPTION="The GNU Privacy Guard"
 HOMEPAGE="http://www.gnupg.org/"
 SRC_URI="ftp://ftp.gnupg.org/gcrypt/gnupg/${P}.tar.bz2"
 
