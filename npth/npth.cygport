@@ -1,5 +1,5 @@
 NAME="npth"
-VERSION=1.5
+VERSION=1.6
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Portable threads library"
@@ -12,14 +12,14 @@ SRC_URI="https://www.gnupg.org/ftp/gcrypt/npth/npth-${VERSION}.tar.bz2"
 PKG_NAMES="libnpth0 libnpth-devel"
 libnpth0_CONTENTS="
 	usr/bin/cygnpth-0.dll
-	usr/share/doc/${NAME}
 "
 libnpth_devel_CONTENTS="
 	usr/bin/npth-config
 	usr/include/npth.h
 	usr/lib/libnpth.dll.a
 	usr/share/aclocal/npth.m4
+	usr/share/doc
 "
 
 MAKEOPTS+=" no_undefined=-no-undefined"
-DIFF_EXCLUDES="npth.h"
+DIFF_EXCLUDES="npth.h VERSION"
