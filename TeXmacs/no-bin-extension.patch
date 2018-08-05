@@ -1,0 +1,50 @@
+--- origsrc/TeXmacs-1.99.7-src/Makefile.in	2018-06-14 10:05:05.000000000 +0200
++++ Makefile.in	2018-08-05 09:54:03.010941200 +0200
+@@ -146,7 +146,7 @@
+ 	$(MKDIR) $(DESTDIR)$(tmbin)
+ 	$(MKDIR) $(DESTDIR)$(tmbin)/bin
+ 	$(MKDIR) $(DESTDIR)$(tmbin)/lib
+-	$(CP) $(tmdir)/bin/texmacs.bin $(DESTDIR)$(tmbin)/bin
++	$(CP) $(tmdir)/bin/texmacs.exe $(DESTDIR)$(tmbin)/bin
+ 	$(CP) $(tmdir)/bin/tm_gs $(DESTDIR)$(tmbin)/bin
+ 	$(CP) $(tmdir)/plugins/*/bin/* $(DESTDIR)$(tmbin)/bin
+ 	$(CP) $(tmdir)/plugins/*/lib/*.$(so) \
+@@ -620,7 +620,7 @@
+ 	$(TOUCH) */*/*/*/*.cpp
+ 
+ STRIP:
+-	$(STRIP) $(tmdir)/bin/texmacs.bin
++	$(STRIP) $(tmdir)/bin/texmacs.exe
+ 	$(STRIP) $(tmdir)/lib/*.$(so) 2>/dev/null || >/dev/null
+ 	$(STRIP) $(tmdir)/plugins/*/bin/* 2>/dev/null || >/dev/null
+ 
+--- origsrc/TeXmacs-1.99.7-src/misc/scripts/texmacs.in	2017-09-28 15:44:13.000000000 +0200
++++ misc/scripts/texmacs.in	2018-08-05 09:56:08.510338400 +0200
+@@ -35,4 +35,4 @@
+ @CONFIG_LIB_PATH@="$TEXMACS_BIN_PATH/lib${@CONFIG_LIB_PATH@+":$@CONFIG_LIB_PATH@"}"
+ export PATH @CONFIG_LIB_PATH@
+ 
+-exec texmacs.bin "$@" < /dev/null
++exec texmacs.exe "$@" < /dev/null
+--- origsrc/TeXmacs-1.99.7-src/src/makefile.in	2018-04-13 15:22:12.000000000 +0200
++++ src/makefile.in	2018-08-05 09:58:47.563951700 +0200
+@@ -421,15 +421,15 @@
+    $(LDAXEL) $(LDCAIRO) $(LDSQLITE3) \
+    $(LDSPARKLE)
+ 
+-$(tmsrc)/bin/texmacs.bin: Objects/texmacs-$(link).bin
++$(tmsrc)/bin/texmacs.exe: Objects/texmacs-$(link).exe
+ 	$(CP) $^ $@
+ 
+-Objects/texmacs-$(link).bin: Objects/texmacs.o Objects/tm_ostream.o Objects/fast_alloc.o Objects/tree.o $(TEXMACS_objects)
++Objects/texmacs-$(link).exe: Objects/texmacs.o Objects/tm_ostream.o Objects/fast_alloc.o Objects/tree.o $(TEXMACS_objects)
+ 	$(call link_bin,$(link_options))
+ 
+-all: $(tmsrc)/bin/texmacs.bin
++all: $(tmsrc)/bin/texmacs.exe
+ 
+-.PHONY: all $(tmsrc)/bin/texmacs.bin
++.PHONY: all $(tmsrc)/bin/texmacs.exe
+ 
+ ###############################################################################
+ # Interface for Guile

@@ -1,0 +1,10 @@
+--- origsrc/TeXmacs-1.99.7-src/misc/m4/tm_platform.m4	2018-05-15 14:35:51.000000000 +0200
++++ misc/m4/tm_platform.m4	2018-08-05 08:34:08.783355300 +0200
+@@ -107,6 +107,7 @@
+       AC_MSG_RESULT(cygwin host)
+       AC_DEFINE([OS_CYGWIN],[1],[OS type])
+       CONFIG_OS="CYGWIN"
++      CONFIG_QTPIPES="yes"
+       CONFIG_BFLAGS="-Wl,-stack,8388608"
+     ;;
+     *apple*darwin*)

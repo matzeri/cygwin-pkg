@@ -1,31 +1,32 @@
 inherit qt4
 
 NAME="TeXmacs"
-VERSION=1.99.4
+VERSION=1.99.7
 RELEASE=1
 
 HOMEPAGE="http://www.texmacs.org/"
 SRC_URI="ftp://ftp.texmacs.org/pub/TeXmacs/tmftp/source/${P}-src.tar.gz"
 SRC_DIR="${P}-src"
-# PATCH_URI=""
+PATCH_URI="enable-QTPIPES.patch
+no-bin-extension.patch"
 
 CATEGORY="Editors"
 SUMMARY="WYSIWYG editor for science and math"
 DESCRIPTION="WYSIWYG editor for science and math"
 
-# REQUIRES="aspell ghostscript ImageMagick libfreetype6 libgcc1 libguile17 libiconv2 libImlib2_1 libQtCore4 libQtGui4 libstdc++6 netpbm python rsvg texlive texlive-collection-basic texlive-collection-fontutils texlive-collection-latexrecommended xmodmap"
 REQUIRES="aspell ghostscript netpbm rsvg"
 
-DIFF_EXCLUDES="SVNREV"
-
+DIFF_EXCLUDES="SVNREV admin.makefile"
 
 src_compile() {
 	cd ${S}
 	cygautoreconf
 	lndirs
 	cd ${B}
- 	export LDFLAGS=-lz
-	cygconf --with-iconv=/usr --with-imlib2=linked --with-gs --with-qt=${QT4_QTDIR}
+ 	export LIBS="-lz -lImlib2"
+	cygconf --with-iconv=/usr --with-imlib2=linked --with-qt=${QT4_QTDIR}
+	cygmake
+	# workaround for last bit in proper place
 	cygmake
 }
 
