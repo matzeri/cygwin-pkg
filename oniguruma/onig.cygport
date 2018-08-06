@@ -1,5 +1,5 @@
 NAME="onig"
-VERSION=6.7.0
+VERSION=6.8.2
 RELEASE=1
 
 DESCRIPTION="Oniguruma: Regular expressions library for different character encoding" 
@@ -12,18 +12,18 @@ SRC_DIR="onig-${PV}"
 
 PATCH_URI="onig-autoconf.patch"
 
-abi=4
+abi=5
 
 PKG_NAMES="libonig${abi} libonig-devel"
 
 onig_SUMMARY="Oniguruma regular expressions library (source only)"
-libonig2_SUMMARY="Oniguruma regular expressions library (runtime)"
+libonig5_SUMMARY="Oniguruma regular expressions library (runtime)"
 libonig_devel_SUMMARY="Oniguruma regular expressions library (development)"
 
 
-PKG_CONTENTS[0]="usr/bin/*-${abi}.dll"
+libonig5_CONTENTS="usr/bin/*-${abi}.dll"
 
-PKG_CONTENTS[1]="
+libonig_devel_CONTENTS="
   usr/bin/onig-config
   usr/include/
   usr/lib/
