@@ -1,6 +1,6 @@
 NAME="tesseract-ocr"
-VERSION=3.05.01
-RELEASE=1
+VERSION=4.0.0
+RELEASE=0.4
 
 CATEGORY="Text"
 SUMMARY="Tesseract Open Source OCR Engine"
@@ -8,12 +8,14 @@ DESCRIPTION="The Tesseract OCR engine was originally developed at HP between 198
 The Tesseract OCR engine was one of the top 3 engines in the 1995 UNLV Accuracy test. Between 1995 and 2006 it had little work done on it, but it is probably one of the most accurate open source OCR engines available. It will read a binary, grey or color image and output text."
 
 HOMEPAGE="https://github.com/tesseract-ocr"
-SRC_URI="https://github.com/tesseract-ocr/tesseract/archive/tesseract-${PV}.tar.gz"
-SRC_DIR="tesseract-${PV}"
+# SRC_URI="https://github.com/tesseract-ocr/tesseract/archive/tesseract-${PV}.tar.gz"
+SRC_URI="https://github.com/tesseract-ocr/tesseract/archive/4.0.0-beta.4.tar.gz"
+# SRC_DIR="tesseract-${PV}"
+SRC_DIR="tesseract-4.0.0-beta.4"
 
 #PATCH_URI=""
 
-PKG_NAMES="tesseract-ocr tesseract-training-util libtesseract-ocr_3 tesseract-ocr-devel"
+PKG_NAMES="tesseract-ocr tesseract-training-util libtesseract-ocr_4 tesseract-ocr-devel"
 
 tesseract_ocr_CONTENTS="usr/bin/tesseract.exe usr/share"
 tesseract_ocr_REQUIRES="tesseract-ocr-eng"
@@ -31,6 +33,10 @@ usr/bin/shapeclustering.exe
 usr/bin/text2image.exe
 usr/bin/unicharset_extractor.exe
 usr/bin/wordlist2dawg.exe
+usr/bin/combine_lang_model.exe
+usr/bin/lstmeval.exe
+usr/bin/lstmtraining.exe
+usr/bin/merge_unicharsets.exe
 usr/bin/language-specific.sh
 usr/bin/tesstrain.sh
 usr/bin/tesstrain_utils.sh
@@ -38,14 +44,15 @@ usr/bin/tesstrain_utils.sh
 
 tesseract_training_util_REQUIRES="tesseract-ocr tesseract-training-core"
 
-libtesseract_ocr_3_SUMMARY="${SUMMARY} (C runtime)"
-libtesseract_ocr_3_CONTENTS="usr/bin/cyg*"  
+libtesseract_ocr_4_SUMMARY="${SUMMARY} (C runtime)"
+libtesseract_ocr_4_CONTENTS="usr/bin/cyg*"  
 
 tesseract_ocr_devel_SUMMARY="${SUMMARY} (development)"
 tesseract_ocr_devel_CONTENTS="usr/include/ usr/lib/"
 
 src_compile() {
         cd ${S}
+	./autogen.sh
         cygautoreconf
         cd ${B}
         cygconf LIBS="$(pkg-config --libs icu-i18n)"
@@ -57,10 +64,14 @@ src_install() {
         cd ${B}
         cyginstall
         cyginstall training-install
-	dobin ${S}/training/language-specific.sh
-	dobin ${S}/training/tesstrain.sh
-	dobin ${S}/training/tesstrain_utils.sh
-	insinto /usr/share/tessdata/testing
-	doins ${S}/testing/eurotext.tif ${S}/testing/phototest.tif
+	dobin ${S}/src/training/language-specific.sh
+	dobin ${S}/src/training/tesstrain.sh
+	dobin ${S}/src/training/tesstrain_utils.sh
+#	insinto /usr/share/tessdata/testing
+#	doins ${S}/testing/eurotext.tif ${S}/testing/phototest.tif
 }
 
+src_test() {
+	cd ${B}
+	make -i check
+}
