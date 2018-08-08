@@ -1,0 +1,42 @@
+inherit cmake
+
+NAME="jsoncpp"
+VERSION="1.8.4"
+RELEASE=1
+
+CATEGORY="Libs"
+DESCRIPTION="C++ library that allows manipulating JSON values"
+SUMMARY="C++ library that allows manipulating JSON values"
+
+HOMEPAGE="https://github.com/open-source-parsers/jsoncpp"
+SRC_URI="https://github.com/open-source-parsers/jsoncpp/archive/${PV}.tar.gz"
+SRC_DIR="${P}"
+
+PKG_NAMES="libjsoncpp-devel libjsoncpp19"
+
+libjsoncpp19_CONTENTS="usr/bin/cygjsoncpp-19.dll"
+libjsoncpp19_SUMMARY="${SUMMARY} - runtime"
+
+libjsoncpp_devel_CONTENTS="usr/lib usr/include usr/share"
+libjsoncpp_devel_SUMMARY="${SUMMARY} - devel"
+
+DIFF_EXCLUDES=""
+
+src_compile()
+{
+  cd ${B}
+  cygcmake -DBUILD_SHARED_LIBS:BOOL=ON -DBUILD_STATIC_LIBS:BOOL=OFF
+  cygmake
+}
+
+src_install()
+{
+  cd ${B}
+  cyginstall
+}
+
+
+src_test() {
+  cd ${B}
+  src/test_lib_json/jsoncpp_test.exe
+}
