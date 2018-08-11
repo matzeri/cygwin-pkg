@@ -1,11 +1,11 @@
 FORGE="optim"
 NAME="octave-optim"
-VERSION=1.5.2
-OV=1.5.2
-RELEASE=2
+VERSION=1.5.3
+OV=1.5.3
+RELEASE=1
 
 CATEGORY="Math"
-SUMMARY="Forge:  Non-linear optimization toolkit"
+SUMMARY="Forge: Non-linear optimization toolkit"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
@@ -26,7 +26,7 @@ src_test() {
         cd ${D}
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        testdir="'"${FORGE}-${PV}"'"
+        testdir="'"${FORGE}-${OV}"'"
 
         cd ${B}
         sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
