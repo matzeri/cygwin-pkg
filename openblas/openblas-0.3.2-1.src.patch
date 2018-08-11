@@ -1,0 +1,12 @@
+--- origsrc/OpenBLAS-0.3.2/Makefile.x86_64	2018-07-30 07:25:01.000000000 +0200
++++ src/OpenBLAS-0.3.2/Makefile.x86_64	2018-08-08 22:03:45.019872200 +0200
+@@ -12,6 +12,9 @@ ifeq ($(CORE), SKYLAKEX)
+ ifndef NO_AVX512
+ CCOMMON_OPT += -march=skylake-avx512
+ FCOMMON_OPT += -march=skylake-avx512
++ifeq ($(OSNAME), CYGWIN_NT)
++CCOMMON_OPT += -fno-asynchronous-unwind-tables
++endif
+ endif
+ endif
+ 

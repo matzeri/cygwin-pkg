@@ -15,7 +15,7 @@
  	@$(MAKE) -C exports dll
 +	gcc $(CFLAGS) -shared -Wl,--enable-auto-import -Wl,--enable-auto-image-base \
 +	    -o cygblas-0.dll -Wl,--out-implib=libblas.dll.a \
-+	    -Wl,--whole-archive exports/dllinit.o  libopenblas.a \
++	    -Wl,--whole-archive exports/dllinit.o  cygopenblas.a \
 +	    -Wl,--no-whole-archive -shared-libgcc -lgfortran
  endif
  endif

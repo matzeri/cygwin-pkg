@@ -1,6 +1,6 @@
 NAME="openblas"
-VERSION=0.2.20
-RELEASE=2
+VERSION=0.3.2
+RELEASE=1
 
 CATEGORY="Math"
 DESCRIPTION="OpenBLAS is an optimized BLAS library based on GotoBLAS2"
@@ -11,9 +11,6 @@ SRC_URI="https://github.com/xianyi/OpenBLAS/archive/v${PV}.tar.gz"
 SRC_DIR="OpenBLAS-${PV}"
 
 PATCH_URI="
-8f5f614615028ae336f91f98f04f1505577d93e7.patch
-ce2028b425fafabbae4494084bd9e6727b2a4195.patch
-f5fc109fbd73b2feadaca5e9e74d085cc5fe5144.patch
 cygwin-shared.patch"
 
 # PKG_NAMES="openblas libopenblas libopenblas-devel"
