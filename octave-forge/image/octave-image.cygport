@@ -1,6 +1,7 @@
 FORGE="image"
 NAME="octave-image"
-VERSION=2.6.2
+VERSION=2.8.0
+OV=2.8.0
 RELEASE=1
 
 CATEGORY="Math"
@@ -25,7 +26,7 @@ src_test() {
         cd ${D}
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        testdir="'"${FORGE}-${PV}"'"
+        testdir="'"${FORGE}-${OV}"'"
 
         cd ${B}
         sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
