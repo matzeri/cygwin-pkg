@@ -1,7 +1,7 @@
 FORGE="lssa"
 NAME="octave-lssa"
-VERSION=0.1.2rh56
-OV=0.1.2
+VERSION=0.1.3
+OV=0.1.3
 RELEASE=1
 
 CATEGORY="Math"
@@ -26,7 +26,7 @@ src_test() {
         cd ${D}
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        testdir="'"${FORGE}-${PV}"'"
+        testdir="'"${FORGE}-${OV}"'"
 
         cd ${B}
         sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
