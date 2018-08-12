@@ -1,0 +1,260 @@
+diff -uNr orig/RHash-1.3.6/common_func.c RHash-1.3.6/common_func.c
+--- orig/RHash-1.3.6/common_func.c	2018-03-14 02:42:17.000000000 +0100
++++ RHash-1.3.6/common_func.c	2018-08-09 09:24:52.538200400 +0200
+@@ -7,8 +7,9 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <wchar.h>
++#include <sys/time.h>
+ 
+-#if defined( _WIN32) || defined(__CYGWIN__)
++#if defined( _WIN32) 
+ # include <windows.h>
+ #endif
+ 
+@@ -243,7 +244,7 @@
+  */
+ static double rsh_fsec(timedelta_t* timer)
+ {
+-#if defined( _WIN32) || defined(__CYGWIN__)
++#if defined( _WIN32) 
+ 	LARGE_INTEGER freq;
+ 	QueryPerformanceFrequency(&freq);
+ 	return (double)*timer / freq.QuadPart;
+@@ -252,7 +253,7 @@
+ #endif
+ }
+ 
+-#if defined( _WIN32) || defined(__CYGWIN__)
++#if defined( _WIN32) 
+ #define get_timedelta(delta) QueryPerformanceCounter((LARGE_INTEGER*)delta)
+ #else
+ #define get_timedelta(delta) gettimeofday(delta, NULL)
+@@ -267,7 +268,7 @@
+ {
+ 	timedelta_t end;
+ 	get_timedelta(&end);
+-#if defined( _WIN32) || defined(__CYGWIN__)
++#if defined( _WIN32) 
+ 	*timer = end - *timer;
+ #else
+ 	timer->tv_sec  = end.tv_sec  - timer->tv_sec - (end.tv_usec >= timer->tv_usec ? 0 : 1);
+@@ -278,7 +279,7 @@
+ 
+ unsigned rhash_get_ticks(void)
+ {
+-#if defined( _WIN32) || defined(__CYGWIN__)
++#if defined( _WIN32) 
+ 	return GetTickCount();
+ #else
+ 	struct timeval tv;
+diff -uNr orig/RHash-1.3.6/common_func.h RHash-1.3.6/common_func.h
+--- orig/RHash-1.3.6/common_func.h	2018-03-14 02:42:17.000000000 +0100
++++ RHash-1.3.6/common_func.h	2018-08-09 09:30:51.982917700 +0200
+@@ -19,7 +19,7 @@
+ #include <time.h> /* for time_t */
+ #include <stddef.h> /* for wchar_t */
+ 
+-#if !defined( _WIN32) && !defined(__CYGWIN__)
++#if !defined( _WIN32) 
+ # include <sys/time.h> /* for timeval */
+ #elif _MSC_VER > 1300
+ # include "platform.h"
+@@ -86,7 +86,7 @@
+ /* time data and functions */
+ 
+ /* portable timer definition */
+-#if defined( _WIN32) || defined(__CYGWIN__)
++#if defined( _WIN32) 
+ typedef unsigned long long timedelta_t;
+ #else
+ #include <sys/time.h> /* for timeval */
+diff -uNr orig/RHash-1.3.6/file.c RHash-1.3.6/file.c
+--- orig/RHash-1.3.6/file.c	2018-03-14 02:42:17.000000000 +0100
++++ RHash-1.3.6/file.c	2018-08-09 09:13:02.587761500 +0200
+@@ -16,7 +16,7 @@
+ #include "common_func.h"
+ #include "win_utils.h"
+ 
+-#if defined( _WIN32) || defined(__CYGWIN__)
++#if defined( _WIN32) 
+ # include <windows.h>
+ # include <share.h> /* for _SH_DENYWR */
+ # include <fcntl.h>  /* _O_RDONLY, _O_BINARY */
+diff -uNr orig/RHash-1.3.6/librhash/plug_openssl.c RHash-1.3.6/librhash/plug_openssl.c
+--- orig/RHash-1.3.6/librhash/plug_openssl.c	2018-03-14 02:42:17.000000000 +0100
++++ RHash-1.3.6/librhash/plug_openssl.c	2018-08-09 09:34:51.107447000 +0200
+@@ -39,7 +39,7 @@
+ #include "plug_openssl.h"
+ 
+ #if defined(OPENSSL_RUNTIME)
+-#  if(defined(_WIN32) || defined(__CYGWIN__))
++#  if defined(_WIN32) 
+ #    include <windows.h>
+ #  else
+ #    include <dlfcn.h>
+@@ -137,7 +137,7 @@
+ rhash_hash_info rhash_openssl_hash_info[RHASH_HASH_COUNT];
+ 
+ #ifdef OPENSSL_RUNTIME
+-#if (defined(_WIN32) || defined(__CYGWIN__)) /* __CYGWIN__ is also defined in MSYS */
++#if defined(_WIN32) 
+ #define LOAD_ADDR(n, name) \
+ 	p##name##_final = (os_fin_t)GetProcAddress(handle, #name "_Final"); \
+ 	rhash_openssl_methods[n].update = (pupdate_t)GetProcAddress(handle, #name "_Update"); \
+@@ -159,7 +159,7 @@
+  */
+ static int load_openssl_runtime(void)
+ {
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32) 
+ 	HMODULE handle;
+ 	/* suppress the error popup dialogs */
+ 	UINT oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
+diff -uNr orig/RHash-1.3.6/librhash/rhash.c RHash-1.3.6/librhash/rhash.c
+--- orig/RHash-1.3.6/librhash/rhash.c	2018-03-14 02:42:17.000000000 +0100
++++ RHash-1.3.6/librhash/rhash.c	2018-08-09 09:18:55.347530900 +0200
+@@ -794,7 +794,7 @@
+ 	return rhash_print_bytes(output, digest, digest_size, flags);
+ }
+ 
+-#if (defined(_WIN32) || defined(__CYGWIN__)) && defined(RHASH_EXPORTS)
++#if defined(_WIN32) && defined(RHASH_EXPORTS)
+ #include <windows.h>
+ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID reserved);
+ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID reserved)
+diff -uNr orig/RHash-1.3.6/librhash/rhash_timing.c RHash-1.3.6/librhash/rhash_timing.c
+--- orig/RHash-1.3.6/librhash/rhash_timing.c	2018-03-14 02:42:17.000000000 +0100
++++ RHash-1.3.6/librhash/rhash_timing.c	2018-08-09 09:20:30.451082900 +0200
+@@ -45,7 +45,7 @@
+ 
+ /* TIMER FUNCTIONS */
+ 
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32) 
+ #include <windows.h>
+ #define get_timedelta(delta) QueryPerformanceCounter((LARGE_INTEGER*)delta)
+ #else
+@@ -64,7 +64,7 @@
+  */
+ static double fsec(timedelta_t* timer)
+ {
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32) 
+ 	LARGE_INTEGER freq;
+ 	QueryPerformanceFrequency(&freq);
+ 	return (double)*timer / freq.QuadPart;
+@@ -99,7 +99,7 @@
+ {
+ 	timedelta_t end;
+ 	get_timedelta(&end);
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32) 
+ 	*timer = end - *timer;
+ #else
+ 	timer->tv_sec  = end.tv_sec  - timer->tv_sec - (end.tv_usec >= timer->tv_usec ? 0 : 1);
+@@ -108,7 +108,7 @@
+ 	return fsec(timer);
+ }
+ 
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32) 
+ /**
+  * Set process priority and affinity to use all cpu's but the first one.
+  * This improves benchmark results on a multi-cpu systems.
+@@ -181,7 +181,7 @@
+ 	double cpb = 0;
+ #endif /* HAVE_TSC */
+ 
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32) 
+ 	benchmark_cpu_init(); /* set cpu affinity to improve test results */
+ #endif
+ 
+diff -uNr orig/RHash-1.3.6/librhash/rhash_timing.h RHash-1.3.6/librhash/rhash_timing.h
+--- orig/RHash-1.3.6/librhash/rhash_timing.h	2018-03-14 02:42:17.000000000 +0100
++++ RHash-1.3.6/librhash/rhash_timing.h	2018-08-09 09:33:09.787847300 +0200
+@@ -18,7 +18,7 @@
+ #endif
+ 
+ /* portable timer definition */
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32) 
+ typedef unsigned long long timedelta_t;
+ #else
+ #include <sys/time.h> /* for timeval */
+diff -uNr orig/RHash-1.3.6/win_utils.c RHash-1.3.6/win_utils.c
+--- orig/RHash-1.3.6/win_utils.c	2018-03-14 02:42:17.000000000 +0100
++++ RHash-1.3.6/win_utils.c	2018-08-09 09:21:49.520234300 +0200
+@@ -1,5 +1,5 @@
+ /* win_utils.c - utility functions for Windows and CygWin */
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32) 
+ #include <windows.h>
+ #include "win_utils.h"
+ 
+@@ -728,4 +728,4 @@
+ #endif /* _WIN32 */
+ #else
+ typedef int dummy_declaration_required_by_strict_iso_c;
+-#endif /* defined(_WIN32) || defined(__CYGWIN__) */
++#endif /* defined(_WIN32) */
+diff -uNr orig/RHash-1.3.6/win_utils.h RHash-1.3.6/win_utils.h
+--- orig/RHash-1.3.6/win_utils.h	2018-03-14 02:42:17.000000000 +0100
++++ RHash-1.3.6/win_utils.h	2018-08-09 09:32:14.715811600 +0200
+@@ -2,7 +2,7 @@
+ #ifndef WIN_UTILS_H
+ #define WIN_UTILS_H
+ 
+-#if defined(_WIN32) || defined(__CYGWIN__)
++#if defined(_WIN32) 
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -69,6 +69,6 @@
+ }
+ #endif
+ 
+-#endif /* defined(_WIN32) || defined(__CYGWIN__) */
++#endif /* defined(_WIN32)  */
+ 
+ #endif /* WIN_UTILS_H */
+--- orig/RHash-1.3.6/configure	2018-03-14 02:42:17.000000000 +0100
++++ RHash-1.3.6/configure	2018-08-09 12:34:40.426721400 +0200
+@@ -7,7 +7,7 @@ OPT_GETTEXT=auto
+
+ export LC_ALL=C
+ CFG_LINE="$*"
+-INSTALL_PREFIX="/usr/local"
++INSTALL_PREFIX="/usr"
+ test -z "$CC" && CC=cc
+ CMD_AR=ar
+ CMD_INSTALL=install
+@@ -557,6 +557,8 @@
+     SHARED_PREFIX="msys-"
+   elif cygwin; then
+     SHARED_PREFIX="cyg"
++    SHARED_EXT="-0.dll"
++    IMPSH_EXT=".dll.a"
+   fi
+ elif darwin; then
+   SHARED_EXT=".0.dylib"
+@@ -616,7 +618,11 @@
+ LIBRHASH_SOLINK_TARGET=
+ test "$NEED_SOLINK" = "yes" && LIBRHASH_SOLINK_TARGET=$LIBRHASH_SOLINK
+ LIBRHASH_DEF="${SHARED_PREFIX}rhash.def"
++if ! cygwin ; then
+ LIBRHASH_IMPLIB="${STATIC_PREFIX}rhash${SHARED_EXT}${STATIC_EXT}"
++else
++LIBRHASH_IMPLIB="${STATIC_PREFIX}rhash${IMPSH_EXT}"
++fi
+ LIBRHASH_EXPORTS_FILE="exports.sym"
+ LIBRHASH_EXPORTS_TARGET=
+ LIBRHASH_SH_CFLAGS=""
+@@ -897,4 +903,4 @@
+ Libs.private: ${OPENSSL_LDFLAGS}
+ 
+ EOF
+-fi
+\ No newline at end of file
++fi

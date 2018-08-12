@@ -1,0 +1,51 @@
+NAME="rhash"
+VERSION="1.3.6"
+RELEASE=1
+
+CATEGORY="Libs"
+DESCRIPTION="RHash is a console utility for calculation and verification of magnet links and a wide range of hash sums like CRC32, MD4, MD5, SHA1, SHA256, SHA512, SHA3, AICH, ED2K, Tiger, DC++ TTH, BitTorrent BTIH, GOST R 34.11-94, RIPEMD-160, HAS-160, EDON-R, Whirlpool and Snefru."
+SUMMARY="utility for computing hash sums"
+
+HOMEPAGE="https://github.com/rhash/RHash"
+SRC_URI="https://github.com/rhash/RHash/archive/v${PV}.tar.gz"
+SRC_DIR="RHash-${PV}"
+PATCH_URI="cygwin.patch"
+
+PKG_NAMES="rhash librhash0 librhash-devel"
+
+rhash_CONTENTS="
+--exclude=usr/bin/cygrhash-0.dll
+etc usr/bin/ usr/share"
+rhash_SUMMARY="${SUMMARY}"
+
+librhash0_CONTENTS="usr/bin/cygrhash-0.dll"
+librhash0_SUMMARY="${SUMMARY} - runtime"
+
+librhash_devel_CONTENTS="usr/lib usr/include"
+librhash_devel_SUMMARY="${SUMMARY} - devel"
+
+src_compile()
+{
+  cd ${S}
+  lndirs
+  cd ${B}
+  # not autoconf configure
+  ./configure
+  cygmake
+}
+
+src_install()
+{
+  cd ${B}
+  cyginstall
+  insinto /usr/include
+  doins ${B}/librhash/rhash.h ${B}/librhash/rhash_torrent.h
+  make_etc_defaults /usr/etc/rhashrc 
+}
+
+
+src_test() {
+  cd ${B}
+  PATH=${B}/librhash:${PATH}
+  cygmake -i test
+}
