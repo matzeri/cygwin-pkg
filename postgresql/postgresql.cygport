@@ -1,5 +1,5 @@
 NAME="postgresql"
-VERSION=10.4
+VERSION=10.5
 RELEASE=1
 
 CATEGORY="Database"
@@ -172,6 +172,7 @@ usr/include/libpq-fe.h \
 usr/include/libpq-events.h \
 usr/include/libpq/libpq-fs.h \
 usr/include/pg_config*.h \
+usr/include/pgtypes.h \
 usr/include/postgres_ext.h \
 usr/include/postgresql/internal \
 usr/lib/libpgport.a \
