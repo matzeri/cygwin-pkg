@@ -1,5 +1,5 @@
 NAME="qpdf"
-VERSION=8.1.0
+VERSION=8.2.1
 RELEASE=1
 
 DESCRIPTION="command-line program that does structural, content-preserving transformations on PDF files"
@@ -13,7 +13,7 @@ PKG_NAMES="qpdf libqpdf${abi} libqpdf-devel"
 
 qpdf_SUMMARY="PDF transformation tool"
 libqpdf21_SUMMARY="PDF transformation tool - shared library"
-libqpdf_devel_SUMMARY="PDF transformation tool -  development"
+libqpdf_devel_SUMMARY="PDF transformation tool - development"
 
 qpdf_CONTENTS="usr/bin/*.exe usr/bin/fix-qdf usr/share/"
 libqpdf21_CONTENTS="usr/bin/cygqpdf-${abi}.dll"
