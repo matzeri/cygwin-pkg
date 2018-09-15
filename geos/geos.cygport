@@ -1,5 +1,5 @@
 NAME="geos"
-VERSION=3.5.1
+VERSION=3.7.0
 RELEASE=1
 
 CATEGORY="Science"
@@ -8,13 +8,12 @@ DESCRIPTION="GEOS (Geometry Engine - Open Source) is a C++ Topology Suite"
 HOMEPAGE="https://trac.osgeo.org/geos/"
 
 SRC_URI="http://download.osgeo.org/geos/${PN}-${PV}.tar.bz2" 
-PATCH_URI="configure-noansi.patch"
 SRC_DIR="${PN}-${PV}"
 
-PKG_NAMES="libgeos-devel libgeos_3_5_1 libgeos_c1"
+PKG_NAMES="libgeos-devel libgeos_3_7_0 libgeos_c1"
 
-libgeos_3_5_1_CONTENTS="
-  usr/bin/cyggeos-3-5-1.dll
+libgeos_3_7_0_CONTENTS="
+  usr/bin/cyggeos-3-7-0.dll
 "
 
 libgeos_c1_CONTENTS="
@@ -28,8 +27,8 @@ libgeos_devel_CONTENTS="
   usr/share
 "
 
-libgeos_3_5_1_CATEGORY="Science Libs"
-libgeos_3_5_1_SUMMARY="Geometry Engine for Topology - (C++ runtime)"
+libgeos_3_7_0_CATEGORY="Science Libs"
+libgeos_3_7_0_SUMMARY="Geometry Engine for Topology - (C++ runtime)"
 
 libgeos_c1_CATEGORY="Science Libs"
 libgeos_c1_SUMMARY="Geometry Engine for Topology - (C runtime)"
@@ -56,6 +55,7 @@ src_install() {
 
 src_test() {
        cd ${B}
-       make check
+       make -i check
+       cat ${B}/tests/unit/test-suite.log
 }
 
