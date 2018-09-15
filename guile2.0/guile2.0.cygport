@@ -1,6 +1,6 @@
-NAME="guile"
+NAME="guile2.0"
 VERSION=2.0.14
-RELEASE=2
+RELEASE=3
 CATEGORY="Interpreters"
 SUMMARY="GNU Scheme interpreter library"
 DESCRIPTION="Guile is an interpreter for Scheme, packaged as a library that
@@ -14,15 +14,14 @@ PATCH_URI="
 	test-ffi.patch
 "
 
-PKG_NAMES="${NAME} libguile2.0_22 libguile2.0-devel"
+PKG_NAMES="guile2.0 libguile2.0_22 libguile2.0-devel"
 libguile2_0_devel_OBSOLETES="guile-devel"
-guile_CONTENTS="
-	usr/bin/guild
-	usr/bin/guile.exe
-	usr/bin/guile-tools
+guile2_0_CONTENTS="
+	usr/bin/guild-2.0
+	usr/bin/guile-2.0.exe
+	usr/bin/guile-tools-2.0
 	usr/share/doc/
-	usr/share/info/
-	usr/share/man/man1/guile.1*
+	usr/share/man/man1/guile*
 "
 libguile2_0_22_CONTENTS="
 	usr/bin/cygguile-2.0-22.dll
@@ -32,17 +31,20 @@ libguile2_0_22_CONTENTS="
 "
 libguile2_0_devel_REQUIRES=${NAME}
 libguile2_0_devel_CONTENTS="
-	usr/bin/guile-config
-	usr/bin/guile-snarf
+	usr/bin/guile-config-2.0
+	usr/bin/guile-snarf-2.0
 	usr/include/guile/2.0/
 	usr/lib/libguile-2.0.*
 	usr/lib/pkgconfig/guile-2.0.pc
 	usr/share/aclocal/guile-2.0.m4
 "
 
+KEEP_LA_FILES="module"
 DIFF_EXCLUDES="ref test-suite"
 
 CYGCONF_ARGS="
+	--program-suffix=-2.0 \
+	--includedir=/usr/include/guile/2.0 \
 	--disable-debug-freelist \
 	--disable-debug-malloc \
 	--disable-guile-debug \
@@ -62,14 +64,23 @@ src_install() {
 	cd ${B}
 	cyginstall
 
-#	sed -i -e '1s|/bin/guile|&-2.0|' ${D}/usr/bin/guile-config-2.0
+	sed -i -e '1s|/bin/guile|&-2.0|' ${D}/usr/bin/guile-config-2.0
 
-	# avoid collisions
+	# avoid collisions with guile -2.2
 	mv ${D}/usr/share/aclocal/guile{,-2.0}.m4
+	rm -f ${D}/usr/share/info/*
 
 	dodir /usr/share/gdb/auto-load/usr/bin
 	mv ${D}/usr/lib/libguile-2.0.dll.a-gdb.scm \
 		${D}/usr/share/gdb/auto-load/usr/bin/$(${DLLTOOL} -I ${D}/usr/lib/libguile-2.0.dll.a)-gdb.scm
 }
 
-KEEP_LA_FILES="module"
+src_test() {
+        cd ${B}
+        inform " **** Running make check     ****"
+        make -i check
+        inform " ****  Running last tests in a complete way    ****"
+        for i in  ${S}/test-suite/tests/*.test
+                do ./check-guile $(basename $i) || true
+        done
+}
