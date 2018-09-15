@@ -1,5 +1,5 @@
 NAME="proj"
-VERSION=5.1.0
+VERSION=5.2.0
 RELEASE=1
 
 CATEGORY="Graphics Libs"
@@ -8,7 +8,7 @@ SUMMARY="The PROJ Cartographic Projections Software"
 HOMEPAGE="http://trac.osgeo.org/proj/"
 
 SRC_URI="http://download.osgeo.org/proj/${PN}-${PV}.tar.gz 
-http://download.osgeo.org/proj/proj-datumgrid-1.7.tar.gz"
+http://download.osgeo.org/proj/proj-datumgrid-1.8.tar.gz"
 SRC_DIR="${PN}-${PV}"
 
 
@@ -21,7 +21,7 @@ PKG_SUMMARY[0]="${SUMMARY} (utilities)"
 PKG_CONTENTS[1]="usr/include usr/lib"
 PKG_SUMMARY[1]="${SUMMARY} (devel)"
 
-PKG_CONTENTS[2]="usr/bin/*.dll"
+PKG_CONTENTS[2]="usr/bin/cygproj-${abi}.dll"
 PKG_SUMMARY[2]="${SUMMARY} (runtime)"
 
 CYGPORT_USE_UNSTABLE_API=1
