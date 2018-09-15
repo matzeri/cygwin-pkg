@@ -1,6 +1,6 @@
 NAME="autotrace"
 VERSION="0.31.1"
-RELEASE="18"
+RELEASE="19"
 CATEGORY="Graphics Libs"
 SUMMARY="A program for converting bitmap to vector graphics"
 DESCRIPTION="AutoTrace is a program for converting bitmap to vector graphics.
