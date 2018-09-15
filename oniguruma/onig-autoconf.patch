@@ -1,17 +1,6 @@
---- origsrc/oniguruma-6.0.0/configure.ac	2016-05-09 02:30:51.000000000 +0200
-+++ configure.ac	2016-05-11 22:39:59.919250100 +0200
-@@ -33,7 +33,7 @@ fi
- 
- dnl Checks for programs.
- AC_PROG_CC
--AM_PROG_LIBTOOL
-+AC_PROG_LIBTOOL
- LTVERSION="5:0:0"
- AC_SUBST(LTVERSION)
- 
---- origsrc/oniguruma-6.0.0/src/Makefile.am	2016-05-09 02:30:51.000000000 +0200
-+++ src/Makefile.am	2016-05-11 22:44:56.032973000 +0200
-@@ -33,7 +33,7 @@ libonig_la_SOURCES = regint.h regparse.h
+--- origsrc/onig-6.9.0/src/Makefile.am	2018-09-03 01:46:37.000000000 +0200
++++ src/Makefile.am	2018-09-12 12:58:24.013329300 +0200
+@@ -45,7 +45,7 @@ libonig_la_SOURCES = regint.h regparse.h
  	gb18030.c koi8_r.c cp1251.c \
  	onig_init.c
  
@@ -20,9 +9,9 @@
  
  EXTRA_DIST = koi8.c mktable.c \
  	unicode_fold_data.c unicode_property_data.c \
-@@ -47,11 +47,6 @@ EXTRA_DIST = koi8.c mktable.c \
- 	unicode-7.0/unicode_property_data_posix.c \
- 	unicode-7.0/unicode_unfold_key.c
+@@ -57,11 +57,6 @@ EXTRA_DIST = koi8.c mktable.c \
+ 	make_property.sh \
+ 	gperf_fold_key_conv.py gperf_unfold_key_conv.py
  
 -dll:
 -	$(CXX) -shared -Wl,--output-def,libonig.def -o libonig.dll *.o \

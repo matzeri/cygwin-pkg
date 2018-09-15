@@ -1,5 +1,5 @@
 NAME="onig"
-VERSION=6.8.2
+VERSION=6.9.0
 RELEASE=1
 
 DESCRIPTION="Oniguruma: Regular expressions library for different character encoding" 
