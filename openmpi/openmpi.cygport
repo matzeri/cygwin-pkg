@@ -1,6 +1,6 @@
 NAME="openmpi"
 VERSION=3.1.2
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Libs"
 SUMMARY="Open Message Passing Interface API"
@@ -13,6 +13,7 @@ SRC_URI="http://www.open-mpi.org/software/ompi/v3.1/downloads/${P}.tar.bz2"
 
 PATCH_URI="pre-install.patch
 openmpi-README.patch
+openmpi-libevent.patch
 "
 
 PKG_NAMES="openmpi libopenmpi40 libopenmpifh40  
@@ -77,9 +78,6 @@ src_test() {
 src_install() {
 	cd ${B}
         cyginstall
-	rm ${D}/usr/bin/mpic++
-	rm ${D}/usr/bin/mpicxx
-
 }
 
 
