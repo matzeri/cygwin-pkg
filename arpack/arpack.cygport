@@ -1,5 +1,5 @@
 NAME="arpack"
-VERSION=3.6.1
+VERSION=3.6.3
 RELEASE=1
 
 CATEGORY="Math Libs"
