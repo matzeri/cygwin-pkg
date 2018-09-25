@@ -1,0 +1,35 @@
+NAME="colordiff"
+VERSION="1.0.18"
+RELEASE=1
+
+ARCH="noarch"
+CATEGORY="Utils"
+DESCRIPTION="A tool to colorize diff command output"
+SUMMARY="A tool to colorize diff command output"
+HOMEPAGE="https://www.colordiff.org/"
+
+SRC_URI="https://www.colordiff.org/${P}.tar.gz
+https://www.colordiff.org/${P}.tar.gz.sig"
+SRC_DIR="${P}"
+PATCH_URI="colordiff-install.patch"
+
+DOCS="colordiffrc-lightbg"
+PKG_NAMES="colordiff"
+
+colordiff_CONTENTS="usr etc"
+colordiff_SUMMARY="${SUMMARY}"
+
+src_compile() {
+    lndirs
+}
+
+src_test() {
+    :
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	make_etc_defaults /etc/colordiffrc
+}
