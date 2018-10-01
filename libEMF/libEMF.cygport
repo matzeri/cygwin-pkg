@@ -1,0 +1,50 @@
+NAME="libEMF"
+VERSION=1.0.9
+RELEASE=1
+CATEGORY="Graphics Libs"
+SUMMARY="A library for generating Enhanced Metafiles"
+DESCRIPTION="libEMF is a library for generating Enhanced Metafiles on systems which
+don't natively support the ECMA-234 Graphics Device Interface
+(GDI). The library is intended to be used as a driver for other
+graphics programs such as Grace or gnuplot. Therefore, it implements a
+very limited subset of the GDI."
+
+HOMEPAGE="http://libemf.sourceforge.net/"
+SRC_URI="mirror://sourceforge/libemf/libemf-${PV}.tar.gz"
+PATCH_URI="
+  libEMF-iconv.patch
+"
+
+abi=1
+PKG_NAMES="${PN} ${PN}${abi} ${PN}-devel"
+libEMF_SUMMARY="${SUMMARY} (utilities)"
+libEMF_CONTENTS="
+  --exclude=usr/share/doc/${PN}/html
+  usr/bin/*.exe
+  usr/share/doc/
+"
+libEMF1_SUMMARY="${SUMMARY} (runtime)"
+libEMF1_CONTENTS="
+  usr/bin/*-${abi}.dll
+"
+libEMF_devel_SUMMARY="${SUMMARY} (development)"
+libEMF_devel_CATEGORY="Devel ${CATEGORY}"
+libEMF_devel_REQUIRES="libiconv-devel"
+libEMF_devel_CONTENTS="
+  usr/include/
+  usr/lib/
+  usr/share/doc/${PN}/html/
+"
+
+
+KEEP_LA_FILES=none
+
+CYGCONF_ARGS="--enable-editing"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	dodir /usr/share/doc/${PN}
+	cp -r ${S}/doc/html ${D}/usr/share/doc/${PN}
+}
