@@ -1,0 +1,62 @@
+NAME="pstoedit"
+VERSION=3.73
+RELEASE=1
+CATEGORY="Graphics"
+SUMMARY="A tool converting PostScript and PDF files into various vector graphic formats"
+DESCRIPTION="Converts Postscript and PDF files to various editable vector graphics formats, 
+including xfig, ai, idraw, metapost, gnu metafile, and others."
+
+HOMEPAGE="http://www.pstoedit.net/"
+SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+
+# Build dependencies only
+DEPEND="libEMF-devel libplotter-devel"
+
+abi=0
+PKG_NAMES="${PN} lib${PN}${abi} ${PN}-devel"
+pstoedit_SUMMARY="${SUMMARY} (utilities)"
+pstoedit_REQUIRES="ghostscript"
+pstoedit_CONTENTS="
+  usr/bin/*.exe
+  usr/share/doc/
+  usr/share/man/
+  usr/share/pstoedit/
+"
+libpstoedit0_CATEGORY="Libs ${CATEGORY}"
+libpstoedit0_SUMMARY="${SUMMARY} (runtime)"
+libpstoedit0_CONTENTS="
+  usr/bin/*-${abi}.dll
+  usr/lib/pstoedit/
+"
+pstoedit_devel_CATEGORY="Devel ${CATEGORY}"
+pstoedit_devel_SUMMARY="${SUMMARY} (development)"
+pstoedit_devel_REQUIRES="libEMF-devel libgd-devel libMagick-devel libming-devel libplotter-devel gcc-core gcc-g++ libzip-devel"
+pstoedit_devel_CONTENTS="
+  usr/include/
+  usr/lib/lib*
+  usr/lib/pkgconfig/
+  usr/share/aclocal/
+"
+
+
+DIFF_EXCLUDES="copying"
+ 
+MAKEOPTS="-j1"
+
+CPPFLAGS+=-I/usr/lib/libzip/include
+
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	doman ${S}/doc/pstoedit.1
+
+	dodir /usr/share/doc/${PN}/java1
+	dodir /usr/share/doc/${PN}/java2
+
+	cp ${S}/contrib/java/java1/{*.java,*.txt}        ${D}/usr/share/doc/${PN}/java1
+	cp ${S}/contrib/java/java2/{*.java,*.html,*.gif} ${D}/usr/share/doc/${PN}/java2
+}
+
+DOCS="readme.install doc/*.htm doc/readme.txt"
