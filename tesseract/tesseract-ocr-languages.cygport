@@ -1,6 +1,6 @@
 NAME="tesseract-ocr-languages"
 VERSION=4.00
-RELEASE=0.4
+RELEASE=2
 
 ARCH="noarch"
 CATEGORY="Text"
