@@ -1,5 +1,5 @@
 NAME="libuv"
-VERSION="1.22.0"
+VERSION="1.23.2"
 RELEASE=1
 
 CATEGORY="Libs"
@@ -9,6 +9,7 @@ SUMMARY="multi-platform support library with a focus on asynchronous I/O"
 HOMEPAGE="https://github.com/libuv/libuv"
 SRC_URI="https://github.com/libuv/libuv/archive/v${PV}.tar.gz"
 SRC_DIR="${P}"
+PATCH_URI="5260e832da20433f22f7fb926a279ca3e94a95a7.patch"
 
 PKG_NAMES="libuv-devel libuv1"
 
