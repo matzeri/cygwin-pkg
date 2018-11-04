@@ -1,5 +1,5 @@
 NAME="postgresql"
-VERSION=10.5
+VERSION=11.0
 RELEASE=1
 
 CATEGORY="Database"
@@ -7,6 +7,7 @@ SUMMARY="object-relational SQL database management system"
 DESCRIPTION="object-relational SQL database management system"
 HOMEPAGE="http://www.postgresql.org/"
 SRC_URI="https://ftp.postgresql.org/pub/source/v${PV}/${PN}-${PV}.tar.bz2"
+SRC_DIR="${PN}-${PV}"
 
 PATCH_URI="
 postgresql-cygwin.patch
@@ -65,11 +66,11 @@ usr/lib/postgresql/dict_snowball.dll \
 usr/lib/postgresql/euc2004_sjis2004.dll \
 usr/lib/postgresql/libpqwalreceiver.dll \
 usr/lib/postgresql/plpgsql.dll \
-usr/share/locale/*/LC_MESSAGES/initdb-10.mo \
-usr/share/locale/*/LC_MESSAGES/pg_controldata-10.mo \
-usr/share/locale/*/LC_MESSAGES/pg_ctl-10.mo \
-usr/share/locale/*/LC_MESSAGES/pg_waldump-10.mo \
-usr/share/locale/*/LC_MESSAGES/postgres-10.mo \
+usr/share/locale/*/LC_MESSAGES/initdb-11.mo \
+usr/share/locale/*/LC_MESSAGES/pg_controldata-11.mo \
+usr/share/locale/*/LC_MESSAGES/pg_ctl-11.mo \
+usr/share/locale/*/LC_MESSAGES/pg_waldump-11.mo \
+usr/share/locale/*/LC_MESSAGES/postgres-11.mo \
 usr/share/man/man1/initdb.1.gz \
 usr/share/man/man1/pg_controldata.1.gz \
 usr/share/man/man1/pg_ctl.1.gz \
@@ -88,12 +89,12 @@ usr/share/man/man3"
 # TODO: usr/lib/pkgconfig/
 
 postgresql_client_CONTENTS=" \
---exclude=usr/share/locale/*/LC_MESSAGES/initdb-10.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_controldata-10.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_ctl-10.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_waldump-10.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/postgres-10.mo \
---exclude=usr/share/locale/*/LC_MESSAGES/pg_config-10.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/initdb-11.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_controldata-11.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_ctl-11.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_waldump-11.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/postgres-11.mo \
+--exclude=usr/share/locale/*/LC_MESSAGES/pg_config-11.mo \
 usr/bin/clusterdb.exe \
 usr/bin/createdb.exe \
 usr/bin/dropdb.exe \
@@ -108,6 +109,7 @@ usr/bin/pg_resetwal.exe \
 usr/bin/pg_rewind.exe \
 usr/bin/pg_test_fsync.exe \
 usr/bin/pg_test_timing.exe \
+usr/bin/pg_verify_checksums.exe \
 usr/bin/pg_upgrade.exe \
 usr/bin/pgbench.exe \
 usr/bin/psql.exe \
@@ -130,6 +132,7 @@ usr/share/man/man1/pg_recvlogical.1.gz \
 usr/share/man/man1/pg_resetwal.1.gz \
 usr/share/man/man1/pg_restore.1.gz \
 usr/share/man/man1/pg_rewind.1.gz \
+usr/share/man/man1/pg_verify_checksums.1.gz \
 usr/share/man/man1/psql.1.gz \
 usr/share/man/man1/reindexdb.1.gz \
 usr/share/man/man1/vacuumdb.1.gz \
@@ -181,7 +184,7 @@ usr/lib/libpgcommon.a \
 usr/lib/libpgfeutils.a \
 usr/lib/pkgconfig/libpq.pc \
 usr/share/man/man1/pg_config.1.gz \
-usr/share/locale/*/LC_MESSAGES/pg_config-10.mo"
+usr/share/locale/*/LC_MESSAGES/pg_config-11.mo"
 
 libpgtypes3_CONTENTS="usr/bin/cygpgtypes-3.dll"
 
