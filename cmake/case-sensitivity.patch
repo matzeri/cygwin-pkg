@@ -1,0 +1,33 @@
+--- origsrc/cmake-3.12.0/Source/cmFileCommand.cxx	2018-07-17 13:29:00.000000000 +0200
++++ src/cmake-3.12.0/Source/cmFileCommand.cxx	2018-08-09 05:20:44.965651400 +0200
+@@ -1108,7 +1108,7 @@
+   MatchProperties CollectMatchProperties(const char* file)
+   {
+ // Match rules are case-insensitive on some platforms.
+-#if defined(_WIN32) || defined(__APPLE__) || defined(__CYGWIN__)
++#if defined(_WIN32) || defined(__APPLE__)
+     std::string lower = cmSystemTools::LowerCase(file);
+     const char* file_to_match = lower.c_str();
+ #else
+--- origsrc/cmake-3.12.0/Source/cmInstallCommand.cxx	2018-07-17 13:29:00.000000000 +0200
++++ src/cmake-3.12.0/Source/cmInstallCommand.cxx	2018-08-09 05:20:44.996894200 +0200
+@@ -1114,7 +1114,7 @@
+     } else if (doing == DoingRegex) {
+       literal_args += " REGEX \"";
+ // Match rules are case-insensitive on some platforms.
+-#if defined(_WIN32) || defined(__APPLE__) || defined(__CYGWIN__)
++#if defined(_WIN32) || defined(__APPLE__)
+       std::string regex = cmSystemTools::LowerCase(args[i]);
+ #else
+       std::string regex = args[i];
+--- origsrc/cmake-3.12.0/Source/kwsys/Glob.cxx	2018-07-17 13:29:00.000000000 +0200
++++ src/cmake-3.12.0/Source/kwsys/Glob.cxx	2018-08-09 05:22:50.125583200 +0200
+@@ -27,7 +27,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ namespace KWSYS_NAMESPACE {
+-#if defined(_WIN32) || defined(__APPLE__) || defined(__CYGWIN__)
++#if defined(_WIN32) || defined(__APPLE__) 
+ // On Windows and Apple, no difference between lower and upper case
+ #  define KWSYS_GLOB_CASE_INDEPENDENT
+ #endif
