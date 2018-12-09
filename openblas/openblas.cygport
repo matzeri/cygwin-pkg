@@ -1,5 +1,5 @@
 NAME="openblas"
-VERSION=0.3.3
+VERSION=0.3.4
 RELEASE=1
 
 CATEGORY="Math"
@@ -34,13 +34,13 @@ src_compile() {
         cd ${S}
         lndirs
         cd ${B}
-        cygmake NO_LAPACK=1 DYNAMIC_ARCH=1 NUM_THREADS=16
+        cygmake NO_LAPACK=1 DYNAMIC_ARCH=1 
 }
 
 
 src_test() {
         cd ${B}
-        PATH=${B}:${PATH} cygmake NO_LAPACK=1 DYNAMIC_ARCH=1 NUM_THREADS=16 tests
+        PATH=${B}:${PATH} cygmake NO_LAPACK=1 DYNAMIC_ARCH=1 tests
 }
 
 src_install() {
