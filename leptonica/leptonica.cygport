@@ -1,5 +1,5 @@
 NAME="leptonica"
-VERSION=1.76.0
+VERSION=1.77.0
 RELEASE=1
 
 CATEGORY="Libs"
@@ -7,6 +7,7 @@ SUMMARY="Library for image processing and image analysis applications"
 DESCRIPTION="Library for image processing and image analysis applications"
 HOMEPAGE="http://www.leptonica.com/"
 SRC_URI="http://www.leptonica.com/source/${PN}-${PV}.tar.gz"
+SRC_URI="https://github.com/DanBloomberg/leptonica/releases/download/${PV}/${PN}-${PV}.tar.gz"
 
 PKG_NAMES="leptonica libleptonica_5 libleptonica-devel"
 
