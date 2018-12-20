@@ -1,5 +1,5 @@
---- origsrc/libgeotiff-1.4.2/Makefile.am	2016-08-18 20:52:23.000000000 +0200
-+++ Makefile.am	2016-09-20 05:44:35.958637000 +0200
+--- origsrc/libgeotiff-1.4.3/Makefile.am	2018-12-11 21:41:58.000000000 +0100
++++ Makefile.am	2018-12-19 19:16:23.906502500 +0100
 @@ -18,7 +18,7 @@ if TIFF_IS_CONFIG
  TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
  endif
@@ -13,13 +13,13 @@
                               csv/unit_of_measure.c
  endif
  
--libgeotiff_la_LDFLAGS = -version-info 3:2:1
-+libgeotiff_la_LDFLAGS = -version-info 3:2:1 ${NOUNDEFINED}
+-libgeotiff_la_LDFLAGS = -version-info 4:0:2
++libgeotiff_la_LDFLAGS = -version-info 4:0:2 ${NOUNDEFINED}
  
  libgeotiff_la_LIBADD = libxtiff/libxtiff.la
  
---- origsrc/libgeotiff-1.4.2/bin/Makefile.am	2016-08-11 17:40:10.000000000 +0200
-+++ bin/Makefile.am	2016-09-20 05:44:35.958637000 +0200
+--- origsrc/libgeotiff-1.4.3/bin/Makefile.am	2016-11-20 15:23:08.000000000 +0100
++++ bin/Makefile.am	2018-12-19 19:15:01.436102300 +0100
 @@ -12,7 +12,7 @@ if TIFF_IS_CONFIG
  TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
  endif
@@ -29,8 +29,8 @@
  
  LDADD = ../libgeotiff.la
  
---- origsrc/libgeotiff-1.4.2/configure.ac	2016-08-11 17:40:10.000000000 +0200
-+++ configure.ac	2016-09-20 05:44:35.974237100 +0200
+--- origsrc/libgeotiff-1.4.3/configure.ac	2018-12-11 21:41:58.000000000 +0100
++++ configure.ac	2018-12-19 19:15:01.436102300 +0100
 @@ -281,8 +281,8 @@ elif test "$PROJ_LIB" != "" -a "$PROJ_IN
    PROJ_INC=-I$PROJ_INC
  
@@ -65,8 +65,8 @@
  
  dnl #########################################################################
  dnl Doxygen settings
---- origsrc/libgeotiff-1.4.2/libxtiff/Makefile.am	2016-08-11 17:40:10.000000000 +0200
-+++ libxtiff/Makefile.am	2016-09-20 05:44:36.270637600 +0200
+--- origsrc/libgeotiff-1.4.3/libxtiff/Makefile.am	2016-11-20 15:23:08.000000000 +0100
++++ libxtiff/Makefile.am	2018-12-19 19:15:01.436102300 +0100
 @@ -4,7 +4,7 @@ if TIFF_IS_CONFIG
  TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
  endif
