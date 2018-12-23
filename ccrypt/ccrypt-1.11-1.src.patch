@@ -1,0 +1,11 @@
+--- origsrc/ccrypt-1.11/check/ccrypt-check.sh	2018-07-27 18:49:14.000000000 +0200
++++ src/ccrypt-1.11/check/ccrypt-check.sh	2018-12-23 14:19:15.528543900 +0100
+@@ -85,7 +85,7 @@ decrypttest() {
+     action diff "$D" "$TMP1" > /dev/null
+     action rm -f "$TMP1"
+ 
+-    action $CCRYPT -c -K "$K" - < "$C" > "$TMP1"
++    action $CCRYPT -c -K "$K" < "$C" > "$TMP1"
+     action diff "$D" "$TMP1" > /dev/null
+     action rm -f "$TMP1"
+ }

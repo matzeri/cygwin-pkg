@@ -1,0 +1,21 @@
+NAME="ccrypt"
+VERSION=1.11
+RELEASE=1
+
+CATEGORY="Utils"
+SUMMARY="A utility for encrypting and decrypting files and streams"
+DESCRIPTION="Secure encryption and decryption of files and streams"
+HOMEPAGE="http://ccrypt.sourceforge.net/"
+SRC_URI="http://ccrypt.sourceforge.net/download/${PV}/${P}.tar.gz"
+
+PKG_NAMES="ccrypt"
+DIFF_EXCLUDES="*.m4"
+
+src_compile() {
+        cd ${S}
+	cygautoreconf 
+        cd ${B}
+        cygconf  --disable-libcrypt
+        cygmake
+}
+
