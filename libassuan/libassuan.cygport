@@ -1,5 +1,5 @@
 NAME="libassuan"
-VERSION=2.5.1
+VERSION=2.5.2
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="GnuPG IPC library"
@@ -22,6 +22,7 @@ libassuan_devel_CONTENTS="
 	usr/bin/libassuan-config
 	usr/include/assuan.h
 	usr/lib/libassuan.dll.a
+	usr/lib/pkgconfig/libassuan.pc
 	usr/share/aclocal/libassuan.m4
 	usr/share/info/assuan.info.gz
 "
