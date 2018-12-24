@@ -1,5 +1,5 @@
 NAME="lyx"
-VERSION=2.3.1
+VERSION=2.3.2
 RELEASE=1
 
 CATEGORY="Publishing Editors Graphics"
@@ -13,8 +13,8 @@ makes you look good."
 SUMMARY="A latex-based WYSIWYM word processor"
 HOMEPAGE="http://www.lyx.org/"
 
-SRC_URI="ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${PN}-${PV}-2.tar.xz
-ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${PN}-${PV}-2.tar.xz.sig" 
+SRC_URI="ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${PN}-${PV}.tar.xz
+ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${PN}-${PV}.tar.xz.sig" 
 SRC_DIR="${PN}-${PV}"
 PATCH_URI="lyx-postinstall.patch"
 
