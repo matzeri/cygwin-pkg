@@ -1,0 +1,19 @@
+inherit python2-wheel
+
+NAME="python-h5py"
+VERSION=2.9.0
+RELEASE=1
+CATEGORY="Python"
+SUMMARY="Read and write HDF5 files from Python"
+DESCRIPTION="The h5py package provides both a high- and low-level interface to the HDF5 library from Python. The low-level interface is intended to be a complete wrapping of the HDF5 API, while the high-level component supports access to HDF5 files, datasets and groups using established Python and NumPy concepts."
+HOMEPAGE="https://pypi.org/project/h5py"
+SRC_URI="https://files.pythonhosted.org/packages/43/27/a6e7dcb8ae20a4dbf3725321058923fec262b6f7835179d78ccc8d98deec/h5py-2.9.0.tar.gz"
+SRC_DIR="h5py-${VERSION}"
+
+# interferes with get_flags_linker_so in numpy.distutils.fcompiler
+unset LDFLAGS
+
+python2_h5py_CONTENTS="${python2_h5py_CONTENTS}"
+
+python2_h5py_OBSOLETES="python-h5py"
+
