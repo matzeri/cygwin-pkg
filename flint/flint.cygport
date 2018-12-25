@@ -1,6 +1,6 @@
 NAME="flint"
 VERSION=2.5.2
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Math"
 SUMMARY="Fast Library for Number Theory"
