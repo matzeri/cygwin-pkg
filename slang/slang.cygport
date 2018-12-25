@@ -1,6 +1,6 @@
 NAME="slang"
 VERSION=2.3.2
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Libs"
 DESCRIPTION="S-Lang is a multi-platform programmer's library"
