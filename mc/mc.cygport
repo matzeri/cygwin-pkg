@@ -1,5 +1,5 @@
 NAME="mc"
-VERSION=4.8.21
+VERSION=4.8.22
 RELEASE=1
 
 CATEGORY="Shells Utils Editors"
@@ -17,3 +17,11 @@ CYGCONF_ARGS="
 	--enable-charset
 	--enable-vfs-undelfs
 "
+src_install() {
+	cd ${B}
+	cyginstall
+	# removing unlikely used funtion to not pull in python
+	rm ${D}/usr/libexec/mc/extfs.d/s3+
+	rm ${D}/usr/libexec/mc/extfs.d/uc1541
+}
+
