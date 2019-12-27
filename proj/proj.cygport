@@ -1,5 +1,5 @@
 NAME="proj"
-VERSION=5.2.0
+VERSION=6.2.1
 RELEASE=1
 
 CATEGORY="Graphics Libs"
@@ -12,7 +12,7 @@ http://download.osgeo.org/proj/proj-datumgrid-1.8.tar.gz"
 SRC_DIR="${PN}-${PV}"
 
 
-abi=13
+abi=15
 PKG_NAMES="proj libproj-devel libproj${abi}"
 
 PKG_CONTENTS[0]="--exclude=usr/bin/*.dll usr/bin usr/share"
@@ -34,7 +34,7 @@ src_unpack_hook () {
 		FL nzgd2kgrid0005.gsb null ntv1_can.dat \
 		MD hawaii stgeorge stlrnc WI TN WO
         do
-                mv ${origsrcdir}/${fn} nad/
+                mv ${origsrcdir}/${fn} data/
         done
 }
 
@@ -51,7 +51,7 @@ src_compile() {
 src_install() {
 	cd ${B}
 	cyginstall -j1
-	cd ${S}/nad
+	cd ${S}/data
         for fn in alaska egm96_15.gtx ntf_r93.gsb conus \
                 stpaul BETA2007.gsb prvi README.DATUMGRID \
                 FL nzgd2kgrid0005.gsb null ntv1_can.dat \
