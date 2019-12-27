@@ -1,5 +1,5 @@
 NAME="netcdf"
-VERSION=4.6.3
+VERSION=4.7.3
 RELEASE=1
 
 CATEGORY="Libs"
@@ -28,8 +28,10 @@ netcdf_CONTENTS="
 "
 libnetcdf15_CONTENTS="
   usr/bin/cygnetcdf-${abi}.dll
+  usr/lib/cygh5bzip2.dll
 "
 libnetcdf_devel_CONTENTS="
+  --exclude=usr/lib/cygh5bzip2.dll
   usr/include/
   usr/lib/
   usr/bin/nc-config
