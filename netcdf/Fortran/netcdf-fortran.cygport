@@ -1,5 +1,5 @@
 NAME="netcdf-fortran"
-VERSION=4.4.5
+VERSION=4.5.2
 RELEASE=1
 
 CATEGORY="Libs"
@@ -11,15 +11,18 @@ SRC_DIR="netcdf-fortran-${PV}"
 
 PATCH_URI="fortran_con_noundefined.patch"
 
-abi=6
+abi=7
 
-PKG_NAMES="lib${PN}_${abi} lib${PN}-devel"
+PKG_NAMES="${PN} lib${PN}_${abi} lib${PN}-devel"
 
 KEEP_LA_FILES="none"
-libnetcdf_fortran_6_SUMMARY="${SUMMARY} (runtime)"
+
+bnetcdf_fortran_SUMMARY="${SUMMARY} (empty)"
+libnetcdf_fortran_7_SUMMARY="${SUMMARY} (runtime)"
 libnetcdf_fortran_devel_SUMMARY="${SUMMARY} (development)"
 
-libnetcdf_fortran_6_CONTENTS="usr/bin/cygnetcdff-6.dll"
+netcdf_fortran_CONTENTS=""
+libnetcdf_fortran_7_CONTENTS="usr/bin/cygnetcdff-7.dll"
 libnetcdf_fortran_devel_CONTENTS="
   usr/include/
   usr/lib/
