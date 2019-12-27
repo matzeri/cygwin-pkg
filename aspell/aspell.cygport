@@ -1,0 +1,73 @@
+NAME="aspell"
+VERSION=0.60.8
+RELEASE=1
+CATEGORY="Text"
+SUMMARY="A spell checker designed to eventually replace Ispell"
+DESCRIPTION="GNU Aspell is a spell checker designed to eventually replace Ispell.  It
+can either be used as a library or as an independent spell checker.  Its
+main feature is that it does a much better job of suggesting possible
+replacements for a misspelled word than just about any other spell
+checker out there for the English language.  Unlike Ispell, Aspell can
+also easily check documents in UTF-8 without having to use a special
+dictionary.  Aspell will also do its best to respect the current locale
+setting.  Other advantages over Ispell include support for using
+multiple dictionaries at once and intelligently handling personal
+dictionaries when more than one Aspell process is open at once."
+
+HOMEPAGE="http://aspell.net/"
+SRC_URI="ftp://ftp.gnu.org/gnu/${PN}/${P}.tar.gz \
+	 ftp://ftp.gnu.org/gnu/${PN}/${P}.tar.gz.sig"
+PATCH_URI="
+  aspell-noundefined.patch
+  aspell-so2dll.patch
+"
+
+
+abi=15
+PKG_NAMES="${PN} lib${PN}${abi} lib${PN}-devel"
+aspell_SUMMARY="${SUMMARY} (program and utilities)"
+aspell_CONTENTS="
+  --exclude=usr/share/doc/${PN}/aspell-dev.html
+  --exclude=usr/bin/cyg*.dll
+  usr/bin/
+  usr/share/"
+libaspell15_SUMMARY="${SUMMARY} (runtime)"
+libaspell15_CATEGORY="Libs ${CATEGORY}"
+libaspell15_CONTENTS="
+  usr/bin/cyg*.dll
+  usr/lib/aspell-${PV_MAJ_MIN}"
+libaspell_devel_SUMMARY="${SUMMARY} (development)"
+libaspell_devel_CATEGORY="Devel Libs ${CATEGORY}"
+libaspell_devel_CONTENTS="
+  --exclude=usr/lib/aspell-${PV_MAJ_MIN}
+  usr/lib
+  usr/include/
+  usr/share/doc/${PN}/aspell-dev.html"
+
+
+DIFF_EXCLUDES="*.m4 settings.h.in"
+
+KEEP_LA_FILES=none
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	lndirs
+        cd ${B}
+        cygconf
+	# workaround for missing files
+	cygmake gen/dirs.h
+	cygmake gen/static_filters.src.cpp
+        cygmake -j1
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	dobin ${S}/scripts/spell
+	dobin ${S}/scripts/ispell
+	
+	dodir /usr/share/doc/${PN}
+	cp -r ${S}/manual/aspell-dev.html ${S}/manual/aspell.html ${D}/usr/share/doc/${PN}	
+}
