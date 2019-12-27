@@ -1,24 +1,30 @@
---- origsrc/arpack-ng-3.6.1/PARPACK/SRC/BLACS/Makefile.am	2018-06-23 09:58:36.000000000 +0200
-+++ PARPACK/SRC/BLACS/Makefile.am	2018-07-08 07:12:41.846816600 +0200
+--- origsrc/arpack-ng-3.7.0/PARPACK/SRC/BLACS/Makefile.am	2019-01-12 16:24:12.000000000 +0100
++++ PARPACK/SRC/BLACS/Makefile.am	2019-12-16 21:37:57.506522800 +0100
 @@ -20,4 +20,4 @@ libparpack@LIBSUFFIX@_la_LIBADD = \
  	$(top_builddir)/PARPACK/UTIL/BLACS/libparpackutil.la \
  	$(top_builddir)/SRC/libarpack@LIBSUFFIX@.la \
  	$(LAPACK_LIBS) $(BLAS_LIBS)
--libparpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 2:0
-+libparpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 0:0
---- origsrc/arpack-ng-3.6.1/PARPACK/SRC/MPI/Makefile.am	2018-06-23 09:58:36.000000000 +0200
-+++ PARPACK/SRC/MPI/Makefile.am	2018-07-08 07:13:07.295466400 +0200
-@@ -44,4 +44,4 @@ libparpack@LIBSUFFIX@_la_LIBADD = libpar
+-libparpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 3:0:1
++libparpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 1:0:1
+--- origsrc/arpack-ng-3.7.0/PARPACK/SRC/MPI/Makefile.am	2019-01-12 16:24:12.000000000 +0100
++++ PARPACK/SRC/MPI/Makefile.am	2019-12-16 21:37:57.544305100 +0100
+@@ -41,7 +41,7 @@ libparpack@LIBSUFFIX@_la_LIBADD = libpar
  	$(top_builddir)/PARPACK/UTIL/MPI/libparpackutil.la \
  	$(top_builddir)/SRC/libarpack@LIBSUFFIX@.la \
  	$(LAPACK_LIBS) $(BLAS_LIBS) $(MPI_Fortran_LIBS)
--libparpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 2:0
-+libparpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 0:0
---- origsrc/arpack-ng-3.6.1/SRC/Makefile.am	2018-06-23 09:58:36.000000000 +0200
-+++ SRC/Makefile.am	2018-07-08 07:13:33.293165300 +0200
-@@ -31,4 +31,4 @@ libarpack@LIBSUFFIX@_la_SOURCES += $(top
- libarpack@LIBSUFFIX@_la_SOURCES += $(top_builddir)/stat_icb.f90
- endif
+-libparpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 3:0:1
++libparpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 1:0:1
+ if ICB
+ libparpack@LIBSUFFIX@_la_LIBADD += $(top_builddir)/ICB/libdbgicb.la $(top_builddir)/ICB/libstaicb.la
+ libparpack@LIBSUFFIX@_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_builddir)
+--- origsrc/arpack-ng-3.7.0/SRC/Makefile.am	2019-01-12 16:24:12.000000000 +0100
++++ SRC/Makefile.am	2019-12-16 21:37:57.744814300 +0100
+@@ -28,7 +28,7 @@ libarpack@LIBSUFFIX@_la_SOURCES = $(SSRC
+ libarpack@LIBSUFFIX@_la_SOURCES += $(top_builddir)/dbgini.f
+ libarpack@LIBSUFFIX@_la_SOURCES += $(top_builddir)/staini.f
  libarpack@LIBSUFFIX@_la_LIBADD = $(top_builddir)/UTIL/libarpackutil.la $(LAPACK_LIBS) $(BLAS_LIBS)
--libarpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 2:0
-+libarpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 0:0
+-libarpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 3:0:1
++libarpack@LIBSUFFIX@_la_LDFLAGS = -no-undefined -version-info 1:0:1
+ if ICB
+ libarpack@LIBSUFFIX@_la_LIBADD += $(top_builddir)/ICB/libdbgicb.la $(top_builddir)/ICB/libstaicb.la
+ libarpack@LIBSUFFIX@_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_builddir)
