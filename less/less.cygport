@@ -1,5 +1,5 @@
 NAME="less"
-VERSION=530
+VERSION=551
 RELEASE=1
 
 CATEGORY="Text"
@@ -20,4 +20,13 @@ less_CONTENTS="usr"
 DIFF_EXCLUDES=""
 
 KEEP_LA_FILES="none"
+
+src_compile() {
+	cd ${S}
+        cygautoreconf
+        cd ${B}
+        cygconf --with-regex=pcre
+}
+
+
 
