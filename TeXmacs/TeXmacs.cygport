@@ -1,13 +1,13 @@
 inherit qt4
 
 NAME="TeXmacs"
-VERSION=1.99.8
+VERSION=1.99.9
 RELEASE=1
 
 HOMEPAGE="http://www.texmacs.org/"
 SRC_URI="ftp://ftp.texmacs.org/pub/TeXmacs/tmftp/source/${P}-src.tar.gz"
 SRC_DIR="${P}-src"
-PATCH_URI="enable-QTPIPES.patch
+PATCH_URI="
 no-bin-extension.patch"
 
 CATEGORY="Editors"
