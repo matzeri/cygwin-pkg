@@ -1,28 +1,25 @@
---- origsrc/mutt-1.12.1/contrib/Makefile.am	2019-05-25 18:22:39.000000000 +0200
-+++ contrib/Makefile.am	2019-07-05 16:12:58.788609900 +0200
+--- origsrc/mutt-1.13.0/contrib/Makefile.am	2019-11-09 22:40:17.000000000 +0100
++++ contrib/Makefile.am	2019-12-12 07:34:47.090207800 +0100
 @@ -6,7 +6,7 @@ SAMPLES = Mush.rc Pine.rc gpg.rc pgp2.rc
  	sample.mailcap sample.muttrc sample.muttrc-sidebar sample.muttrc-tlr \
  	sample.muttrc-compress sample.muttrc-starter \
  	sample.vimrc-sidebar colors.default colors.linux smime.rc \
--	ca-bundle.crt smime_keys_test.pl mutt_xtitle
-+	smime_keys_test.pl mutt_xtitle
+-	ca-bundle.crt smime_keys_test.pl mutt_xtitle markdown2html
++	smime_keys_test.pl mutt_xtitle markdown2html
  
  EXTRA_DIST = language.txt language50.txt  \
  	patch.slang-1.2.2.keypad.1	\
---- origsrc/mutt-1.12.1/doc/smime-notes.txt	2017-12-03 04:10:17.000000000 +0100
-+++ doc/smime-notes.txt	2019-07-05 16:15:52.458669000 +0200
-@@ -37,11 +37,9 @@ How to add use mutt's S/MIME capabilitie
-       The number (including the ".0" at the end) is your keyid. You will
-       need this number in the next step.
+--- origsrc/mutt-1.13.0/doc/smime-notes.txt	2017-12-03 04:10:17.000000000 +0100
++++ doc/smime-notes.txt	2019-12-12 07:38:51.153347200 +0100
+@@ -40,8 +40,9 @@ How to add use mutt's S/MIME capabilitie
+ - Edit the smime_sign_as line in your muttrc, replacing the keyid with your
+   own.
  
--- Edit the smime_sign_as line in your muttrc, replacing the keyid with your
--  own.
--
 -- You probably want to import the trusted roots in
 -  contrib/ca-bundle.crt. This makes you trust anything that was ultimately
-+- There is no more ca-bundle.crt file with the trusted roots to import shipped
-+  in mutt. The user is encouraged to use ca-bundle.crt from ca-certificate package.
-+  This makes you trust anything that was ultimately
++-  There is no more ca-bundle.crt file with the trusted roots to import shipped
++   in mutt. The user is encouraged to use ca-bundle.crt from ca-certificate 
++   package.  This makes you trust anything that was ultimately
    signed by one of them. You can use "smime_keys add_root" to do so, or
    just copy ca-bundle.crt into the place you point mutt's smime_ca_location
    variable to.
