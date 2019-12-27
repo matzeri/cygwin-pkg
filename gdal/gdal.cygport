@@ -1,7 +1,7 @@
 inherit python-distutils.cygclass perl
 
 NAME="gdal"
-VERSION=2.4.0
+VERSION=3.0.2
 RELEASE=1
 
 CATEGORY="Science"
@@ -12,7 +12,7 @@ HOMEPAGE="http://www.gdal.org/"
 SRC_URI="http://download.osgeo.org/gdal/${PV}/gdal-${PV}.tar.xz" 
 SRC_DIR="${PN}-${PV}"
 
-PKG_NAMES="gdal libgdal-devel libgdal20 perl-gdal python-gdal"
+PKG_NAMES="gdal libgdal-devel libgdal26 perl-gdal python-gdal"
 
 PKG_IGNORE="usr/share/man/man1/gnm*"
 
@@ -43,10 +43,10 @@ gdal_CONTENTS="
   usr/share/man/man1/ogr_utilities.1.gz
 "
 
-libgdal20_CATEGORY="Science Libs"
-libgdal20_SUMMARY="Geospatial Data Abstraction Library - (C runtime)"
-libgdal20_CONTENTS="
-  usr/bin/cyggdal-20.dll
+libgdal26_CATEGORY="Science Libs"
+libgdal26_SUMMARY="Geospatial Data Abstraction Library - (C runtime)"
+libgdal26_CONTENTS="
+  usr/bin/cyggdal-26.dll
 "
 
 libgdal_devel_CATEGORY="Science Devel Libs"
