@@ -1,6 +1,6 @@
---- origsrc/postgresql-9.4.2/src/Makefile.shlib	2015-05-20 00:33:58.000000000 +0200
-+++ src/Makefile.shlib	2015-05-27 23:01:09.379468300 +0200
-@@ -267,7 +267,7 @@ endif
+--- origsrc/postgresql-12.0/src/Makefile.shlib	2019-09-30 22:06:55.000000000 +0200
++++ src/Makefile.shlib	2019-10-16 09:04:29.637976500 +0200
+@@ -256,7 +256,7 @@ endif
  ifeq ($(PORTNAME), cygwin)
    LINK.shared		= $(CC) -shared
    ifdef SO_MAJOR_VERSION
@@ -9,25 +9,10 @@
    endif
    haslibarule   = yes
  endif
-@@ -359,12 +359,9 @@ ifeq ($(PORTNAME), cygwin)
- # Cygwin case
- 
- $(shlib): $(OBJS) | $(SHLIB_PREREQS)
--	$(CC) $(CFLAGS)  -shared -o $@  $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) $(LDAP_LIBS_BE)
-+	$(CC) $(CFLAGS)  -shared -o $@ -Wl,--out-implib=$(stlib) $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) $(LDAP_LIBS_BE)
- 
--$(stlib): $(OBJS) | $(SHLIB_PREREQS)
--	rm -f $@
--	$(LINK.static) $@ $^
--	$(RANLIB) $@
-+$(stlib): $(shlib) ;
- 
- else
- 
---- origsrc/postgresql-9.4.2/src/interfaces/libpq/Makefile	2015-05-20 00:33:58.000000000 +0200
-+++ src/interfaces/libpq/Makefile	2015-05-27 22:56:43.193200600 +0200
-@@ -45,7 +45,7 @@ OBJS += ip.o md5.o
- OBJS += encnames.o wchar.o
+--- origsrc/postgresql-12.0/src/interfaces/libpq/Makefile	2019-09-30 22:06:55.000000000 +0200
++++ src/interfaces/libpq/Makefile	2019-10-16 09:05:23.429951400 +0200
+@@ -43,7 +43,7 @@ OBJS += fe-gssapi-common.o fe-secure-gss
+ endif
  
  ifeq ($(PORTNAME), cygwin)
 -override shlib = cyg$(NAME)$(DLSUFFIX)
