@@ -1,0 +1,14 @@
+NAME="aspell-de"
+VERSION="20161207.7.0"
+RELEASE="1"
+
+inherit aspell-dict
+ORIG_PV="20161207-7-0"
+SRC_URI="aspell6-de-20161207-7-0.tar.bz2"
+SRC_DIR="aspell6-de-20161207-7-0"
+
+ASPELL_COMPAT=6
+
+
+# Build dependencies only
+DEPEND="aspell"
