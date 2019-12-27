@@ -1,34 +1,35 @@
 NAME="netcdf"
-VERSION=4.6.1
-RELEASE=2
+VERSION=4.6.3
+RELEASE=1
 
 CATEGORY="Libs"
 SUMMARY="NetCDF (network Common Data Form)"
 DESCRIPTION="NetCDF (network Common Data Form) are libraries for array-oriented scientific data"
 HOMEPAGE="http://www.unidata.ucar.edu/software/netcdf/"
 
-SRC_URI="ftp://ftp.unidata.ucar.edu/pub/netcdf/${PN}-${PV}.tar.gz" 
-SRC_DIR="netcdf-${PV}"
+SRC_URI="https://github.com/Unidata/netcdf-c/archive/v${PV}.tar.gz" 
+SRC_DIR="netcdf-c-${PV}"
 
-PATCH_URI="netcdf-undefined.patch
+PATCH_URI="
+netcdf-undefined.patch
 oc2-resized.path"
 
-abi=13
+abi=15
 
 PKG_NAMES="${PN} lib${PN}${abi} lib${PN}-devel"
 
 KEEP_LA_FILES="none"
-PKG_SUMMARY[1]="${SUMMARY} (C runtime)"
-PKG_SUMMARY[2]="${SUMMARY} (development)"
+libnetcdf15_SUMMARY="${SUMMARY} (C runtime)"
+libnetcdf_devel_SUMMARY="${SUMMARY} (development)"
 
-PKG_CONTENTS[0]="
+netcdf_CONTENTS="
   usr/bin/*.exe
   usr/share/man/man1/
 "
-PKG_CONTENTS[1]="
+libnetcdf15_CONTENTS="
   usr/bin/cygnetcdf-${abi}.dll
 "
-PKG_CONTENTS[2]="
+libnetcdf_devel_CONTENTS="
   usr/include/
   usr/lib/
   usr/bin/nc-config
