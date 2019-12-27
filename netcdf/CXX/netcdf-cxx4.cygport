@@ -1,6 +1,6 @@
 NAME="netcdf-cxx4"
-VERSION=4.3.0
-RELEASE=4
+VERSION=4.3.1
+RELEASE=1
 
 CATEGORY="Libs"
 SUMMARY="C++ (Network Common Data Form)"
@@ -13,12 +13,15 @@ PATCH_URI="cxx4_noundefined.patch"
 
 abi=1
 
-PKG_NAMES="lib${PN}_${abi} lib${PN}-devel"
+PKG_NAMES="${PN} lib${PN}_${abi} lib${PN}-devel"
 
 KEEP_LA_FILES="none"
+
+netcdf_cxx4_SUMMARY="${SUMMARY} (empty)"
 libnetcdf_cxx4_1_SUMMARY="${SUMMARY} (runtime)"
 libnetcdf_cxx4_devel_SUMMARY="${SUMMARY} (development)"
 
+netcdf_cxx4_CONTENTS=""
 libnetcdf_cxx4_1_CONTENTS="usr/bin/cygnetcdf_c++4-1.dll"
 libnetcdf_cxx4_devel_CONTENTS="
   usr/include/
@@ -42,6 +45,12 @@ src_compile() {
 src_install() {
 	cd ${B}
 	cyginstall
+	# removing duplicate already in base package
+	cd ${D}
+	rm usr/lib/cygh5bzip2.dll
+	rm usr/lib/libh5bzip2.dll.a
+	rm usr/lib/libh5bzip2.la
+
 }
 
 src_test() {
