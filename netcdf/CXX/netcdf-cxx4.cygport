@@ -1,12 +1,13 @@
 NAME="netcdf-cxx4"
 VERSION=4.3.0
-RELEASE=3
+RELEASE=4
 
 CATEGORY="Libs"
 SUMMARY="C++ (Network Common Data Form)"
 DESCRIPTION="NetCDF (network Common Data Form) are libraries for array-oriented scientific data"
 HOMEPAGE="http://www.unidata.ucar.edu/software/netcdf/"
-SRC_URI="http://www.unidata.ucar.edu/downloads/netcdf/ftp/${PN}-${PV}.tar.gz" 
+SRC_URI="https://github.com/Unidata/netcdf-cxx4/archive/v${PV}.tar.gz" 
+SRC_DIR=${PN}-${PV}
 
 PATCH_URI="cxx4_noundefined.patch"
 
