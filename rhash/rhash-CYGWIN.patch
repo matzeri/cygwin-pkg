@@ -1,17 +1,6 @@
---- origsrc/RHash-1.3.7/Makefile	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/Makefile	2018-12-29 00:04:53.927931900 +0100
-@@ -72,7 +72,7 @@ mkdir-bin:
- 
- # install binary without (re-)compilation
- install-binary: mkdir-bin
--	$(INSTALL_PROGRAM) $(RHASH_BINARY) $(BINDIR)/$(RHASH_BINARY)
-+	-$(INSTALL_PROGRAM) $(RHASH_BINARY) $(BINDIR)/$(RHASH_BINARY)
- 
- install-man:
- 	$(INSTALL) -d $(MANDIR)/man1
---- origsrc/RHash-1.3.7/common_func.c	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/common_func.c	2018-12-28 23:39:50.856244300 +0100
-@@ -7,8 +7,9 @@
+--- origsrc/RHash-1.3.9/common_func.c	2019-12-14 17:52:11.000000000 +0100
++++ common_func.c	2019-12-19 16:17:43.866849500 +0100
+@@ -11,8 +11,9 @@
  #include <stdlib.h>
  #include <string.h>
  #include <wchar.h>
@@ -22,7 +11,7 @@
  # include <windows.h>
  #endif
  
-@@ -243,7 +244,7 @@ const char* get_bt_program_name(void)
+@@ -241,7 +242,7 @@ const char* get_bt_program_name(void)
   */
  static double rsh_fsec(timedelta_t* timer)
  {
@@ -31,16 +20,16 @@
  	LARGE_INTEGER freq;
  	QueryPerformanceFrequency(&freq);
  	return (double)*timer / freq.QuadPart;
-@@ -252,7 +253,7 @@ static double rsh_fsec(timedelta_t* time
+@@ -250,7 +251,7 @@ static double rsh_fsec(timedelta_t* time
  #endif
  }
  
 -#if defined( _WIN32) || defined(__CYGWIN__)
-+#if defined( _WIN32) 
++#if defined( _WIN32)
  #define get_timedelta(delta) QueryPerformanceCounter((LARGE_INTEGER*)delta)
  #else
  #define get_timedelta(delta) gettimeofday(delta, NULL)
-@@ -267,7 +268,7 @@ double rsh_timer_stop(timedelta_t* timer
+@@ -265,7 +266,7 @@ double rsh_timer_stop(timedelta_t* timer
  {
  	timedelta_t end;
  	get_timedelta(&end);
@@ -49,7 +38,7 @@
  	*timer = end - *timer;
  #else
  	timer->tv_sec  = end.tv_sec  - timer->tv_sec - (end.tv_usec >= timer->tv_usec ? 0 : 1);
-@@ -278,7 +279,7 @@ double rsh_timer_stop(timedelta_t* timer
+@@ -276,7 +277,7 @@ double rsh_timer_stop(timedelta_t* timer
  
  unsigned rhash_get_ticks(void)
  {
@@ -58,19 +47,19 @@
  	return GetTickCount();
  #else
  	struct timeval tv;
---- origsrc/RHash-1.3.7/common_func.h	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/common_func.h	2018-12-28 23:40:49.579819600 +0100
-@@ -19,7 +19,7 @@
+--- origsrc/RHash-1.3.9/common_func.h	2019-12-14 17:52:11.000000000 +0100
++++ common_func.h	2019-12-19 16:19:03.896876500 +0100
+@@ -18,7 +18,7 @@
+ #include <stdint.h>
+ #include <stdio.h>
  #include <time.h> /* for time_t */
- #include <stddef.h> /* for wchar_t */
- 
 -#if !defined( _WIN32) && !defined(__CYGWIN__)
-+#if !defined( _WIN32)
++#if !defined( _WIN32) 
  # include <sys/time.h> /* for timeval */
  #elif _MSC_VER > 1300
  # include "platform.h"
 @@ -86,7 +86,7 @@ const char* get_bt_program_name(void);
- /* time data and functions */
+ /* time delta and timer functions */
  
  /* portable timer definition */
 -#if defined( _WIN32) || defined(__CYGWIN__)
@@ -78,51 +67,19 @@
  typedef unsigned long long timedelta_t;
  #else
  #include <sys/time.h> /* for timeval */
---- origsrc/RHash-1.3.7/configure	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/configure	2018-12-28 23:53:06.728114200 +0100
-@@ -7,7 +7,7 @@ OPT_GETTEXT=auto
- 
- export LC_ALL=C
- CFG_LINE="$*"
--INSTALL_PREFIX="/usr/local"
-+INSTALL_PREFIX="/usr"
- test -z "$CC" && CC=cc
- CMD_AR=ar
- CMD_INSTALL=install
-@@ -559,6 +559,8 @@ if win32; then
-     SHARED_PREFIX="msys-"
-   elif cygwin; then
-     SHARED_PREFIX="cyg"
-+    SHARED_EXT="-0.dll"
-+    IMPSH_EXT=".dll.a"
-   fi
- elif darwin; then
-   SHARED_EXT=".0.dylib"
-@@ -618,7 +620,11 @@ LIBRHASH_SOLINK="${SHARED_PREFIX}rhash${
- LIBRHASH_SOLINK_TARGET=
- test "$NEED_SOLINK" = "yes" && LIBRHASH_SOLINK_TARGET=$LIBRHASH_SOLINK
- LIBRHASH_DEF="${SHARED_PREFIX}rhash.def"
-+if ! cygwin ; then
- LIBRHASH_IMPLIB="${STATIC_PREFIX}rhash${SHARED_EXT}${STATIC_EXT}"
-+else
-+LIBRHASH_IMPLIB="${STATIC_PREFIX}rhash${IMPSH_EXT}"
-+fi
- LIBRHASH_EXPORTS_FILE="exports.sym"
- LIBRHASH_EXPORTS_TARGET=
- LIBRHASH_SH_CFLAGS=""
---- origsrc/RHash-1.3.7/file.c	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/file.c	2018-12-28 23:41:24.713174500 +0100
-@@ -16,7 +16,7 @@
- #include "common_func.h"
- #include "win_utils.h"
+--- origsrc/RHash-1.3.9/file.c	2019-12-14 17:52:11.000000000 +0100
++++ file.c	2019-12-19 16:19:29.386535500 +0100
+@@ -18,7 +18,7 @@
+ #include <string.h>
+ #include <sys/stat.h>
  
 -#if defined( _WIN32) || defined(__CYGWIN__)
 +#if defined( _WIN32)
  # include <windows.h>
  #if !defined(__CYGWIN__)
  # include <share.h> /* for _SH_DENYWR */
---- origsrc/RHash-1.3.7/librhash/plug_openssl.c	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/librhash/plug_openssl.c	2018-12-28 23:55:11.708225700 +0100
+--- origsrc/RHash-1.3.9/librhash/plug_openssl.c	2019-12-14 17:52:11.000000000 +0100
++++ librhash/plug_openssl.c	2019-12-19 16:34:19.467508100 +0100
 @@ -39,7 +39,7 @@
  #include "plug_openssl.h"
  
@@ -132,16 +89,16 @@
  #    include <windows.h>
  #  else
  #    include <dlfcn.h>
-@@ -137,7 +137,7 @@ rhash_hash_info rhash_openssl_methods[]
- rhash_hash_info rhash_openssl_hash_info[RHASH_HASH_COUNT];
+@@ -138,7 +138,7 @@ rhash_hash_info rhash_openssl_hash_info[
  
  #ifdef OPENSSL_RUNTIME
+ 
 -#if (defined(_WIN32) || defined(__CYGWIN__)) /* __CYGWIN__ is also defined in MSYS */
-+#if defined(_WIN32)  
- #define LOAD_ADDR(n, name) \
- 	p##name##_final = (os_fin_t)GetProcAddress(handle, #name "_Final"); \
- 	rhash_openssl_methods[n].update = (pupdate_t)GetProcAddress(handle, #name "_Update"); \
-@@ -159,7 +159,7 @@ rhash_hash_info rhash_openssl_hash_info[
++#if defined(_WIN32) 
+ # define GET_DLSYM(name) (void(*)(void))GetProcAddress(handle, name)
+ #else  /* _WIN32 */
+ # define GET_DLSYM(name) dlsym(handle, name)
+@@ -157,7 +157,7 @@ rhash_hash_info rhash_openssl_hash_info[
   */
  static int load_openssl_runtime(void)
  {
@@ -150,9 +107,18 @@
  	HMODULE handle;
  	/* suppress the error popup dialogs */
  	UINT oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
---- origsrc/RHash-1.3.7/librhash/rhash.c	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/librhash/rhash.c	2018-12-28 23:55:52.953912400 +0100
-@@ -618,7 +618,7 @@ size_t RHASH_API rhash_print(char* outpu
+--- origsrc/RHash-1.3.9/librhash/rhash.c	2019-12-14 17:52:11.000000000 +0100
++++ librhash/rhash.c	2019-12-19 16:48:42.605848200 +0100
+@@ -15,7 +15,7 @@
+  */
+ 
+ /* modifier for Windows DLL */
+-#if (defined(_WIN32) || defined(__CYGWIN__)) && defined(RHASH_EXPORTS)
++#if defined(_WIN32) && defined(RHASH_EXPORTS)
+ # define RHASH_API __declspec(dllexport)
+ #endif
+ 
+@@ -621,7 +621,7 @@ size_t RHASH_API rhash_print(char* outpu
  	return rhash_print_bytes(output, digest, digest_size, flags);
  }
  
@@ -161,8 +127,17 @@
  #include <windows.h>
  BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID reserved);
  BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID reserved)
---- origsrc/RHash-1.3.7/librhash/rhash_timing.c	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/librhash/rhash_timing.c	2018-12-28 23:46:46.865372700 +0100
+--- origsrc/RHash-1.3.9/librhash/rhash_timing.c	2019-12-14 17:52:11.000000000 +0100
++++ librhash/rhash_timing.c	2019-12-19 16:31:44.576455100 +0100
+@@ -15,7 +15,7 @@
+  */
+ 
+ /* modifier for Windows dll */
+-#if (defined(_WIN32) || defined(__CYGWIN__)) && defined(RHASH_EXPORTS)
++#if defined(_WIN32) && defined(RHASH_EXPORTS)
+ # define RHASH_API __declspec(dllexport)
+ #endif
+ 
 @@ -45,7 +45,7 @@ static uint64_t read_tsc(void) {
  
  /* TIMER FUNCTIONS */
@@ -186,7 +161,7 @@
  	timedelta_t end;
  	get_timedelta(&end);
 -#if defined(_WIN32) || defined(__CYGWIN__)
-+#if defined(_WIN32)
++#if defined(_WIN32) 
  	*timer = end - *timer;
  #else
  	timer->tv_sec  = end.tv_sec  - timer->tv_sec - (end.tv_usec >= timer->tv_usec ? 0 : 1);
@@ -208,8 +183,8 @@
  	benchmark_cpu_init(); /* set cpu affinity to improve test results */
  #endif
  
---- origsrc/RHash-1.3.7/librhash/rhash_timing.h	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/librhash/rhash_timing.h	2018-12-28 23:47:21.670714500 +0100
+--- origsrc/RHash-1.3.9/librhash/rhash_timing.h	2019-12-14 17:52:11.000000000 +0100
++++ librhash/rhash_timing.h	2019-12-19 16:24:27.906642100 +0100
 @@ -19,7 +19,7 @@ extern "C" {
  # define RHASH_API
  #endif
@@ -219,23 +194,34 @@
  /**
   * Platform-dependent time delta.
   */
---- origsrc/RHash-1.3.7/win_utils.c	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/win_utils.c	2018-12-28 23:54:19.702716500 +0100
+--- origsrc/RHash-1.3.9/librhash/rhash_torrent.c	2019-12-14 17:52:11.000000000 +0100
++++ librhash/rhash_torrent.c	2019-12-19 16:54:28.185099200 +0100
+@@ -15,7 +15,7 @@
+  */
+ 
+ /* modifier for Windows DLL */
+-#if (defined(_WIN32) || defined(__CYGWIN__) ) && defined(RHASH_EXPORTS)
++#if defined(_WIN32)  && defined(RHASH_EXPORTS)
+ # define RHASH_API __declspec(dllexport)
+ #endif
+ 
+--- origsrc/RHash-1.3.9/win_utils.c	2019-12-14 17:52:11.000000000 +0100
++++ win_utils.c	2019-12-19 16:25:58.681744700 +0100
 @@ -1,5 +1,5 @@
  /* win_utils.c - utility functions for Windows and CygWin */
 -#if defined(_WIN32) || defined(__CYGWIN__)
 +#if defined(_WIN32)
- #include <windows.h>
  #include "win_utils.h"
+ #include <windows.h>
  
-@@ -520,4 +520,4 @@ size_t win_fwrite(const void *ptr, size_
+@@ -575,4 +575,4 @@ size_t win_fwrite(const void* ptr, size_
  #endif /* _WIN32 */
  #else
  typedef int dummy_declaration_required_by_strict_iso_c;
 -#endif /* defined(_WIN32) || defined(__CYGWIN__) */
 +#endif /* defined(_WIN32) */
---- origsrc/RHash-1.3.7/win_utils.h	2018-12-22 21:11:35.000000000 +0100
-+++ src/RHash-1.3.7/win_utils.h	2018-12-28 23:50:14.543719400 +0100
+--- origsrc/RHash-1.3.9/win_utils.h	2019-12-14 17:52:11.000000000 +0100
++++ win_utils.h	2019-12-19 16:26:20.156506200 +0100
 @@ -2,7 +2,7 @@
  #ifndef WIN_UTILS_H
  #define WIN_UTILS_H
@@ -245,7 +231,7 @@
  
  #ifdef __cplusplus
  extern "C" {
-@@ -44,6 +44,6 @@ size_t win_fwrite(const void *ptr, size_
+@@ -58,6 +58,6 @@ size_t win_fwrite(const void* ptr, size_
  }
  #endif
  

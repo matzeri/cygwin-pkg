@@ -1,0 +1,44 @@
+--- origsrc/RHash-1.3.9/configure	2019-12-14 17:52:11.000000000 +0100
++++ configure	2019-12-19 15:29:10.474113800 +0100
+@@ -8,7 +8,7 @@ OPT_CC=
+ 
+ export LC_ALL=C
+ CFG_LINE="$*"
+-INSTALL_PREFIX="/usr/local"
++INSTALL_PREFIX="/usr"
+ test -z "$CC" && CC=cc
+ CMD_AR=ar
+ CMD_INSTALL=install
+@@ -617,6 +617,9 @@ if win32; then
+     SHARED_PREFIX="msys-"
+   elif cygwin; then
+     SHARED_PREFIX="cyg"
++    SHARED_EXT="-0.dll"
++    IMPSH_EXT=".dll.a"
++
+   fi
+ elif darwin; then
+   SHARED_EXT=".0.dylib"
+@@ -678,7 +681,11 @@ LIBRHASH_SOLINK="${SHARED_PREFIX}rhash${
+ LIBRHASH_SOLINK_TARGET=
+ test "$NEED_SOLINK" = "yes" && LIBRHASH_SOLINK_TARGET=$LIBRHASH_SOLINK
+ LIBRHASH_DEF="${SHARED_PREFIX}rhash.def"
++if ! cygwin ; then
+ LIBRHASH_IMPLIB="${STATIC_PREFIX}rhash${SHARED_EXT}${STATIC_EXT}"
++else
++LIBRHASH_IMPLIB="${STATIC_PREFIX}rhash${IMPSH_EXT}"
++fi
+ LIBRHASH_EXPORTS_FILE="exports.sym"
+ LIBRHASH_EXPORTS_TARGET=
+ LIBRHASH_SH_CFLAGS=""
+--- origsrc/RHash-1.3.9/tests/test_rhash.sh	2019-12-14 17:52:11.000000000 +0100
++++ tests/test_rhash.sh	2019-12-19 15:46:22.824321100 +0100
+@@ -47,7 +47,7 @@ if [ -n "$OPT_SHARED" -a -d "$UPPER_DIR/
+     export DYLD_LIBRARY_PATH="$D:$DYLD_LIBRARY_PATH"
+   elif ls $D/*rhash.dll 2>/dev/null >/dev/null && ( win32 || [ ! -r $N.so.0 ] ); then
+     export PATH="$D:$PATH"
+-  elif [ -r $N.so.0 ]; then
++  elif [ -r $N.so.0 -o -r $D/cygrhash-0.dll ]; then
+     export LD_LIBRARY_PATH="$D:$LD_LIBRARY_PATH"
+   else
+     echo "shared library not found at $D"
