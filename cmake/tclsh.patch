@@ -1,11 +1,12 @@
---- origsrc/cmake-3.12.0/Modules/FindTclsh.cmake	2018-07-17 13:29:00.000000000 +0200
-+++ src/cmake-3.12.0/Modules/FindTclsh.cmake	2018-08-09 06:11:34.520194500 +0200
-@@ -16,12 +16,6 @@
- #   TCLSH_FOUND = TRUE if tclsh has been found
- #   TCL_TCLSH = the path to the tclsh executable
- #
--# In cygwin, look for the cygwin version first.  Don't look for it later
--# to avoid finding the cygwin version on a Win32 build.
+--- origsrc/cmake-3.14.5/Modules/FindTclsh.cmake	2019-05-31 15:31:25.000000000 +0200
++++ Modules/FindTclsh.cmake	2019-06-02 14:44:08.638927600 +0200
+@@ -16,13 +16,6 @@
+   TCLSH_FOUND = TRUE if tclsh has been found
+   TCL_TCLSH = the path to the tclsh executable
+ 
+-In cygwin, look for the cygwin version first.  Don't look for it later
+-to avoid finding the cygwin version on a Win32 build.
+-#]=======================================================================]
 -
 -if(CYGWIN)
 -  find_program(TCL_TCLSH NAMES cygtclsh83 cygtclsh80)

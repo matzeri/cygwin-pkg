@@ -1,5 +1,5 @@
 --- origsrc/cmake-3.12.0/Modules/FindOpenGL.cmake	2018-07-17 13:29:00.000000000 +0200
-+++ src/cmake-3.12.0/Modules/FindOpenGL.cmake	2018-08-09 06:08:41.549377900 +0200
++++ Modules/FindOpenGL.cmake	2018-08-09 06:08:41.549377900 +0200
 @@ -129,14 +129,7 @@
    set(OPENGL_USE_${_COMPONENT} 1)
  endforeach()
