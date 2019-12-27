@@ -1,5 +1,5 @@
 NAME="ngspice"
-VERSION=30
+VERSION=31
 RELEASE=1
 
 CATEGORY="Math"
@@ -28,7 +28,7 @@ DIFF_EXCLUDES="Makefile makedefs autoconf.h.in *.idx"
 
 src_compile() {
 	cd ${S}
-    	cygautoreconf
+	cygautoreconf
 	mkdir ${B}/ngshared
 	cd ${B}/ngshared
 	cygconf --prefix=/usr \
