@@ -1,0 +1,29 @@
+--- origsrc/UDUNITS-2-2.2.27.6/lib/xml.c	2018-08-09 19:32:13.000000000 +0200
++++ src/UDUNITS-2-2.2.27.6/lib/xml.c	2019-12-19 09:32:59.366268300 +0100
+@@ -18,7 +18,7 @@
+ #   define _XOPEN_SOURCE 500
+ #endif
+ 
+-#if defined(__linux__)
++#if defined(__linux__) || defined(__CYGWIN__)
+ #   ifndef _GNU_SOURCE
+ #       define _GNU_SOURCE
+ #   endif
+@@ -40,7 +40,7 @@
+ #endif
+ #include <sys/stat.h>
+ #include <sys/types.h>
+-#if defined(__linux__)
++#if defined(__linux__) || defined(__CYGWIN__)
+ #include <dlfcn.h>
+ #elif defined(__APPLE__)
+ #define _DARWIN_C_SOURCE
+@@ -2135,7 +2135,7 @@ static const char*
+ default_udunits2_xml_path()
+ {
+     char const * soname = 0;
+-#if defined(__APPLE__) || defined(__linux__)
++#if defined(__APPLE__) || defined(__linux__) || defined(__CYGWIN__)
+     #define END_BIT "/share/udunits/udunits2.xml"
+     #define SEP '/'
+     Dl_info info;
