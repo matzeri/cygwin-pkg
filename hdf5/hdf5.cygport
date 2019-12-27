@@ -1,35 +1,32 @@
 NAME="hdf5"
-VERSION=1.10.2
+VERSION=1.10.5
 RELEASE=1
 
 DESCRIPTION="Hierarchical Data Format ver.5 API interface"
 HOMEPAGE="http://www.hdfgroup.org/HDF5/"
 SRC_DIR=${PN}-${PV}
 SRC_URI="ftp://ftp.hdfgroup.org/HDF5/current/src/${SRC_DIR}.tar.bz2"
-PATCH_URI="no-c99.patch
-shared-lib.cygwin.patch
-libadd-undefined.patch"
 
-PKG_NAMES="hdf5 libhdf5_101 libhdf5hl_100 libhdf5cpp_102 libhdf5hlcpp_100 libhdf5-devel"
+PKG_NAMES="hdf5 libhdf5_103 libhdf5hl_100 libhdf5cpp_103 libhdf5hlcpp_100 libhdf5-devel"
 
 hdf5_CATEGORY="Archive Utils"
 hdf5_SUMMARY="HDF5 Hierarchical Data Format"
 hdf5_CONTENTS='--exclude=usr/bin/*.dll usr/bin usr/share/'
 
-libhdf5_101_CATEGORY="Libs Archive Utils"
-libhdf5_101_SUMMARY="Hierarchical Data Format - (runtime)"
-libhdf5_101_CONTENTS="
- usr/bin/cyghdf5-101.dll"
+libhdf5_103_CATEGORY="Libs Archive Utils"
+libhdf5_103_SUMMARY="Hierarchical Data Format - (runtime)"
+libhdf5_103_CONTENTS="
+ usr/bin/cyghdf5-103.dll"
 
 libhdf5hl_100_CATEGORY="Libs Archive Utils"
 libhdf5hl_100_SUMMARY="Hierarchical Data Format - (HL runtime)"
 libhdf5hl_100_CONTENTS="
  usr/bin/cyghdf5_hl-100.dll"
 
-libhdf5cpp_102_CATEGORY="Libs Archive Utils"
-libhdf5cpp_102_SUMMARY="Hierarchical Data Format - (C++ runtime)"
-libhdf5cpp_102_CONTENTS="
- usr/bin/cyghdf5_cpp-102.dll"
+libhdf5cpp_103_CATEGORY="Libs Archive Utils"
+libhdf5cpp_103_SUMMARY="Hierarchical Data Format - (C++ runtime)"
+libhdf5cpp_103_CONTENTS="
+ usr/bin/cyghdf5_cpp-103.dll"
 
 libhdf5hlcpp_100_CATEGORY="Libs Archive Utils"
 libhdf5hlcpp_100_SUMMARY="Hierarchical Data Format - (HL C++ runtime)"
