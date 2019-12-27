@@ -1,7 +1,7 @@
 inherit qt4
 
 NAME="TeXmacs"
-VERSION=1.99.9
+VERSION=1.99.12
 RELEASE=1
 
 HOMEPAGE="http://www.texmacs.org/"
