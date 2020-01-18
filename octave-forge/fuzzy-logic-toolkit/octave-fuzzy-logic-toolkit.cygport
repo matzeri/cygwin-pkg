@@ -1,33 +1,65 @@
 FORGE="fuzzy-logic-toolkit"
 NAME="octave-fuzzy-logic-toolkit"
-VERSION=0.4.5
+VERSION=0.4.6
 OV=0.4.5
-RELEASE=3
+RELEASE=0.2
 
 ARCH="noarch"
 CATEGORY="Math"
-SUMMARY="Forge: toolkit for Octave."
+SUMMARY="Forge: toolkit for Octave"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/${FORGE}-${PV}.tar"
-SRC_DIR="fuzzy-logic-toolkit-${PV}"
+#SRC_URI="https://octave.sourceforge.io/${FORGE}-${PV}.tar.gz"
+HG_URI="http://hg.code.sf.net/p/octave/fuzzy-logic-toolkit"
+HG_REV="351bee1dea5f"
+#SRC_DIR="fuzzy-logic-toolkit-${PV}"
+SRC_DIR="fuzzy-logic-toolkit"
+inherit hg
+
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
+
 octave_fuzzy_logic_toolkit_CONTENTS='etc/ usr/'
 octave_fuzzy_logic_toolkit_REQUIRES="octave"
 
 src_compile() {
-        :
+	# from repository but we don't need bootstrap
+
+        cd ${S}
+	mkdir ${B}/${FORGE}-${OV}
+	cp -r *  ${B}/${FORGE}-${OV}
+	cd ${B}
+	tar -vczf ${FORGE}-${OV}.tar.gz --exclude=".hg*" --exclude="CYGWIN-PATCHES" ${FORGE}-${OV}
 }
 
+src_install() {
+        cd ${D}
+        unset CXX
+	LDFLAGS=$(pkgconf  --libs-only-L octave)
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+        binpkg=${B}/${FORGE}-${OV}.tar.gz
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+        pkg global_list  ${B}/octave_packages
+        pkg install -nodeps -global -verbose ${binpkg}
+        pkg list
+        echo off
+"
+}
+                   
 src_test() {
         cd ${D}
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        testdir="'"${FORGE}-${PV}"'"
+	testdir="'"${D}"/usr/share/octave/packages/"${FORGE}-${OV}"'"
 
         cd ${B}
         sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
@@ -42,28 +74,18 @@ src_test() {
         pkg list
         cd ${D}/usr/share/octave/packages
         __run_test_suite__ ({${testdir}}, {})
+	cd ${testdir}
+	# using demo as tests are missing
+        graphics_toolkit gnuplot
+        source cubic_approx_demo.m
+        source heart_disease_demo_1.m
+        source heart_disease_demo_2.m
+        source investment_portfolio_demo.m
+        source linear_tip_demo.m
+        source mamdani_tip_demo.m
+        source sugeno_tip_demo.m
         echo off
 "
         mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
 
 }
-
-src_install() {
-        cd ${D}
-        unset CXX
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-        binpkg=$(find ${S} -name "*gz")
-
-        octave-cli --eval "
-        echo on
-        diary ../log/diary
-        more off
-        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-        pkg global_list  ${B}/octave_packages
-        pkg install -nodeps -global -verbose ${binpkg}
-        pkg list
-        echo off
-"
-}
-
