@@ -1,0 +1,74 @@
+FORGE="matgeom"
+NAME="octave-matgeom"
+VERSION=1.2.2
+OV=1.2.2
+RELEASE=1
+
+ARCH="noarch"
+CATEGORY="Math"
+SUMMARY="Forge: Geometry toolbox for 2D/3D geometric computing"
+DESCRIPTION="${SUMMARY} 
+Contributed functions for GNU Octave from octave.sourceforge.net"
+HOMEPAGE="http://octave.sourceforge.net/"
+
+SRC_URI="https://octave.sourceforge.io/${FORGE}-${PV}.tar.gz"
+SRC_DIR="${FORGE}-${PV}"
+PATCH_URI="do-octave-update.patch"
+
+PKG_NAMES="${PN}"
+
+octave_matgeom_CONTENTS='etc/ usr/'
+octave_matgeom_REQUIRES="octave"
+
+src_compile() {
+        cd ${S}
+	mkdir ${B}/${FORGE}-${OV}
+	cp -r *  ${B}/${FORGE}-${OV}
+	cd ${B}
+	tar -vczf ${FORGE}-${OV}.tar.gz --exclude=".hg*" --exclude="CYGWIN-PATCHES" ${FORGE}-${OV}
+}
+
+src_install() {
+        cd ${D}
+        unset CXX
+	LDFLAGS=$(pkgconf  --libs-only-L octave)
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+        binpkg=${B}/${FORGE}-${OV}.tar.gz
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+        pkg global_list  ${B}/octave_packages
+        pkg install -nodeps -global -verbose ${binpkg}
+        pkg list
+        echo off
+"
+}
+                   
+src_test() {
+        cd ${D}
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+	testdir="'"${D}"/usr/share/octave/packages/"${FORGE}-${OV}"'"
+
+        cd ${B}
+        sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
+
+        cd ${D}
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg local_list  ${B}/octave_packages_local
+        pkg load ${FORGE}
+        pkg list
+        cd ${D}/usr/share/octave/packages
+        __run_test_suite__ ({${testdir}}, {})
+        echo off
+"
+        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+
+}
