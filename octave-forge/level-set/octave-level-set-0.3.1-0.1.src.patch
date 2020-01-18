@@ -1,0 +1,88 @@
+--- origsrc/level-set/src/geomBoundary.cpp	2020-01-11 16:06:36.000000000 +0100
++++ src/level-set/src/geomBoundary.cpp	2020-01-11 16:46:54.132990600 +0100
+@@ -370,7 +370,7 @@ DEFUN_DLD (__levelset_geomBoundary, args
+     }
+   catch (const std::runtime_error& exc)
+     {
+-      error (exc.what ());
++      error ("%s",exc.what ());
+       return octave_value_list ();
+     }
+ }
+--- origsrc/level-set/src/geomElements.cpp	2020-01-11 16:06:36.000000000 +0100
++++ src/level-set/src/geomElements.cpp	2020-01-11 16:46:40.284937400 +0100
+@@ -124,7 +124,7 @@ DEFUN_DLD (__levelset_geomElements, args
+     }
+   catch (const std::runtime_error& exc)
+     {
+-      error (exc.what ());
++      error ("%s",exc.what ());
+       return octave_value_list ();
+     }
+ }
+--- origsrc/level-set/src/geomGamma.cpp	2020-01-11 16:06:36.000000000 +0100
++++ src/level-set/src/geomGamma.cpp	2020-01-11 16:46:59.274487500 +0100
+@@ -372,7 +372,7 @@ DEFUN_DLD (__levelset_geomGamma, args, n
+     }
+   catch (const std::runtime_error& exc)
+     {
+-      error (exc.what ());
++      error ("%s",exc.what ());
+       return octave_value_list ();
+     }
+ }
+--- origsrc/level-set/src/internal_fastmarching.cpp	2020-01-11 16:06:36.000000000 +0100
++++ src/level-set/src/internal_fastmarching.cpp	2020-01-11 16:47:09.178397800 +0100
+@@ -125,7 +125,7 @@ DEFUN_DLD (__levelset_internal_fastmarch
+     }
+   catch (const std::exception& exc)
+     {
+-      error (exc.what ());
++      error ("%s",exc.what ());
+       return octave_value_list ();
+     }
+ }
+--- origsrc/level-set/src/internal_init_narrowband.cpp	2020-01-11 16:06:36.000000000 +0100
++++ src/level-set/src/internal_init_narrowband.cpp	2020-01-11 16:47:15.091397400 +0100
+@@ -139,7 +139,7 @@ DEFUN_DLD (__levelset_internal_init_narr
+     }
+   catch (const std::exception& exc)
+     {
+-      error (exc.what ());
++      error ("%s",exc.what ());
+       return octave_value_list ();
+     }
+ }
+--- origsrc/level-set/src/internal_mesh.cpp	2020-01-11 16:06:36.000000000 +0100
++++ src/level-set/src/internal_mesh.cpp	2020-01-11 16:47:20.420605700 +0100
+@@ -519,7 +519,7 @@ DEFUN_DLD (__levelset_internal_mesh, arg
+     }
+   catch (const std::runtime_error& exc)
+     {
+-      error (exc.what ());
++      error ("%s",exc.what ());
+       return octave_value_list ();
+     }
+ }
+--- origsrc/level-set/src/nbFromGeom.cpp	2020-01-11 16:06:36.000000000 +0100
++++ src/level-set/src/nbFromGeom.cpp	2020-01-11 16:47:26.854773100 +0100
+@@ -160,7 +160,7 @@ DEFUN_DLD (__levelset_nbFromGeom, args,
+     }
+   catch (const std::runtime_error& exc)
+     {
+-      error (exc.what ());
++      error ("%s",exc.what ());
+       return octave_value_list ();
+     }
+ }
+--- origsrc/level-set/src/upwindGrad.cpp	2020-01-11 16:06:36.000000000 +0100
++++ src/level-set/src/upwindGrad.cpp	2020-01-11 16:47:32.459799700 +0100
+@@ -146,7 +146,7 @@ DEFUN_DLD (__levelset_upwindGrad, args,
+     }
+   catch (const std::exception& exc)
+     {
+-      error (exc.what ());
++      error ("%s",exc.what ());
+       return octave_value_list ();
+     }
+ }
