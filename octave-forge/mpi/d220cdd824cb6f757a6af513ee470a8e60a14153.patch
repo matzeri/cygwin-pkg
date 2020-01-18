@@ -1,0 +1,21 @@
+From d220cdd824cb6f757a6af513ee470a8e60a14153 Mon Sep 17 00:00:00 2001
+From: Carlo de Falco <carlo.defalco@polimi.it>
+Date: Mon, 6 Jan 2020 07:07:32 +0100
+Subject: [PATCH] add missing header
+
+---
+ src/MPI_Recv.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/MPI_Recv.cc b/src/MPI_Recv.cc
+index a717dd3..d0559c3 100644
+--- a/src/MPI_Recv.cc
++++ b/src/MPI_Recv.cc
+@@ -18,6 +18,7 @@
+ 
+ #include "octave_mpi_communicator.h"
+ 
++#include <iostream>
+ #include <string>
+ #include <sstream>
+ 

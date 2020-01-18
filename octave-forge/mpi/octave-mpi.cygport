@@ -1,8 +1,8 @@
 FORGE="mpi"
 NAME="octave-mpi"
-VERSION=1.2.0r43
-OV=1.2.0
-RELEASE=3
+VERSION=3.1.1
+OV=3.1.0
+RELEASE=0.1
 
 CATEGORY="Math"
 SUMMARY="Forge: bindings for basic Message Passing Interface (MPI)"
@@ -10,23 +10,49 @@ DESCRIPTION="${SUMMARY}
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/mpi-${PV}.tar"
-SRC_DIR="mpi-${PV}"
-PATCH_URI="do-octave-update.patch"
+SRC_URI="https://github.com/carlodefalco/octave-mpi/releases/download/v${OV}/${FORGE}-${OV}.tar.gz"
+SRC_DIR="${FORGE}"
+PATCH_URI="do-octave-update.patch
+d220cdd824cb6f757a6af513ee470a8e60a14153.patch"
 
 PKG_NAMES="${PN}"
+
 octave_mpi_CONTENTS='etc/ usr/'
 octave_mpi_REQUIRES="octave"
 
 src_compile() {
-        :
+        cd ${S}
+	mkdir ${B}/${FORGE}-${OV}
+	cp -r *  ${B}/${FORGE}-${OV}
+	cd ${B}
+	tar -vczf ${FORGE}-${OV}.tar.gz --exclude=".hg*" --exclude="CYGWIN-PATCHES" ${FORGE}-${OV}
 }
 
+src_install() {
+        cd ${D}
+        unset CXX
+	LDFLAGS=$(pkgconf  --libs-only-L octave)
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+        binpkg=${B}/${FORGE}-${OV}.tar.gz
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+        pkg global_list  ${B}/octave_packages
+        pkg install -nodeps -global -verbose ${binpkg}
+        pkg list
+        echo off
+"
+}
+                   
 src_test() {
         cd ${D}
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        testdir="'"${FORGE}-${PV}"'"
+	testdir="'"${D}"/usr/share/octave/packages/"${FORGE}-${OV}"'"
 
         cd ${B}
         sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
@@ -43,27 +69,17 @@ src_test() {
         __run_test_suite__ ({${testdir}}, {})
         echo off
 "
-        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
-
-}
-
-src_install() {
-        cd ${D}
-        unset CXX
-        F77=gfortran
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-        binpkg=$(find ${S} -name "*gz")
-
-        octave-cli --eval "
+	# Dedicated test for MPI
+	mpirun -np 2 octave-cli --eval "
         echo on
         diary ../log/diary
         more off
-        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-        pkg global_list  ${B}/octave_packages
-        pkg install -nodeps -global -verbose ${binpkg}
-        pkg list
+        pkg local_list  ${B}/octave_packages_local
+        pkg load ${FORGE}
+        test_mpi_send_receive()
         echo off
 "
-}
 
+        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+
+}
