@@ -1,5 +1,5 @@
 NAME="octave"
-VERSION="4.4.1"
+VERSION="5.1.0"
 RELEASE=1
 
 CATEGORY="Math"
@@ -7,7 +7,8 @@ DESCRIPTION="GNU Octave is a high-level language for numerical computations"
 HOMEPAGE="http://www.gnu.org/software/octave/"
 
 OR="${PV}"
-SRC_URI="https://ftp.gnu.org/gnu/octave/${PN}-${PV}.tar.lz"
+SRC_URI="https://ftp.gnu.org/gnu/octave/${PN}-${PV}.tar.lz
+https://ftp.gnu.org/gnu/octave/${PN}-${PV}.tar.lz.sig"
 SRC_DIR="${PN}-${PV}"
 
 PATCH_URI="
@@ -21,7 +22,7 @@ octave_doc_SUMMARY="GNU Octave additional docs in html and pdf"
 
 octave_CONTENTS='etc var usr/bin/cyg* usr/bin/oct* usr/lib/octave/'${OR}'/[eos]* usr/lib/octave/[as]*  usr/share/[aimos]* usr/share/doc/octave/[ABCINPRTe]*'
 
-octave_devel_CONTENTS=' usr/bin/mk* usr/include/ usr/lib/octave/'${OR}'/lib*'
+octave_devel_CONTENTS=' usr/bin/mk* usr/include/ usr/lib/octave/'${OR}'/lib* usr/lib/pkgconfig'
 
 octave_doc_CONTENTS='usr/share/doc/octave/[hp]*'
 
@@ -36,6 +37,7 @@ src_compile() {
 		--enable-shared \
 		--enable-float-truncate \
                 --disable-java \
+		--enable-link-all-dependencies \
 		LIBS="-lsuitesparseconfig"
 
 # workaround to avoid rebuilding of all interpreter documentation
@@ -55,23 +57,23 @@ src_install() {
 
 	keepdir /usr/lib/octave/${OR}/site/exec/${ARC}
 	keepdir /usr/lib/octave/${OR}/site/oct/${ARC}
-	keepdir /usr/lib/octave/api-v52/site/exec/${ARC}
- 	keepdir /usr/lib/octave/site/oct/api-v52/${ARC} 
+	keepdir /usr/lib/octave/api-v53/site/exec/${ARC}
+ 	keepdir /usr/lib/octave/site/oct/api-v53/${ARC} 
         keepdir /usr/lib/octave/${OR}/site/exec
         keepdir /usr/lib/octave/${OR}/site/oct
-        keepdir /usr/lib/octave/api-v52/site/exec
+        keepdir /usr/lib/octave/api-v53/site/exec
         keepdir /usr/lib/octave/site/exec/${ARC}
-        keepdir /usr/lib/octave/site/oct/api-v52
+        keepdir /usr/lib/octave/site/oct/api-v53
         keepdir /usr/lib/octave/site/oct/${ARC}
         keepdir /usr/share/octave/${OR}/site/m
-        keepdir /usr/share/octave/site/api-v52/m
+        keepdir /usr/share/octave/site/api-v53/m
         keepdir /usr/lib/octave/${OR}/site
-        keepdir /usr/lib/octave/api-v52/site
+        keepdir /usr/lib/octave/api-v53/site
         keepdir /usr/lib/octave/site/exec
         keepdir /usr/lib/octave/site/oct
         keepdir /usr/share/octave/${OR}/site
-        keepdir /usr/share/octave/site/api-v52
-        keepdir /usr/lib/octave/api-v52
+        keepdir /usr/share/octave/site/api-v53
+        keepdir /usr/lib/octave/api-v53
         keepdir /usr/lib/octave/site
 
 	cyginstall 
