@@ -1,0 +1,14 @@
+--- CYGWIN-PATCHES/postinstall.sh	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/postinstall.sh	2015-05-31 22:32:05.000000000 +0200
+@@ -0,0 +1,4 @@
++if [ ! -f /var/lib/octave/update.flag ]
++then
++    touch /var/lib/octave/update.flag
++fi
+--- CYGWIN-PATCHES/preremove.sh	1970-01-01 01:00:00.000000000 +0100
++++ CYGWIN-PATCHES/preremove.sh	2015-06-06 19:52:17.863708200 +0200
+@@ -0,0 +1,4 @@
++if [ ! -f /var/lib/octave/update.flag ]
++then
++    touch /var/lib/octave/update.flag
++fi
