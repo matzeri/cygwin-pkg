@@ -1,8 +1,8 @@
 FORGE="fl-core"
 NAME="octave-fl-core"
-VERSION=1.0.0r7
+VERSION=1.0.1
 OV=1.0.0
-RELEASE=3
+RELEASE=0.3
 
 CATEGORY="Math"
 SUMMARY="Forge: basic functions in Fuzzy Logic for Octave"
@@ -10,24 +10,55 @@ DESCRIPTION="${SUMMARY}
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
+#SRC_URI="https://packages.octave.org/download/${FORGE}-${PV}.tar.gz"
+HG_URI="http://hg.code.sf.net/p/octave/fl-core"
+HG_REV="8e7292478faf"
+#SRC_DIR="fl-core-${PV}"
+SRC_DIR="fl-core"
+inherit hg
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/${FORGE}-${PV}.tar"
-SRC_DIR="fl-core-${PV}"
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
+
 octave_fl_core_CONTENTS='etc/ usr/'
 octave_fl_core_REQUIRES="octave"
 
 src_compile() {
-        :
+	# from repository but we don`t need bootstrap
+
+        cd ${S}
+	mkdir ${B}/${FORGE}-${OV}
+	cp -r *  ${B}/${FORGE}-${OV}
+	cd ${B}
+	tar -vczf ${FORGE}-${OV}.tar.gz --exclude=".hg*" --exclude="CYGWIN-PATCHES" ${FORGE}-${OV}
 }
 
+src_install() {
+        cd ${D}
+        unset CXX
+	LDFLAGS=$(pkgconf  --libs-only-L octave)
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+        binpkg=${B}/${FORGE}-${OV}.tar.gz
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+        pkg global_list  ${B}/octave_packages
+        pkg install -nodeps -global -verbose ${binpkg}
+        pkg list
+        echo off
+"
+}
+                   
 src_test() {
         cd ${D}
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        testdir="'"${FORGE}-${PV}"'"
+	testdir="'"${D}"/usr/share/octave/packages/"${FORGE}-${OV}"'"
 
         cd ${B}
         sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
@@ -47,23 +78,3 @@ src_test() {
         mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
 
 }
-
-src_install() {
-        cd ${D}
-        unset CXX
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-        binpkg=$(find ${S} -name "*gz")
-
-        octave-cli --eval "
-        echo on
-        diary ../log/diary
-        more off
-        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-        pkg global_list  ${B}/octave_packages
-        pkg install -nodeps -global -verbose ${binpkg}
-        pkg list
-        echo off
-"
-}
-
