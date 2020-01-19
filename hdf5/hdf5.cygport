@@ -1,11 +1,11 @@
 NAME="hdf5"
-VERSION=1.10.5
+VERSION=1.10.6
 RELEASE=1
 
 DESCRIPTION="Hierarchical Data Format ver.5 API interface"
 HOMEPAGE="http://www.hdfgroup.org/HDF5/"
 SRC_DIR=${PN}-${PV}
-SRC_URI="ftp://ftp.hdfgroup.org/HDF5/current/src/${SRC_DIR}.tar.bz2"
+SRC_URI="https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${SRC_DIR}/src/${SRC_DIR}.tar.bz2"
 
 PKG_NAMES="hdf5 libhdf5_103 libhdf5hl_100 libhdf5cpp_103 libhdf5hlcpp_100 libhdf5-devel"
 
