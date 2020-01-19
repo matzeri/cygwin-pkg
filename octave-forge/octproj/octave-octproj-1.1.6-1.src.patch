@@ -1,0 +1,24 @@
+--- origsrc/jgpallero-octproj-a5d22a67b246/src/Makefile	2019-04-02 15:22:26.000000000 +0200
++++ src/jgpallero-octproj-a5d22a67b246/src/Makefile	2020-01-05 17:37:39.171686600 +0100
+@@ -11,7 +11,7 @@ CFLAGS+=-Wstrict-prototypes -Wnested-ext
+ #Flags for C++
+ CXXFLAGS=$(FLAGSCOMW) $(FLAGSCOMO)
+ #Flags for the linker
+-LDFLAGS=-lproj
++LDFLAGS+=-lproj 
+ #Export flags for compilers and linker
+ export CFLAGS CXXFLAGS
+ 
+@@ -21,9 +21,9 @@ all: compile
+ .PHONY: compile
+ compile:
+ 	$(MKOCTFILE) -c -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H projwrap.c -o projwrap.o
+-	$(MKOCTFILE) -s _op_transform.cc projwrap.o $(LDFLAGS)
+-	$(MKOCTFILE) -s _op_fwd.cc projwrap.o $(LDFLAGS)
+-	$(MKOCTFILE) -s _op_inv.cc projwrap.o $(LDFLAGS)
++	$(MKOCTFILE) -s -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H _op_transform.cc projwrap.o $(LDFLAGS)
++	$(MKOCTFILE) -s -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H _op_fwd.cc projwrap.o $(LDFLAGS)
++	$(MKOCTFILE) -s -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H _op_inv.cc projwrap.o $(LDFLAGS)
+ 	$(MKOCTFILE) -s -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H _op_geod2geoc.cc $(LDFLAGS)
+ 	$(MKOCTFILE) -s -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H _op_geoc2geod.cc $(LDFLAGS)
+ 
