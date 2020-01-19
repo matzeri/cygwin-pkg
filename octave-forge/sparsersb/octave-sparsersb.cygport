@@ -1,7 +1,7 @@
 FORGE="sparsersb"
 NAME="octave-sparsersb"
-VERSION=1.0.5
-OV=1.0.5
+VERSION=1.0.7
+OV=1.0.7
 RELEASE=1
 
 CATEGORY="Math"
@@ -10,49 +10,30 @@ DESCRIPTION="${SUMMARY}
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/${FORGE}-${PV}.tar"
+SRC_URI="https://packages.octave.org/download/${FORGE}-${PV}.tar.gz"
 SRC_DIR="${FORGE}-${PV}"
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
+
 octave_sparsersb_CONTENTS='etc/ usr/'
 octave_sparsersb_REQUIRES="octave"
 
 src_compile() {
-        :
-}
-
-src_test() {
-        cd ${D}
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-        testdir="'"${FORGE}-${PV}"'"
-
-        cd ${B}
-        sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
-
-        cd ${D}
-        octave-cli --eval "
-        echo on
-        diary ../log/diary
-        more off
-        pkg local_list  ${B}/octave_packages_local
-        pkg load ${FORGE}
-        pkg list
-        cd ${D}/usr/share/octave/packages/${FORGE}-${PV}
-        sparsersbtester
-
-        echo off
-"
+        cd ${S}
+	mkdir ${B}/${FORGE}-${OV}
+	cp -r *  ${B}/${FORGE}-${OV}
+	cd ${B}
+	tar -vczf ${FORGE}-${OV}.tar.gz --exclude=".hg*" --exclude="CYGWIN-PATCHES" ${FORGE}-${OV}
 }
 
 src_install() {
         cd ${D}
         unset CXX
-        F77=gfortran
+	LDFLAGS=$(pkgconf  --libs-only-L octave)
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        binpkg=$(find ${S} -name "*gz")
+        binpkg=${B}/${FORGE}-${OV}.tar.gz
 
         octave-cli --eval "
         echo on
@@ -65,4 +46,31 @@ src_install() {
         echo off
 "
 }
+                   
+src_test() {
+        cd ${D}
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+	testdir="'"${D}"/usr/share/octave/packages/"${FORGE}-${OV}"'"
 
+        cd ${B}
+        sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
+
+        cd ${D}
+	SPARSERSB_TEST=1
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg local_list  ${B}/octave_packages_local
+        pkg load ${FORGE}
+        pkg list
+        cd ${D}/usr/share/octave/packages
+        __run_test_suite__ ({${testdir}}, {})
+	run ${testdir}/sparsersbtester.m
+	demo sparsersb
+        echo off
+"
+        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
+
+}
