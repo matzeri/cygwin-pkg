@@ -2,31 +2,56 @@ FORGE="odepkg"
 NAME="octave-odepkg"
 VERSION=0.9.1
 OV=0.9.1
-RELEASE=0.1
+RELEASE=0.4
 
 CATEGORY="Math"
 SUMMARY="Forge: solving ordinary differential equations"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
-HOMEPAGE="http://octave.sourceforge.net/"
+HOMEPAGE="https://bitbucket.org/odepkg/odepkg/src/default/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/odepkg-${PV}.tar"
-SRC_DIR="odepkg-${PV}"
+SRC_URI="${FORGE}-${PV}.tar.gz"
+SRC_DIR="${FORGE}-${PV}"
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
+
 octave_odepkg_CONTENTS='etc/ usr/'
 octave_odepkg_REQUIRES="octave"
 
 src_compile() {
-        :
+        cd ${S}
+	mkdir ${B}/${FORGE}-${OV}
+	cp -r *  ${B}/${FORGE}-${OV}
+	cd ${B}
+	tar -vczf ${FORGE}-${OV}.tar.gz --exclude=".hg*" --exclude="CYGWIN-PATCHES" ${FORGE}-${OV}
 }
 
+src_install() {
+        cd ${D}
+        unset CXX
+	LDFLAGS=$(pkgconf  --libs-only-L octave)
+        dodir /usr/share/octave/packages
+        dodir /usr/lib/octave/packages
+        binpkg=${B}/${FORGE}-${OV}.tar.gz
+
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
+        pkg global_list  ${B}/octave_packages
+        pkg install -nodeps -global -verbose ${binpkg}
+        pkg list
+        echo off
+"
+}
+                   
 src_test() {
         cd ${D}
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
-        testdir="'"${FORGE}-${PV}"'"
+	testdir="'"${D}"/usr/share/octave/packages/"${FORGE}-${OV}"'"
 
         cd ${B}
         sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
@@ -41,47 +66,8 @@ src_test() {
         pkg list
         cd ${D}/usr/share/octave/packages
         __run_test_suite__ ({${testdir}}, {})
-	cd ${testdir}
-	@example
-	demo odepkg_examples_dae.m
-	demo odepkg_examples_dde.m
-	demo odepkg_examples_ide.m
-	demo odepkg_examples_ode.m
-	demo odepkg_testsuite_calcmescd.m
-	demo odepkg_testsuite_calcscd.m
-	demo odepkg_testsuite_chemakzo.m
-	demo odepkg_testsuite_hires.m
-	demo odepkg_testsuite_implakzo.m
-	demo odepkg_testsuite_implrober.m
-	demo odepkg_testsuite_impltrans.m
-	demo odepkg_testsuite_oregonator.m
-	demo odepkg_testsuite_pollution.m
-	demo odepkg_testsuite_robertson.m
-	demo odepkg_testsuite_transistor.m
-	@end example
         echo off
 "
         mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
 
 }
-
-src_install() {
-        cd ${D}
-        unset CXX
-        F77=gfortran
-        dodir /usr/share/octave/packages
-        dodir /usr/lib/octave/packages
-        binpkg=$(find ${S} -name "*gz")
-
-        octave-cli --eval "
-        echo on
-        diary ../log/diary
-        more off
-        pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-        pkg global_list  ${B}/octave_packages
-        pkg install -nodeps -global -verbose ${binpkg}
-        pkg list
-        echo off
-"
-}
-
