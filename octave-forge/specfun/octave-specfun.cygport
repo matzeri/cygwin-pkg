@@ -1,59 +1,81 @@
+FORGE="specfun"
 NAME="octave-specfun"
-VERSION=1.1.0r153
+VERSION=1.1.1
 OV=1.1.0
-RELEASE=1
+RELEASE=0.1
 
+ARCH="noarch"
 CATEGORY="Math"
-SUMMARY="Octave-Forge specfun: Special functions including ellipitic"
+SUMMARY="Forge: Special functions including ellipitic"
 DESCRIPTION="${SUMMARY} 
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="http://matzeri.altervista.org/octave-forge/specfun-${PV}.tar"
-SRC_DIR="specfun-${PV}"
+#SRC_URI="https://octave.sourceforge.io/${FORGE}-${PV}.tar.gz"
+HG_URI="http://hg.code.sf.net/p/octave/${FORGE}"
+HG_REV="8e53e97c2b1d"
+#SRC_DIR="${FORGE}-${PV}"
+SRC_DIR="${FORGE}"
+inherit hg
+
 PATCH_URI="do-octave-update.patch"
 
 PKG_NAMES="${PN}"
+
 octave_specfun_CONTENTS='etc/ usr/'
 octave_specfun_REQUIRES="octave"
 
 src_compile() {
+	# from repository but we don't need bootstrap
+
+        cd ${S}
+	mkdir ${B}/${FORGE}-${OV}
+	cp -r *  ${B}/${FORGE}-${OV}
+	cd ${B}
+	tar -vczf ${FORGE}-${OV}.tar.gz --exclude=".hg*" --exclude="CYGWIN-PATCHES" ${FORGE}-${OV}
+}
+
+src_install() {
         cd ${D}
-        F77=gfortran
+        unset CXX
+	LDFLAGS=$(pkgconf  --libs-only-L octave)
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
+        binpkg=${B}/${FORGE}-${OV}.tar.gz
 
         octave-cli --eval "
         echo on
         diary ../log/diary
         more off
         pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg local_list  ${B}/octave_packages	
-	pkg global_list  ${B}/octave_packages	
-        pkg build -nodeps -noauto -global -verbose ${B} ${S}/specfun-${PV}.tar.gz
+        pkg global_list  ${B}/octave_packages
+        pkg install -nodeps -global -verbose ${binpkg}
+        pkg list
+        echo off
 "
 }
-
+                   
 src_test() {
-	: 
-}
-
-src_install() {
         cd ${D}
-
-        F77=gfortran
         dodir /usr/share/octave/packages
         dodir /usr/lib/octave/packages
+	testdir="'"${D}"/usr/share/octave/packages/"${FORGE}-${OV}"'"
 
-	octave-cli --eval "
-	echo on 
-        diary ../log/diary 
-	more off 
-	pkg prefix ${D}/usr/share/octave/packages/ ${D}/usr/lib/octave/packages/
-	pkg local_list  ${B}/octave_packages	
-	pkg global_list  ${B}/octave_packages	
-        pkg install -nodeps -noauto -global -verbose  ${B}/specfun-${OV}.tar.gz 
-	pkg list
-" 
+        cd ${B}
+        sed -e "2s/global_packages/local_packages/" octave_packages > octave_packages_local
+
+        cd ${D}
+        octave-cli --eval "
+        echo on
+        diary ../log/diary
+        more off
+        pkg local_list  ${B}/octave_packages_local
+        pkg load ${FORGE}
+        pkg list
+        cd ${D}/usr/share/octave/packages
+        __run_test_suite__ ({${testdir}}, {})
+        echo off
+"
+        mv ${D}/usr/share/octave/packages/fntests.log ${D}/../log
 
 }
