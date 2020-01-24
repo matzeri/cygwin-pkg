@@ -1,0 +1,93 @@
+diff -uNr origsrc/tisean/src/source_f/d1.f src/tisean/src/source_f/d1.f
+--- origsrc/tisean/src/source_f/d1.f	2020-01-11 18:51:10.000000000 +0100
++++ src/tisean/src/source_f/d1.f	2020-01-12 06:34:52.390084700 +0100
+@@ -30,7 +30,7 @@
+ c===========================================================================
+       subroutine d1(nmax,mmax,nxx,y,id,m,ncmin,pr,pln,eln,nmin,kmax,
+      .              iverb)
+-      parameter(im=100,nx=100000,tiny=1e-20) 
++      parameter(im=100,nx=10000,tiny=1e-20) 
+       dimension y(nxx,mmax),jh(0:im*im),ju(nx)
+ 
+       real, dimension (:), allocatable :: d
+diff -uNr origsrc/tisean/src/source_f/neigh.f src/tisean/src/source_f/neigh.f
+--- origsrc/tisean/src/source_f/neigh.f	2020-01-11 18:51:10.000000000 +0100
++++ src/tisean/src/source_f/neigh.f	2020-01-12 06:36:47.748711600 +0100
+@@ -31,7 +31,7 @@
+       implicit none
+ c     -- parameters --
+       integer*4 im, ii
+-      parameter (im = 100, ii = 100000000) 
++      parameter (im = 100, ii = 10000000) 
+ 
+ c     -- input variables --
+       integer*4 nmax, id, m
+@@ -64,7 +64,7 @@
+       implicit none
+ c     -- parameters --
+       integer*4 im, ii
+-      parameter (im = 100, ii = 100000000) 
++      parameter (im = 100, ii = 10000000) 
+ 
+ c     -- input variables --
+       integer*4 nmax, id, m, nfound
+@@ -106,7 +106,7 @@
+       implicit none
+ c     -- parameters --
+       integer*4 im, ii
+-      parameter (im = 100, ii = 100000000) 
++      parameter (im = 100, ii = 10000000) 
+ 
+ c     -- input variables --
+       integer*4 nmax, id, m, mmax, nxx
+@@ -142,7 +142,7 @@
+       implicit none
+ c     -- parameters --
+       integer*4 im, ii
+-      parameter (im = 100, ii = 100000000) 
++      parameter (im = 100, ii = 10000000) 
+ 
+ c     -- input variables --
+       integer*4 nmax, mmax, nxx, id, m, nfound
+@@ -195,7 +195,7 @@
+       implicit none
+ c     -- parameters --
+       integer*4 im, ii
+-      parameter (im = 100, ii = 100000000) 
++      parameter (im = 100, ii = 10000000) 
+ 
+ c     -- input variables --
+       integer*4 nmax, mdim, nx, nfound
+@@ -232,7 +232,7 @@
+       implicit none
+ c     -- parameters --
+       integer*4 im, ii
+-      parameter (im = 100, ii = 100000000) 
++      parameter (im = 100, ii = 10000000) 
+ 
+ c     -- input variables --
+       integer*4 nmax, id, m, mmax, nxx
+diff -uNr origsrc/tisean/src/source_f/rank.f src/tisean/src/source_f/rank.f
+--- origsrc/tisean/src/source_f/rank.f	2020-01-11 18:51:10.000000000 +0100
++++ src/tisean/src/source_f/rank.f	2020-01-12 06:37:30.126075100 +0100
+@@ -24,7 +24,7 @@
+ c===========================================================================
+       subroutine rank(nmax,x,list)
+ c  rank points in x
+-      parameter(nptr=100000)
++      parameter(nptr=10000)
+       dimension x(nmax), list(nmax), jptr(0:nptr)
+ 
+       call minmax(nmax,x,xmin,xmax)
+diff -uNr origsrc/tisean/src/source_f/ts_lazy.f src/tisean/src/source_f/ts_lazy.f
+--- origsrc/tisean/src/source_f/ts_lazy.f	2020-01-11 18:51:10.000000000 +0100
++++ src/tisean/src/source_f/ts_lazy.f	2020-01-12 06:38:30.161600400 +0100
+@@ -99,7 +99,7 @@
+       implicit none
+ c     -- parameters --
+       integer*4 im, nx
+-      parameter(im=100,nx=1000000) 
++      parameter(im=100,nx=100000) 
+ c     -- input variables --
+       integer*4 nmax, m
+       real*8 eps

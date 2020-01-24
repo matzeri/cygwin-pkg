@@ -1,0 +1,27 @@
+--- origsrc/tisean/src/Makefile.in	2020-01-11 18:51:09.000000000 +0100
++++ src/tisean/src/Makefile.in	2020-01-12 06:42:21.296610300 +0100
+@@ -3,6 +3,7 @@ OCTAVE_CONFIG ?= octave-config
+ SED       ?= sed
+ LIBS_F=source_f/libsla.a
+ CXXFLAGS=@CXXFLAGS@
++LDFLAGS=@LDFLAGS@
+ FFLAGS=@AM_FFLAGS@ @FFLAGS@
+ 
+ CANONICAL_HOST_TYPE=$(shell $(OCTAVE_CONFIG) -p CANONICAL_HOST_TYPE)
+@@ -79,13 +80,13 @@ $(OBJECTS_CC): $(OBJ_DIR_CC)/%.o : $(SOU
+ 	$(MKOCTFILE) $(CXXFLAGS) -c $< $(LIBS) -o $@
+ 
+ $(OCTFILES) : %.oct : %.cc
+-	$(MKOCTFILE) $(CXXFLAGS) $< $(LIBS) -o $@
++	$(MKOCTFILE) $(CXXFLAGS) $(LDFLAGS) $< $(LIBS) -o $@
+ 
+ $(OCT_LINK_F): %.oct : %.cc $(OBJECTS_F) $(LIBS_F)
+-	$(MKOCTFILE) $(CXXFLAGS) $< $(OBJECTS_F) $(LIBS_F) $(F77LIBS) -o $@
++	$(MKOCTFILE) $(CXXFLAGS) $(LDFLAGS) $< $(OBJECTS_F) $(LIBS_F) $(F77LIBS) -o $@
+ 
+ $(OCT_LINK_CC): %.oct : %.cc $(OBJECTS_CC)
+-	$(MKOCTFILE) $(CXXFLAGS) $< $(OBJECTS_CC) -o $@
++	$(MKOCTFILE) $(CXXFLAGS) $(LDFLAGS) $< $(OBJECTS_CC) -o $@
+ 
+ PKG_ADD PKG_DEL: $(OCT_SOURCES)
+ 	$(SED) -n -e 's/.*$@: \(.*\)/\1/p' $^ > $@-t
