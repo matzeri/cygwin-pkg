@@ -1,8 +1,8 @@
 FORGE="optiminterp"
 NAME="octave-optiminterp"
-VERSION=0.3.5
-OV=0.3.5
-RELEASE=3
+VERSION=0.3.6
+OV=0.3.6
+RELEASE=1
 
 CATEGORY="Math"
 SUMMARY="Forge: optimal interpolation toolbox for octave"
