@@ -1,5 +1,5 @@
 NAME="lapack"
-VERSION=3.8.0
+VERSION=3.9.0
 RELEASE=1
 
 CATEGORY="Libs Math"
@@ -7,14 +7,15 @@ CATEGORY="Libs Math"
 SUMMARY="LAPACK library for linear algebra operations"
 DESCRIPTION="Comprehensive FORTRAN library for linear algebra operations."
 HOMEPAGE="http://www.netlib.org/lapack/"
-SRC_URI="http://www.netlib.org/lapack/${PN}-${PV}.tar.gz \
-http://www.netlib.org/lapack/manpages-${PV}.tgz"
+SRC_URI="https://github.com/Reference-LAPACK/lapack/archive/v${PV}.tar.gz"
+# http://www.netlib.org/lapack/manpages-${PV}.tgz"
+SRC_DIR="${PN}-${PV}"
 
 PATCH_URI="
 lapack-cblas-on.patch
-lapack-test-on.patch
 lapack-CYGWIN.patch
 lapack-dll.patch"
+# lapack-test-on.patch
 
 abi=0
 PKG_NAMES="lib${PN}-devel lib${PN}${abi} lib${PN}-doc"
@@ -31,15 +32,21 @@ PKG_SUMMARY[1]="${SUMMARY} - runtime"
 PKG_CONTENTS[2]='usr/share/man'
 PKG_SUMMARY[2]="${SUMMARY} - documentation"
 
-DIFF_EXCLUDES="Makefile build.sh cblas_mangling.h"
+DIFF_EXCLUDES="Makefile build.sh cblas_mangling.h output_err *.3"
 inherit cmake
 
 src_compile() {
+	# building man pages
+	cd ${S}
+	doxygen DOCS/Doxyfile_man
+
+	# normal build
 	cd ${B}
-	cygcmake -DCBLAS:BOOL=ON -DBUILD_DEPRECATED:BOOL=ON
+	cygcmake -DCBLAS:BOOL=ON -DBUILD_DEPRECATED:BOOL=ON \
+		-DBUILD_TESTING:BOOL=ON
 	cygmake
 
-# building cygwin dll
+	# building cygwin dll
 	cd ${B}
 	mkdir -p ${B}/lib_cygwin
 	cp lib/libcblas.a lib_cygwin
@@ -108,7 +115,7 @@ src_install() {
 # ----------------------------------------------
 
         insinto /usr/share/man/man3
-        doins ${S}/../man/man3/*
+        doins ${S}/DOCS/man/man3/*
 	cd ${D}/usr/share/man/man3
 	rm *LAPACKE*
 	rm *lapacke*
