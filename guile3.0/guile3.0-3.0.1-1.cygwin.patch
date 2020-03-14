@@ -1,0 +1,63 @@
+--- origsrc/guile-3.0.1/CYGWIN-PATCHES/README	1970-01-01 01:00:00.000000000 +0100
++++ src/guile-3.0.1/CYGWIN-PATCHES/README	2020-03-13 06:35:37.080527300 +0100
+@@ -0,0 +1,37 @@
++==========
++guile3.0
++==========
++
++Guile is an implementation of the Scheme programming language,
++supporting the Revised5 and most of the Revised6 language
++reports, as well as many SRFIs.
++Guile is designed to help programmers create flexible applications
++that can be extended by users or other programmers with plug-ins,
++modules, or scripts.
++
++Guile  comes in several complementary packages for Cygwin:
++
++Package name  Guile version  Executable name
++------------  --------------  --------------------
++guile1.8        1.8.*        /usr/bin/{guile,guild,guile-config}-1.8 
++guile2.0        2.0.*        /usr/bin/{guile,guild,guile-config}-2.0 
++guile2.2        2.2.*        /usr/bin/{guile,guild,guile-config}-2.2 
++guile3.0        3.0.*        /usr/bin/{guile,guild,guile-config}-3.0 
++
++
++Separate packages and executables are needed because Guile implementation
++are not compatible between major release and you could need a specific 
++version for your build.
++ 
++The package postinstallation script uses alternatives(8) to install a symlink
++/usr/bin/t{guile,guild,guile-config} that points to one of the above-named 
++executables.  By default this symlink will track the highest-numbered version 
++of Guile that you install on your system, unless you reset it, either manually 
++or using alternatives(8).
++See alternatives(8) for more details.
++
++Cygwin maintainer:  Marco Atzeri
++License:            GPL
++
++Please address questions and bug reports to the Cygwin mailing list
++<cygwin@cygwin.com>.
+--- origsrc/guile-3.0.1/CYGWIN-PATCHES/postinstall.sh	1970-01-01 01:00:00.000000000 +0100
++++ src/guile-3.0.1/CYGWIN-PATCHES/postinstall.sh	2020-03-13 06:19:35.328347600 +0100
+@@ -0,0 +1,10 @@
++# Install this package as a guile alternative.
++
++GUILE_VERSION=3.0
++GUILE_PRIORITY=3001
++
++/usr/sbin/alternatives --install /usr/bin/guile guile /usr/bin/guile-$GUILE_VERSION $GUILE_PRIORITY
++/usr/sbin/alternatives --install /usr/bin/guild guild /usr/bin/guild-$GUILE_VERSION $GUILE_PRIORITY
++/usr/sbin/alternatives --install /usr/bin/guile-config guile-config /usr/bin/guile-config-$GUILE_VERSION $GUILE_PRIORITY
++/usr/sbin/alternatives --install /usr/bin/guile-snarf guile-snarf /usr/bin/guile-snarf-$GUILE_VERSION $GUILE_PRIORITY
++/usr/sbin/alternatives --install /usr/bin/guile-tools guile-tools /usr/bin/guile-tools-$GUILE_VERSION $GUILE_PRIORITY
+--- origsrc/guile-3.0.1/CYGWIN-PATCHES/preremove.sh	1970-01-01 01:00:00.000000000 +0100
++++ src/guile-3.0.1/CYGWIN-PATCHES/preremove.sh	2020-03-13 06:21:18.292305500 +0100
+@@ -0,0 +1,7 @@
++# Remove this package as a guile alternative.
++
++/usr/sbin/alternatives --remove guile /usr/bin/guile-3.0
++/usr/sbin/alternatives --remove guild /usr/bin/guild-3.0
++/usr/sbin/alternatives --remove guile-config /usr/bin/guile-config-3.0
++/usr/sbin/alternatives --remove guile-snarf /usr/bin/guile-snarf-3.0
++/usr/sbin/alternatives --remove guile-tools /usr/bin/guile-tools-3.0
