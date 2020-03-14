@@ -1,7 +1,7 @@
 inherit python-distutils.cygclass perl
 
 NAME="gdal"
-VERSION=3.0.2
+VERSION=3.0.4
 RELEASE=1
 
 CATEGORY="Science"
@@ -99,7 +99,8 @@ src_compile() {
 	unset CC CXX
 	CFLAGS="-gdwarf ${CFLAGS}"
 	CXXFLAGS="-gdwarf ${CXXFLAGS}"
-        cygconf --with-proj --with-python --with-perl --without-jasper
+        cygconf --with-proj --with-python --with-perl --without-jasper \
+		lt_cv_deplibs_check_method=pass_all
 	cygmake 
 		
 }
