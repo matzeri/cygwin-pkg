@@ -1,8 +1,8 @@
 FORGE="mapping"
 NAME="octave-mapping"
-VERSION=1.2.1
-OV=1.2.1
-RELEASE=5
+VERSION=1.4.0
+OV=1.4.0
+RELEASE=1
 
 CATEGORY="Math"
 SUMMARY="Forge: Simple Mapping and GIS .shp file functions"
