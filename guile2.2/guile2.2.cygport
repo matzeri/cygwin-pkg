@@ -1,5 +1,5 @@
-NAME="guile"
-VERSION=2.2.6
+NAME="guile2.2"
+VERSION=2.2.7
 RELEASE=1
 CATEGORY="Interpreters"
 SUMMARY="GNU Scheme interpreter library"
@@ -13,15 +13,16 @@ PATCH_URI="
 	test-ffi.patch
 "
 
-PKG_NAMES="${NAME} libguile2.2_1 libguile2.2-devel"
+PKG_NAMES="guile2.2 libguile2.2_1 libguile2.2-devel"
 
-guile_CONTENTS="
-	usr/bin/guild
-	usr/bin/guile.exe
-	usr/bin/guile-tools
+guile2_2_CONTENTS="
+	etc/
+	usr/bin/guild-2.2
+	usr/bin/guile-2.2.exe
+	usr/bin/guile-tools-2.2
 	usr/share/doc/
 	usr/share/info/
-	usr/share/man/man1/guile.1*
+	usr/share/man/man1/guile-2*
 "
 libguile2_2_1_CONTENTS="
 	usr/bin/cygguile-2.2-1.dll
@@ -30,8 +31,8 @@ libguile2_2_1_CONTENTS="
 "
 libguile2_2_devel_REQUIRES=${NAME}
 libguile2_2_devel_CONTENTS="
-	usr/bin/guile-config
-	usr/bin/guile-snarf
+	usr/bin/guile-config-2.2
+	usr/bin/guile-snarf-2.2
 	usr/include/guile/2.2/
 	usr/lib/libguile-2.2.*
 	usr/lib/pkgconfig/guile-2.2.pc
@@ -42,6 +43,8 @@ KEEP_LA_FILES="module"
 DIFF_EXCLUDES="ref test-suite"
 
 CYGCONF_ARGS="
+	--program-suffix=-2.2 \
+	--includedir=/usr/include/guile/2.2 \
 	--disable-debug-freelist \
 	--disable-debug-malloc \
 	--disable-guile-debug \
@@ -61,7 +64,7 @@ src_install() {
 	cd ${B}
 	cyginstall
 
-#	sed -i -e '1s|/bin/guile|&-2.0|' ${D}/usr/bin/guile-config-2.0
+	sed -i -e '1s|/bin/guile|&-2.2|' ${D}/usr/bin/guile-config-2.2
 
 	# avoid collisions
 	mv ${D}/usr/share/aclocal/guile{,-2.2}.m4
