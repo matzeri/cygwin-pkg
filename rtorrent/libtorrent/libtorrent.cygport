@@ -1,12 +1,12 @@
 NAME="libtorrent"
-VERSION=0.13.6
+VERSION=0.13.8
 RELEASE=1
 
 HOMEPAGE="https://github.com/rakshasa/libtorrent"
-SRC_URI="https://github.com/rakshasa/libtorrent/releases/${P}.tar.gz"
+SRC_URI="http://rtorrent.net/downloads/libtorrent-${PV}.tar.gz"
 PATCH_URI="libtorrent-no-undefined.patch"
 
-PKG_NAMES="${PN} ${PN}19 ${PN}-devel"
+PKG_NAMES="${PN} ${PN}21 ${PN}-devel"
 
 CATEGORY=Libs
 DESCRIPTION="LibTorrent is a BitTorrent library written in C++ for *nix, with a focus on high performance and good code."
@@ -14,10 +14,20 @@ DESCRIPTION="LibTorrent is a BitTorrent library written in C++ for *nix, with a 
 libtorrent_CONTENTS=""
 libtorrent_SUMMARY="BitTorrent library written in C++ (source empty) "
 
-libtorrent19_CONTENTS="usr/bin/cygtorrent-19.dll"
-libtorrent19_SUMMARY="BitTorrent library written in C++ (runtime)"
+libtorrent21_CONTENTS="usr/bin/cygtorrent-21.dll"
+libtorrent21_SUMMARY="BitTorrent library written in C++ (runtime)"
 
 libtorrent_devel_CONTENTS="usr/include usr/lib usr/share"
 libtorrent_devel_SUMMARY="BitTorrent library written in C++ (development)"
 
-CYGCONF_ARGS="--disable-mincore cc_cv_attribute_visibility=no"
+src_compile() {
+        cd ${S}
+        cygautoreconf
+        cd ${B}
+        cygconf --disable-mincore \
+		cc_cv_attribute_visibility=no
+	echo "defining _GNU_SOURCE on config.h"
+	echo "#define _GNU_SOURCE 1" >> config.h
+        cygmake
+}
+	

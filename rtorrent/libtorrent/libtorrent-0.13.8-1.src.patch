@@ -1,0 +1,23 @@
+--- origsrc/libtorrent-0.13.8/test/Makefile.am	2019-07-19 13:44:08.000000000 +0200
++++ src/libtorrent-0.13.8/test/Makefile.am	2020-03-14 20:23:18.147245300 +0100
+@@ -3,19 +3,7 @@ AUTOMAKE_OPTIONS = subdir-objects
+ 
+ check_PROGRAMS = $(TESTS)
+ LibTorrentTest_LDADD = \
+-	../src/libtorrent.la \
+-	../src/torrent/libsub_torrent.la \
+-	../src/torrent/data/libsub_torrentdata.la \
+-	../src/torrent/download/libsub_torrentdownload.la \
+-	../src/torrent/peer/libsub_torrentpeer.la \
+-	../src/data/libsub_data.la \
+-	../src/dht/libsub_dht.la \
+-	../src/net/libsub_net.la \
+-	../src/protocol/libsub_protocol.la \
+-	../src/download/libsub_download.la \
+-	../src/tracker/libsub_tracker.la \
+-	../src/utils/libsub_utils.la \
+-	../src/torrent/utils/libsub_torrentutils.la
++	../src/libtorrent.la 
+ 
+ LibTorrentTest_SOURCES = \
+ 	../src/thread_disk.cc \
