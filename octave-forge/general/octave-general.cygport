@@ -1,8 +1,8 @@
 FORGE="general"
 NAME="octave-general"
-VERSION=2.1.0
-OV=2.1.0
-RELEASE=3
+VERSION=2.1.1
+OV=2.1.1
+RELEASE=1
 
 CATEGORY="Math"
 SUMMARY="Forge: General tools for Octave" 
