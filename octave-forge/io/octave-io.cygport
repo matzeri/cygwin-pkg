@@ -1,7 +1,7 @@
 FORGE="io"
 NAME="octave-io"
-VERSION=2.4.13
-OV=2.4.13
+VERSION=2.6.0
+OV=2.6.0
 RELEASE=1
 
 CATEGORY="Math"
