@@ -1,7 +1,7 @@
 FORGE="statistics"
 NAME="octave-statistics"
-VERSION=1.4.1
-OV=1.4.1
+VERSION=1.4.2
+OV=1.4.2
 RELEASE=1
 
 ARCH="noarch"
