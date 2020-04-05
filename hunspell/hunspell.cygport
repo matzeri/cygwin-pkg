@@ -1,0 +1,48 @@
+NAME="hunspell"
+VERSION=1.7.0
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="Spell checker and morphological analyzer"
+DESCRIPTION="Hunspell is a spell checker and morphological analyzer library
+and program designed for languages with rich morphology and complex
+compounding or character encoding."
+HOMEPAGE="https://hunspell.github.io/"
+SRC_URI="https://github.com/hunspell/hunspell/files/2573619/hunspell-${VERSION}.tar.gz"
+
+PKG_NAMES="hunspell libhunspell1.7_0 libhunspell-devel"
+hunspell_CATEGORY="Text"
+hunspell_CONTENTS="
+	usr/bin/hunspell.exe
+	usr/share/doc/
+	usr/share/locale/
+	usr/share/man/man1/hunspell.1*
+	usr/share/man/hu/man1/hunspell.1*
+"
+libhunspell1_7_0_CONTENTS="usr/bin/*-1.7-0.dll"
+libhunspell_devel_CONTENTS="
+	--exclude=hunspell.exe --exclude=hunspell.1* --exclude=*.dll
+	usr/bin/ usr/include/ usr/lib/ usr/share/man/"
+
+DIFF_EXCLUDES="intl m4 po hunvisapi.h"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	cd ${B}
+	cygconf --with-readline --with-ui
+	ln -sf {${B},${S}}/src/hunspell/hunvisapi.h
+	cygmake
+	cygmake -C po update-gmo
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	dosym libhunspell-${VERSION%.*}.dll.a /usr/lib/libhunspell.dll.a
+
+	rm -f ${D}/usr/lib/libparsers.a
+}
+
+DOCS="*.myspell"
+
