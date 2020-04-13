@@ -1,7 +1,7 @@
 FORGE="queueing"
 NAME="octave-queueing"
-VERSION=1.2.6
-OV=1.2.6
+VERSION=1.2.7
+OV=1.2.7
 RELEASE=1
 
 ARCH="noarch"
@@ -11,7 +11,7 @@ DESCRIPTION="${SUMMARY}
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-SRC_URI="https://octave.sourceforge.io/${FORGE}-${PV}.tar.gz"
+SRC_URI="https://packages.octave.org/download/${FORGE}-${PV}.tar.gz"
 SRC_DIR="${FORGE}"
 PATCH_URI="do-octave-update.patch"
 
