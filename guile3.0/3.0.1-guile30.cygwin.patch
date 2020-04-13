@@ -1,5 +1,5 @@
 --- origsrc/guile-3.0.1/CYGWIN-PATCHES/README	1970-01-01 01:00:00.000000000 +0100
-+++ src/guile-3.0.1/CYGWIN-PATCHES/README	2020-03-13 06:35:37.080527300 +0100
++++ CYGWIN-PATCHES/README	2020-03-13 06:35:37.080527300 +0100
 @@ -0,0 +1,37 @@
 +==========
 +guile3.0
@@ -39,7 +39,7 @@
 +Please address questions and bug reports to the Cygwin mailing list
 +<cygwin@cygwin.com>.
 --- origsrc/guile-3.0.1/CYGWIN-PATCHES/postinstall.sh	1970-01-01 01:00:00.000000000 +0100
-+++ src/guile-3.0.1/CYGWIN-PATCHES/postinstall.sh	2020-03-13 06:19:35.328347600 +0100
++++ CYGWIN-PATCHES/postinstall.sh	2020-03-13 06:19:35.328347600 +0100
 @@ -0,0 +1,10 @@
 +# Install this package as a guile alternative.
 +
@@ -52,7 +52,7 @@
 +/usr/sbin/alternatives --install /usr/bin/guile-snarf guile-snarf /usr/bin/guile-snarf-$GUILE_VERSION $GUILE_PRIORITY
 +/usr/sbin/alternatives --install /usr/bin/guile-tools guile-tools /usr/bin/guile-tools-$GUILE_VERSION $GUILE_PRIORITY
 --- origsrc/guile-3.0.1/CYGWIN-PATCHES/preremove.sh	1970-01-01 01:00:00.000000000 +0100
-+++ src/guile-3.0.1/CYGWIN-PATCHES/preremove.sh	2020-03-13 06:21:18.292305500 +0100
++++ CYGWIN-PATCHES/preremove.sh	2020-03-13 06:21:18.292305500 +0100
 @@ -0,0 +1,7 @@
 +# Remove this package as a guile alternative.
 +
