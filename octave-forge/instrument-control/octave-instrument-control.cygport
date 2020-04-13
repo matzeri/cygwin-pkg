@@ -1,8 +1,8 @@
 FORGE="instrument-control"
 NAME="octave-instrument-control"
-VERSION=0.4.1
-OV=0.4.0+
-RELEASE=0.1
+VERSION=0.5.0
+OV=0.5.0
+RELEASE=1
 
 CATEGORY="Math"
 SUMMARY="Forge: Low level I/O functions for interfaces. "
@@ -10,12 +10,13 @@ DESCRIPTION="${SUMMARY}
 Contributed functions for GNU Octave from octave.sourceforge.net"
 HOMEPAGE="http://octave.sourceforge.net/"
 
-#SRC_URI="https://packages.octave.org/download/${FORGE}-${PV}.tar.gz"
-HG_URI="http://hg.code.sf.net/p/octave/instrument-control"
-HG_REV="d1c38d00a254"
-#SRC_DIR="instrument-control-${PV}"
-SRC_DIR="instrument-control"
-inherit hg
+SRC_URI="https://packages.octave.org/download/${FORGE}-${PV}.tar.gz"
+SRC_DIR="instrument-control-${PV}"
+
+#HG_URI="http://hg.code.sf.net/p/octave/instrument-control"
+#HG_REV="d1c38d00a254"
+#SRC_DIR="instrument-control"
+#inherit hg
 
 PATCH_URI="do-octave-update.patch"
 
