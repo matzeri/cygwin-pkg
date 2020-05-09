@@ -1,6 +1,6 @@
 NAME="mutt"
-VERSION=1.13.5
-RELEASE=1
+VERSION=1.14.0
+RELEASE=2
 
 CATEGORY="Mail"
 DESCRIPTION="A text mode mail user agent (MUA)"
@@ -45,8 +45,10 @@ src_compile() {
 	--with-sasl \
 	--with-slang \
 	MUTT_MD5=mutt_md5
+	# workaround 
+	mv ${S}/doc/stamp-doc-rc ${S}/doc/stamp-doc-rc_bk
 	cygmake 
-	cygmake -C doc makedoc.exe
+	mv ${S}/doc/stamp-doc-rc_bk ${S}/doc/stamp-doc-rc
 }
 
 src_test() {

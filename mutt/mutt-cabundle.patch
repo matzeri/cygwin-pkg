@@ -1,25 +1,25 @@
---- origsrc/mutt-1.13.0/contrib/Makefile.am	2019-11-09 22:40:17.000000000 +0100
-+++ contrib/Makefile.am	2019-12-12 07:34:47.090207800 +0100
+--- origsrc/mutt-1.14.0/contrib/Makefile.am	2020-05-02 23:08:56.000000000 +0200
++++ contrib/Makefile.am	2020-05-09 08:41:26.551099000 +0200
 @@ -6,7 +6,7 @@ SAMPLES = Mush.rc Pine.rc gpg.rc pgp2.rc
  	sample.mailcap sample.muttrc sample.muttrc-sidebar sample.muttrc-tlr \
  	sample.muttrc-compress sample.muttrc-starter \
  	sample.vimrc-sidebar colors.default colors.linux smime.rc \
--	ca-bundle.crt smime_keys_test.pl mutt_xtitle markdown2html
-+	smime_keys_test.pl mutt_xtitle markdown2html
+-	ca-bundle.crt smime_keys_test.pl mutt_xtitle markdown2html \
++	smime_keys_test.pl mutt_xtitle markdown2html \
+ 	bgedit-detectgui.sh bgedit-screen-tmux.sh
  
  EXTRA_DIST = language.txt language50.txt  \
- 	patch.slang-1.2.2.keypad.1	\
---- origsrc/mutt-1.13.0/doc/smime-notes.txt	2017-12-03 04:10:17.000000000 +0100
-+++ doc/smime-notes.txt	2019-12-12 07:38:51.153347200 +0100
+--- origsrc/mutt-1.14.0/doc/smime-notes.txt	2020-05-02 23:08:56.000000000 +0200
++++ doc/smime-notes.txt	2020-05-09 08:42:52.563667800 +0200
 @@ -40,8 +40,9 @@ How to add use mutt's S/MIME capabilitie
  - Edit the smime_sign_as line in your muttrc, replacing the keyid with your
    own.
  
 -- You probably want to import the trusted roots in
 -  contrib/ca-bundle.crt. This makes you trust anything that was ultimately
-+-  There is no more ca-bundle.crt file with the trusted roots to import shipped
-+   in mutt. The user is encouraged to use ca-bundle.crt from ca-certificate 
-+   package.  This makes you trust anything that was ultimately
++- There is no more ca-bundle.crt file with the trusted roots to import shipped
++  in mutt. The user is encouraged to use ca-bundle.crt from ca-certificate
++  package.  This makes you trust anything that was ultimately
    signed by one of them. You can use "smime_keys add_root" to do so, or
    just copy ca-bundle.crt into the place you point mutt's smime_ca_location
    variable to.
