@@ -1,5 +1,5 @@
 NAME="colordiff"
-VERSION="1.0.18"
+VERSION="1.0.19"
 RELEASE=1
 
 ARCH="noarch"
@@ -8,9 +8,9 @@ DESCRIPTION="A tool to colorize diff command output"
 SUMMARY="A tool to colorize diff command output"
 HOMEPAGE="https://www.colordiff.org/"
 
-SRC_URI="https://www.colordiff.org/${P}.tar.gz
-https://www.colordiff.org/${P}.tar.gz.sig"
-SRC_DIR="${P}"
+SRC_URI="https://www.colordiff.org/${PN}-${PV}.tar.gz
+https://www.colordiff.org/${PN}-${PV}.tar.gz.sig"
+SRC_DIR="${PN}-${PV}"
 PATCH_URI="colordiff-install.patch"
 
 DOCS="colordiffrc-lightbg"
