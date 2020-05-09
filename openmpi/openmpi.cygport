@@ -1,5 +1,5 @@
 NAME="openmpi"
-VERSION=3.1.3
+VERSION="3.1.6"
 RELEASE=1
 
 CATEGORY="Libs"
@@ -11,7 +11,7 @@ source, freely available, high performance implementation of the MPI spec."
 HOMEPAGE="http://www.open-mpi.org"
 SRC_URI="http://www.open-mpi.org/software/ompi/v3.1/downloads/${P}.tar.bz2"
 
-PATCH_URI="pre-install.patch
+PATCH_URI="
 openmpi-README.patch
 openmpi-libevent.patch
 "
@@ -78,6 +78,14 @@ src_test() {
 src_install() {
 	cd ${B}
         cyginstall
+
+	echo -e "#\n# Avoid PMIX error on 3.1.5 for " >> ${D}/etc/pmix-mca-params.conf
+	echo "# https://www.mail-archive.com/devel@lists.open-mpi.org//msg21004.html" >> ${D}/etc/pmix-mca-params.conf
+	echo "gds = ^ds21" >> ${D}/etc/pmix-mca-params.conf
+
+	make_etc_defaults /etc/openmpi-default-hostfile \
+	/etc/openmpi-mca-params.conf /etc/openmpi-totalview.tcl \
+	/etc/pmix-mca-params.conf
 }
 
 
