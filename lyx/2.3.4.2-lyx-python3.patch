@@ -1,0 +1,368 @@
+--- origsrc/lyx-2.3.4.2/development/autotests/keytest.py	2020-02-08 22:43:18.000000000 +0100
++++ development/autotests/keytest.py	2020-04-24 18:41:05.483232800 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ # This script generates hundreds of random keypresses per second,
+ #  and sends them to the lyx window
+--- origsrc/lyx-2.3.4.2/development/cmake/doc/ReplaceValues.py	2020-02-08 22:43:18.000000000 +0100
++++ development/cmake/doc/ReplaceValues.py	2020-04-24 18:41:05.503320700 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ 
+ from __future__ import print_function
+ 
+--- origsrc/lyx-2.3.4.2/development/cmake/po/cat.py	2020-02-08 22:43:18.000000000 +0100
++++ development/cmake/po/cat.py	2020-04-24 18:41:05.603568600 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ 
+ from __future__ import print_function
+ 
+--- origsrc/lyx-2.3.4.2/development/cmake/po/unix2dos.py	2020-02-08 22:43:18.000000000 +0100
++++ development/cmake/po/unix2dos.py	2020-04-24 18:41:05.663449700 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ 
+ ###############
+ import sys
+--- origsrc/lyx-2.3.4.2/development/keystest/cache-bisect.py	2020-02-08 22:43:18.000000000 +0100
++++ development/keystest/cache-bisect.py	2020-04-24 18:41:05.723375600 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ 
+ import os
+--- origsrc/lyx-2.3.4.2/development/keystest/keytest.py	2020-02-08 22:43:18.000000000 +0100
++++ development/keystest/keytest.py	2020-04-24 18:41:05.774611700 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ # This script generates hundreds of random keypresses per second,
+ #  and sends them to the lyx window
+--- origsrc/lyx-2.3.4.2/development/keystest/make_screenshot_html.py	2020-02-08 22:43:18.000000000 +0100
++++ development/keystest/make_screenshot_html.py	2020-04-24 18:41:05.843413400 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ import re
+ import os
+--- origsrc/lyx-2.3.4.2/development/tools/gen_lfuns.py	2020-02-08 22:43:18.000000000 +0100
++++ development/tools/gen_lfuns.py	2020-04-24 18:41:06.093484100 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file gen_lfuns.py
+--- origsrc/lyx-2.3.4.2/development/tools/generate_symbols_images.py	2020-02-08 22:43:18.000000000 +0100
++++ development/tools/generate_symbols_images.py	2020-04-24 18:41:05.953512300 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file generate_symbols_images.py
+--- origsrc/lyx-2.3.4.2/development/tools/generate_symbols_list.py	2020-02-08 22:43:18.000000000 +0100
++++ development/tools/generate_symbols_list.py	2020-04-24 18:41:06.033127900 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file generate_symbols_images.py
+--- origsrc/lyx-2.3.4.2/development/tools/mergepo.py	2020-02-08 22:43:18.000000000 +0100
++++ development/tools/mergepo.py	2020-04-24 18:41:06.163361800 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file mergepo.py
+--- origsrc/lyx-2.3.4.2/development/tools/unicodesymbols.py	2020-02-08 22:43:18.000000000 +0100
++++ development/tools/unicodesymbols.py	2020-04-24 18:41:06.223520400 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file unciodesymbols.py
+--- origsrc/lyx-2.3.4.2/development/tools/updatedocs.py	2020-02-08 22:43:18.000000000 +0100
++++ development/tools/updatedocs.py	2020-04-24 18:41:06.263399300 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file updatedocs.py
+--- origsrc/lyx-2.3.4.2/development/tools/updatelayouts.py	2020-02-08 22:43:18.000000000 +0100
++++ development/tools/updatelayouts.py	2020-04-24 18:41:06.303393100 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file updatelayouts.py
+--- origsrc/lyx-2.3.4.2/lib/configure.py	2020-02-08 22:43:18.000000000 +0100
++++ lib/configure.py	2020-04-24 18:41:06.383488100 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python
++#! /usr/bin/python3
+ # -*- coding: utf-8 -*-
+ #
+ # file configure.py
+--- origsrc/lyx-2.3.4.2/lib/lyx2lyx/profiling.py	2020-02-08 22:43:18.000000000 +0100
++++ lib/lyx2lyx/profiling.py	2020-04-24 18:41:07.493040700 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ # Copyright (C) 2004 José Matos <jamatos@lyx.org>
+ #
+--- origsrc/lyx-2.3.4.2/lib/scripts/gnuplot2pdf.py	2020-02-08 22:43:18.000000000 +0100
++++ lib/scripts/gnuplot2pdf.py	2020-04-24 18:41:08.183475800 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ from subprocess import Popen, PIPE
+ from sys import argv, stderr, exit
+--- origsrc/lyx-2.3.4.2/lib/scripts/svg2pdftex.py	2020-02-08 22:43:18.000000000 +0100
++++ lib/scripts/svg2pdftex.py	2020-04-24 18:41:08.613283500 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file svg2pdftex.py
+--- origsrc/lyx-2.3.4.2/lib/scripts/svg2pstex.py	2020-02-08 22:43:18.000000000 +0100
++++ lib/scripts/svg2pstex.py	2020-04-24 18:41:08.663504500 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file svg2pstex.py
+--- origsrc/lyx-2.3.4.2/po/lyx_pot.py	2020-02-08 22:43:18.000000000 +0100
++++ po/lyx_pot.py	2020-04-24 18:41:08.883525000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file lyx_pot.py
+--- origsrc/lyx-2.3.4.2/po/postats.py	2020-02-08 22:43:18.000000000 +0100
++++ po/postats.py	2020-04-24 18:41:08.923581900 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ # Copyright (C) 2007 Michael Gerz <michael.gerz@teststep.org>
+ # Copyright (C) 2007 José Matos <jamatos@lyx.org>
+--- origsrc/lyx-2.3.4.2/src/tex2lyx/test/runtests.py	2020-02-08 22:43:18.000000000 +0100
++++ src/tex2lyx/test/runtests.py	2020-04-24 18:41:08.983398400 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # file src/tex2lyx/test/runtests.py
+--- origsrc/lyx-2.3.4.2/lib/configure.py	2020-04-24 20:35:19.119812500 +0200
++++ lib/configure.py	2020-04-25 09:18:26.076589900 +0200
+@@ -574,7 +574,7 @@ def checkLatex(dtl_tools):
+     if dtl_tools:
+         # Windows only: DraftDVI
+         addToRC(r'''\converter latex      dvi2       "%s"	"latex,hyperref-driver=dvips"
+-\converter dvi2       dvi        "python -tt $$s/scripts/clean_dvi.py $$i $$o"	""''' % PPLATEX)
++\converter dvi2       dvi        "python3 -tt $$s/scripts/clean_dvi.py $$i $$o"	""''' % PPLATEX)
+     else:
+         addToRC(r'\converter latex      dvi        "%s"	"latex,hyperref-driver=dvips"' % PPLATEX)
+     # no latex
+@@ -862,7 +862,7 @@ def checkConverterEntries():
+     checkProg('an HTML -> LaTeX converter', ['html2latex $$i', 'gnuhtml2latex',
+         'htmltolatex -input $$i -output $$o', 'htmltolatex.jar -input $$i -output $$o'],
+         rc_entry = [ r'\converter html       latex      "%%"	""',
+-                     r'\converter html       latex      "python -tt $$s/scripts/html2latexwrapper.py %% $$i $$o"	""',
++                     r'\converter html       latex      "python3 -tt $$s/scripts/html2latexwrapper.py %% $$i $$o"	""',
+                      r'\converter html       latex      "%%"	""',
+                      r'\converter html       latex      "%%"	""', '' ])
+     #
+@@ -883,8 +883,8 @@ def checkConverterEntries():
+         ['elyxer.py --html --nofooter --unicode --directory $$r $$i $$o', 'elyxer --html --nofooter --unicode --directory $$r $$i $$o'],
+         rc_entry = [ r'\converter lyx      word      "%%"	""' ])
+     if elyxer.find('elyxer') >= 0:
+-      addToRC(r'''\copier    html       "python -tt $$s/scripts/ext_copy.py -e html,png,jpg,jpeg,css $$i $$o"''')
+-      addToRC(r'''\copier    wordhtml       "python -tt $$s/scripts/ext_copy.py -e html,png,jpg,jpeg,css $$i $$o"''')
++      addToRC(r'''\copier    html       "python3 -tt $$s/scripts/ext_copy.py -e html,png,jpg,jpeg,css $$i $$o"''')
++      addToRC(r'''\copier    wordhtml       "python3 -tt $$s/scripts/ext_copy.py -e html,png,jpg,jpeg,css $$i $$o"''')
+     else:
+       # search for HTML converters other than eLyXer
+       # On SuSE the scripts have a .sh suffix, and on debian they are in /usr/share/tex4ht/
+@@ -893,24 +893,24 @@ def checkConverterEntries():
+           'latex2html -no_subdir -split 0 -show_section_numbers $$i', 'hevea -s $$i'],
+           rc_entry = [ r'\converter latex      html       "%%"	"needaux"' ])
+       if htmlconv.find('htlatex') >= 0 or htmlconv == 'latex2html':
+-        addToRC(r'''\copier    html       "python -tt $$s/scripts/ext_copy.py -e html,png,css $$i $$o"''')
++        addToRC(r'''\copier    html       "python3 -tt $$s/scripts/ext_copy.py -e html,png,css $$i $$o"''')
+       else:
+-        addToRC(r'''\copier    html       "python -tt $$s/scripts/ext_copy.py $$i $$o"''')
++        addToRC(r'''\copier    html       "python3 -tt $$s/scripts/ext_copy.py $$i $$o"''')
+       path, htmlconv = checkProg('a LaTeX -> HTML (MS Word) converter', ["htlatex $$i 'html,word' 'symbol/!' '-cvalidate'",
+           "htlatex.sh $$i 'html,word' 'symbol/!' '-cvalidate'",
+           "/usr/share/tex4ht/htlatex $$i 'html,word' 'symbol/!' '-cvalidate'"],
+           rc_entry = [ r'\converter latex      wordhtml   "%%"	"needaux"' ])
+       if htmlconv.find('htlatex') >= 0:
+-        addToRC(r'''\copier    wordhtml       "python -tt $$s/scripts/ext_copy.py -e html,png,css $$i $$o"''')
++        addToRC(r'''\copier    wordhtml       "python3 -tt $$s/scripts/ext_copy.py -e html,png,css $$i $$o"''')
+       else:
+-        addToRC(r'''\copier    wordhtml       "python -tt $$s/scripts/ext_copy.py $$i $$o"''')
++        addToRC(r'''\copier    wordhtml       "python3 -tt $$s/scripts/ext_copy.py $$i $$o"''')
+ 
+ 
+     # Check if LyXBlogger is installed
+     lyxblogger_found = checkModule('lyxblogger')
+     if lyxblogger_found:
+       addToRC(r'\Format    blog       blog       "LyXBlogger"           "" "" ""  "document"  ""')
+-      addToRC(r'\converter xhtml      blog       "python -m lyxblogger $$i"       ""')
++      addToRC(r'\converter xhtml      blog       "python3 -m lyxblogger $$i"       ""')
+ 
+     #
+     checkProg('an OpenOffice.org -> LaTeX converter', ['w2l -clean $$i'],
+@@ -992,8 +992,8 @@ def checkConverterEntries():
+     # PDF produced using non-TeX fonts. This does not produce non-unique
+     # conversion paths, since a given document either uses TeX fonts or not.
+     checkProg('Ghostscript', ["gswin32c", "gswin64c", "gs"],
+-        rc_entry = [ r'''\converter pdf2   pdf8       "python -tt $$s/scripts/convert_pdf.py $$i $$o ebook"	""
+-\converter pdf4   pdf8       "python -tt $$s/scripts/convert_pdf.py $$i $$o ebook"	""''' ])
++        rc_entry = [ r'''\converter pdf2   pdf8       "python3 -tt $$s/scripts/convert_pdf.py $$i $$o ebook"	""
++\converter pdf4   pdf8       "python3 -tt $$s/scripts/convert_pdf.py $$i $$o ebook"	""''' ])
+     #
+     checkProg('a Beamer info extractor', ['makebeamerinfo -p $$i'],
+         rc_entry = [ r'\converter pdf2         beamer.info        "%%"	""' ])
+@@ -1019,15 +1019,15 @@ def checkConverterEntries():
+ \converter fig        ppm        "fig2dev -L ppm $$i $$o"	""
+ \converter fig        svg        "fig2dev -L svg $$i $$o"	""
+ \converter fig        png        "fig2dev -L png $$i $$o"	""
+-\converter fig        pdftex     "python -tt $$s/scripts/fig2pdftex.py $$i $$o"	""
+-\converter fig        pstex      "python -tt $$s/scripts/fig2pstex.py $$i $$o"	""''')
++\converter fig        pdftex     "python3 -tt $$s/scripts/fig2pdftex.py $$i $$o"	""
++\converter fig        pstex      "python3 -tt $$s/scripts/fig2pstex.py $$i $$o"	""''')
+     #
+     checkProg('a SVG -> PDFTeX converter', [inkscape_cl],
+-        rc_entry = [ r'\converter svg        pdftex     "python -tt $$s/scripts/svg2pdftex.py %% $$p$$i $$p$$o" ""'],
++        rc_entry = [ r'\converter svg        pdftex     "python3 -tt $$s/scripts/svg2pdftex.py %% $$p$$i $$p$$o" ""'],
+         path = [inkscape_path])
+     #
+     checkProg('a SVG -> PSTeX converter', [inkscape_cl],
+-        rc_entry = [ r'\converter svg        pstex     "python -tt $$s/scripts/svg2pstex.py %% $$p$$i $$p$$o" ""'],
++        rc_entry = [ r'\converter svg        pstex     "python3 -tt $$s/scripts/svg2pstex.py %% $$p$$i $$p$$o" ""'],
+         path = [inkscape_path])
+     #
+     checkProg('a TIFF -> PS converter', ['tiff2ps $$i > $$o'],
+@@ -1111,7 +1111,7 @@ def checkConverterEntries():
+     #
+     checkProg('Gnuplot', ['gnuplot'], 
+         rc_entry = [ r'''\Format gnuplot     "gp, gnuplot"    "Gnuplot"     "" "" ""  "vector"	"text/plain"
+-\converter gnuplot      pdf6      "python -tt $$s/scripts/gnuplot2pdf.py $$i $$o"    "needauth"''' ])
++\converter gnuplot      pdf6      "python3 -tt $$s/scripts/gnuplot2pdf.py $$i $$o"    "needauth"''' ])
+     #
+     # gnumeric/xls/ods to tex
+     checkProg('a spreadsheet -> latex converter', ['ssconvert'],
+@@ -1181,7 +1181,7 @@ def checkConverterEntries():
+     # Currently, lyxpak outputs a gzip compressed tar archive on *nix
+     # and a zip archive on Windows.
+     # So, we configure the appropriate version according to the platform.
+-    cmd = r'\converter lyx %s "python -tt $$s/scripts/lyxpak.py $$r/$$f" ""'
++    cmd = r'\converter lyx %s "python3 -tt $$s/scripts/lyxpak.py $$r/$$f" ""'
+     if os.name == 'nt':
+         addToRC(r'\Format lyxzip     zip    "LyX Archive (zip)"     "" "" ""  "document,menu=export"	""')
+         addToRC(cmd % "lyxzip")
+@@ -1195,24 +1195,24 @@ def checkConverterEntries():
+     #
+     # Entries that do not need checkProg
+     addToRC(r'''
+-\converter csv        lyx        "python -tt $$s/scripts/csv2lyx.py $$i $$o"	""
++\converter csv        lyx        "python3 -tt $$s/scripts/csv2lyx.py $$i $$o"	""
+ \converter docbook    docbook-xml "cp $$i $$o"	"xml"
+-\converter fen        asciichess "python -tt $$s/scripts/fen2ascii.py $$i $$o"	""
+-\converter lyx        lyx13x     "python -tt $$s/lyx2lyx/lyx2lyx -V 1.3 -o $$o $$i"	""
+-\converter lyx        lyx14x     "python -tt $$s/lyx2lyx/lyx2lyx -V 1.4 -o $$o $$i"	""
+-\converter lyx        lyx15x     "python -tt $$s/lyx2lyx/lyx2lyx -V 1.5 -o $$o $$i"	""
+-\converter lyx        lyx16x     "python -tt $$s/lyx2lyx/lyx2lyx -V 1.6 -o $$o $$i"	""
+-\converter lyx        lyx20x     "python -tt $$s/lyx2lyx/lyx2lyx -V 2.0 -o $$o $$i"	""
+-\converter lyx        lyx21x     "python -tt $$s/lyx2lyx/lyx2lyx -V 2.1 -o $$o $$i"	""
+-\converter lyx        lyx22x     "python -tt $$s/lyx2lyx/lyx2lyx -V 2.2 -o $$o $$i"	""
+-\converter lyx        clyx       "python -tt $$s/lyx2lyx/lyx2lyx -V 1.4 -o $$o -c big5   $$i"	""
+-\converter lyx        jlyx       "python -tt $$s/lyx2lyx/lyx2lyx -V 1.4 -o $$o -c euc_jp $$i"	""
+-\converter lyx        klyx       "python -tt $$s/lyx2lyx/lyx2lyx -V 1.4 -o $$o -c euc_kr $$i"	""
+-\converter clyx       lyx        "python -tt $$s/lyx2lyx/lyx2lyx -c big5   -o $$o $$i"	""
+-\converter jlyx       lyx        "python -tt $$s/lyx2lyx/lyx2lyx -c euc_jp -o $$o $$i"	""
+-\converter klyx       lyx        "python -tt $$s/lyx2lyx/lyx2lyx -c euc_kr -o $$o $$i"	""
+-\converter lyxpreview png        "python -tt $$s/scripts/lyxpreview2bitmap.py --png"	""
+-\converter lyxpreview ppm        "python -tt $$s/scripts/lyxpreview2bitmap.py --ppm"	""
++\converter fen        asciichess "python3 -tt $$s/scripts/fen2ascii.py $$i $$o"	""
++\converter lyx        lyx13x     "python3 -tt $$s/lyx2lyx/lyx2lyx -V 1.3 -o $$o $$i"	""
++\converter lyx        lyx14x     "python3 -tt $$s/lyx2lyx/lyx2lyx -V 1.4 -o $$o $$i"	""
++\converter lyx        lyx15x     "python3 -tt $$s/lyx2lyx/lyx2lyx -V 1.5 -o $$o $$i"	""
++\converter lyx        lyx16x     "python3 -tt $$s/lyx2lyx/lyx2lyx -V 1.6 -o $$o $$i"	""
++\converter lyx        lyx20x     "python3 -tt $$s/lyx2lyx/lyx2lyx -V 2.0 -o $$o $$i"	""
++\converter lyx        lyx21x     "python3 -tt $$s/lyx2lyx/lyx2lyx -V 2.1 -o $$o $$i"	""
++\converter lyx        lyx22x     "python3 -tt $$s/lyx2lyx/lyx2lyx -V 2.2 -o $$o $$i"	""
++\converter lyx        clyx       "python3 -tt $$s/lyx2lyx/lyx2lyx -V 1.4 -o $$o -c big5   $$i"	""
++\converter lyx        jlyx       "python3 -tt $$s/lyx2lyx/lyx2lyx -V 1.4 -o $$o -c euc_jp $$i"	""
++\converter lyx        klyx       "python3 -tt $$s/lyx2lyx/lyx2lyx -V 1.4 -o $$o -c euc_kr $$i"	""
++\converter clyx       lyx        "python3 -tt $$s/lyx2lyx/lyx2lyx -c big5   -o $$o $$i"	""
++\converter jlyx       lyx        "python3 -tt $$s/lyx2lyx/lyx2lyx -c euc_jp -o $$o $$i"	""
++\converter klyx       lyx        "python3 -tt $$s/lyx2lyx/lyx2lyx -c euc_kr -o $$o $$i"	""
++\converter lyxpreview png        "python3 -tt $$s/scripts/lyxpreview2bitmap.py --png"	""
++\converter lyxpreview ppm        "python3 -tt $$s/scripts/lyxpreview2bitmap.py --ppm"	""
+ ''')
+ 
+ 
+@@ -1266,10 +1266,10 @@ def checkOtherEntries():
+     ## FIXME: MAPLE is not used anywhere
+     # path, MAPLE = checkProg('Maple', ['maple'])
+     # Add the rest of the entries (no checkProg is required)
+-    addToRC(r'''\copier    fig        "python -tt $$s/scripts/fig_copy.py $$i $$o"
+-\copier    pstex      "python -tt $$s/scripts/tex_copy.py $$i $$o $$l"
+-\copier    pdftex     "python -tt $$s/scripts/tex_copy.py $$i $$o $$l"
+-\copier    program    "python -tt $$s/scripts/ext_copy.py $$i $$o"
++    addToRC(r'''\copier    fig        "python3 -tt $$s/scripts/fig_copy.py $$i $$o"
++\copier    pstex      "python3 -tt $$s/scripts/tex_copy.py $$i $$o $$l"
++\copier    pdftex     "python3 -tt $$s/scripts/tex_copy.py $$i $$o $$l"
++\copier    program    "python3 -tt $$s/scripts/ext_copy.py $$i $$o"
+ ''')
+ 
+ def _checkForClassExtension(x):
+@@ -1794,7 +1794,7 @@ def rescanTeXFiles():
+         sys.exit(1)
+     interpreter = sys.executable
+     if interpreter == '':
+-        interpreter = "python"
++        interpreter = "python3"
+     tfp = cmdOutput('"%s" -tt "%s"' % (interpreter, tfscript))
+     logger.info(tfp)
+     logger.info("\tdone")
+--- origsrc/lyx-2.3.4.2/lib/lyx2lyx/lyx2lyx	2020-02-08 22:43:18.000000000 +0100
++++ lib/lyx2lyx/lyx2lyx	2020-04-25 09:12:26.211094700 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ # Copyright (C) 2002-2011 The LyX Team
+ # Copyright (C) 2002-2007 José Matos <jamatos@lyx.org>
+--- origsrc/lyx-2.3.4.2/lib/scripts/listerrors	2020-02-08 22:43:18.000000000 +0100
++++ lib/scripts/listerrors	2020-04-25 16:06:47.128742700 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # file listerrors
+ # This file is part of LyX, the document processor.

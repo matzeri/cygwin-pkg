@@ -1,6 +1,6 @@
 NAME="lyx"
 VERSION=2.3.4.2
-RELEASE=1
+RELEASE=2
 
 CATEGORY="Publishing Editors Graphics"
 DESCRIPTION="A document processor that encourages an approach to writing based
@@ -16,10 +16,14 @@ HOMEPAGE="http://www.lyx.org/"
 SRC_URI="ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${PN}-${PV}.tar.xz
 ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${PN}-${PV}.tar.xz.sig" 
 SRC_DIR="${PN}-${PV}"
-PATCH_URI="lyx-postinstall.patch"
+
+PATCH_URI="
+2.3.4.2-lyx-python3.patch
+lyx-postinstall.patch
+"
 
 PKG_NAMES="lyx"
-lyx_REQUIRES="hunspell libQtSvg4"
+lyx_REQUIRES="hunspell"
 
 lyx_CONTENTS='usr etc'
 
@@ -30,7 +34,7 @@ src_compile() {
 	cd ${S}
     	cygautoreconf
 	cd ${B}
-	cygconf 
+	cygconf  --enable-qt5 PYTHON="python3"
 	cygmake 
 }
 
@@ -42,5 +46,4 @@ src_test() {
 src_install() {
 	cd ${B}
 	cyginstall 
-	
 }
