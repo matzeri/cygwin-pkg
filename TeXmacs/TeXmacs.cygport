@@ -1,13 +1,14 @@
-inherit qt4
+inherit qt5
 
 NAME="TeXmacs"
-VERSION=1.99.12
+VERSION=1.99.13
 RELEASE=1
 
 HOMEPAGE="http://www.texmacs.org/"
 SRC_URI="ftp://ftp.texmacs.org/pub/TeXmacs/tmftp/source/${P}-src.tar.gz"
-SRC_DIR="${P}-src"
+SRC_DIR="${P}"
 PATCH_URI="
+1.99.13-python3.patch
 no-bin-extension.patch"
 
 CATEGORY="Editors"
@@ -24,7 +25,15 @@ src_compile() {
 	lndirs
 	cd ${B}
  	export LIBS="-lz -lImlib2"
-	cygconf --with-iconv=/usr --with-imlib2=linked --with-qt=${QT4_QTDIR}
+	export QT_SELECT=5
+	cygconf --with-iconv=/usr \
+		--with-imlib2=linked \
+		--with-qt=${QT5_QTDIR} \
+		GUILE_CFLAGS="'pkg-config --static --cflags guile-1.8'" \
+		GUILE_LDFLAGS="'pkg-config --static --libs guile-1.8'" \
+		GUILE_DATA_PATH="'pkg-config --variable=datadir guile-1.8'" \
+		GUILE_VERSION="'pkg-config --modversion guile-1.8'" \
+		ac_cv_prog_GUILE_CONFIG='guile-config-1.8'
 	cygmake
 	# workaround for last bit in proper place
 	cygmake

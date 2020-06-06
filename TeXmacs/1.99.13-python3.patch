@@ -1,0 +1,255 @@
+--- origsrc/TeXmacs-1.99.13/TeXmacs/examples/plugins/pycomplete/src/complete.py	2020-05-28 10:57:14.348793200 +0200
++++ src/TeXmacs-1.99.13/TeXmacs/examples/plugins/pycomplete/src/complete.py	2020-06-06 16:26:46.240454300 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : complete.py
+--- origsrc/TeXmacs-1.99.13/TeXmacs/examples/plugins/pyminimal/src/minimal.py	2020-05-28 10:57:14.564795900 +0200
++++ src/TeXmacs-1.99.13/TeXmacs/examples/plugins/pyminimal/src/minimal.py	2020-06-06 16:26:46.294129500 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : minimal.py
+--- origsrc/TeXmacs-1.99.13/TeXmacs/examples/plugins/pyprompt/src/prompt.py	2020-05-28 10:57:14.432794200 +0200
++++ src/TeXmacs-1.99.13/TeXmacs/examples/plugins/pyprompt/src/prompt.py	2020-06-06 16:26:46.340339200 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : prompt.py
+--- origsrc/TeXmacs-1.99.13/TeXmacs/misc/inkscape_extension/texmacs_reedit.py	2020-05-28 10:56:59.492602100 +0200
++++ src/TeXmacs-1.99.13/TeXmacs/misc/inkscape_extension/texmacs_reedit.py	2020-06-06 16:26:46.374886500 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ *******************************************************************************
+ * Texmacs extension for Inkscape
+--- origsrc/TeXmacs-1.99.13/plugins/mathematica/bin/realpath.py	2020-05-28 10:56:39.000338500 +0200
++++ src/TeXmacs-1.99.13/plugins/mathematica/bin/realpath.py	2020-06-06 16:26:44.548192100 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ from os.path import realpath
+ from sys import argv,exit
+ if len(argv)<2: exit(1)
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/capture.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/capture.py	2020-06-06 16:27:55.660153700 +0200
+@@ -1,3 +1,4 @@
++#!/usr/bin/python3
+ import os
+ import traceback
+ 
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/compat.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/compat.py	2020-06-06 16:26:44.626452100 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ #
+ # MODULE      : compat.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/completion.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/completion.py	2020-06-06 16:26:44.658006700 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ #
+ # MODULE      : completion.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/asymptote.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/asymptote.py	2020-06-06 16:26:44.688278500 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : asymptote.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/diagrams.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/diagrams.py	2020-06-06 16:26:44.721524100 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : diagrams.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/dratex.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/dratex.py	2020-06-06 16:26:44.784434000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : dratex.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/feynmf.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/feynmf.py	2020-06-06 16:26:44.854524100 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : feynmf.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/gnuplot.py	2020-05-28 10:56:39.456344400 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/gnuplot.py	2020-06-06 16:26:44.891427000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : gnuplot.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/graph.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/graph.py	2020-06-06 16:26:44.942116100 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : graph.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/graphviz.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/graphviz.py	2020-06-06 16:26:44.979238800 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : graphviz.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/latex.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/latex.py	2020-06-06 16:26:45.017766100 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : latex.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/mermaid.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/mermaid.py	2020-06-06 16:26:45.061374200 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : mermaid.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/pdflatex.py	2020-05-28 10:56:39.456344400 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/pdflatex.py	2020-06-06 16:26:45.092586000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : pdflatex.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/plantuml.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/plantuml.py	2020-06-06 16:26:45.121908300 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : plantuml.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/tikz.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/tikz.py	2020-06-06 16:26:45.155491400 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : tikz.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/graph/xypic.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/graph/xypic.py	2020-06-06 16:26:45.222229300 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : xypic.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/postscript.py	2020-05-28 10:56:39.456344400 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/postscript.py	2020-06-06 16:26:45.366945000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : postscript.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/protocol.py	2020-05-28 10:56:39.452344300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/protocol.py	2020-06-06 16:26:45.458784900 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : protocol.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/session/tm_asy.py	2020-05-28 10:56:39.372343300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/session/tm_asy.py	2020-06-06 16:26:45.519488600 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : tm_gnuplot.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/session/tm_dratex.py	2020-05-28 10:56:39.372343300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/session/tm_dratex.py	2020-06-06 16:26:45.562320500 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : tm_dratex.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/session/tm_gnuplot.py	2020-05-28 10:56:39.372343300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/session/tm_gnuplot.py	2020-06-06 16:26:45.583161800 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : tm_gnuplot.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/session/tm_graph.py	2020-05-28 10:56:39.372343300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/session/tm_graph.py	2020-06-06 16:26:45.624696100 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : tm_graph.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/session/tm_graphviz.py	2020-05-28 10:56:39.372343300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/session/tm_graphviz.py	2020-06-06 16:26:45.928898800 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : tm_graphviz.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/session/tm_python.py	2020-05-28 10:56:39.372343300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/session/tm_python.py	2020-06-06 16:26:45.966550000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ #
+ # MODULE      : tm_python.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/session/tm_sage.py	2020-05-28 10:56:39.372343300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/session/tm_sage.py	2020-06-06 16:26:45.997480900 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ #
+ # MODULE      : tm_sage.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/session/tm_sympy.py	2020-05-28 10:56:39.372343300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/session/tm_sympy.py	2020-06-06 16:26:46.044459000 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : tm_sympy.py
+--- origsrc/TeXmacs-1.99.13/plugins/tmpy/session/tm_xypic.py	2020-05-28 10:56:39.372343300 +0200
++++ src/TeXmacs-1.99.13/plugins/tmpy/session/tm_xypic.py	2020-06-06 16:26:46.085293600 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ ###############################################################################
+ ##
+ ## MODULE      : tm_xypic.py
