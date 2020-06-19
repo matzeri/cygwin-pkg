@@ -1,7 +1,7 @@
 inherit cmake
 
 NAME="jsoncpp"
-VERSION="1.8.4"
+VERSION="1.9.3"
 RELEASE=1
 
 CATEGORY="Libs"
@@ -12,10 +12,10 @@ HOMEPAGE="https://github.com/open-source-parsers/jsoncpp"
 SRC_URI="https://github.com/open-source-parsers/jsoncpp/archive/${PV}.tar.gz"
 SRC_DIR="${P}"
 
-PKG_NAMES="libjsoncpp-devel libjsoncpp19"
+PKG_NAMES="libjsoncpp-devel libjsoncpp24"
 
-libjsoncpp19_CONTENTS="usr/bin/cygjsoncpp-19.dll"
-libjsoncpp19_SUMMARY="${SUMMARY} - runtime"
+libjsoncpp24_CONTENTS="usr/bin/cygjsoncpp-24.dll"
+libjsoncpp24_SUMMARY="${SUMMARY} - runtime"
 
 libjsoncpp_devel_CONTENTS="usr/lib usr/include usr/share"
 libjsoncpp_devel_SUMMARY="${SUMMARY} - devel"
