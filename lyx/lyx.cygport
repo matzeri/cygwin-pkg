@@ -1,6 +1,6 @@
 NAME="lyx"
-VERSION=2.3.4.2
-RELEASE=2
+VERSION=2.3.5.1
+RELEASE=1
 
 CATEGORY="Publishing Editors Graphics"
 DESCRIPTION="A document processor that encourages an approach to writing based
@@ -15,10 +15,11 @@ HOMEPAGE="http://www.lyx.org/"
 
 SRC_URI="ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${PN}-${PV}.tar.xz
 ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${PN}-${PV}.tar.xz.sig" 
-SRC_DIR="${PN}-${PV}"
+#SRC_DIR="${PN}-${PV}"
+SRC_DIR="lyx-2.3.5-1"
 
 PATCH_URI="
-2.3.4.2-lyx-python3.patch
+2.3.5-lyx-python3.patch
 lyx-postinstall.patch
 "
 
