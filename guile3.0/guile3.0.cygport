@@ -1,5 +1,5 @@
 NAME="guile3.0"
-VERSION=3.0.2
+VERSION=3.0.4
 RELEASE=1
 CATEGORY="Interpreters"
 SUMMARY="GNU Scheme interpreter library"
