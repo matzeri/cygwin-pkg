@@ -2,7 +2,7 @@ inherit perl
 
 NAME="ImageMagick"
 VERSION="6.9.10.11"
-RELEASE=1
+RELEASE=4
 
 CATEGORY="Graphics"
 SUMMARY="Image processing suite"

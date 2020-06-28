@@ -1,0 +1,22 @@
+--- origsrc/ImageMagick-6.9.10-11/coders/pdf.c	2018-08-28 14:31:12.000000000 +0200
++++ src/ImageMagick-6.9.10-11/coders/pdf.c	2020-06-24 19:24:31.163563100 +0200
+@@ -198,7 +198,7 @@ static MagickBooleanType InvokePDFDelega
+     *ghost_info;
+ 
+   gs_main_instance
+-    *interpreter;
++    *interpreter = NULL ;
+ 
+   gsapi_revision_t
+     revision;
+--- origsrc/ImageMagick-6.9.10-11/coders/ps.c	2018-08-28 14:31:12.000000000 +0200
++++ src/ImageMagick-6.9.10-11/coders/ps.c	2020-06-24 19:22:23.300560800 +0200
+@@ -188,7 +188,7 @@ static MagickBooleanType InvokePostscrip
+     *ghost_info;
+ 
+   gs_main_instance
+-    *interpreter;
++    *interpreter = NULL;
+ 
+   gsapi_revision_t
+     revision;
