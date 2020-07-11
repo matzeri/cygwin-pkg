@@ -1,6 +1,6 @@
---- ../../origsrc/OpenBLAS-0.2.20/Makefile	2017-07-24 06:03:35.000000000 +0200
-+++ Makefile	2018-02-13 09:11:37.643864000 +0100
-@@ -28,7 +28,7 @@
+--- origsrc/OpenBLAS-0.3.10/Makefile	2020-06-14 22:03:04.000000000 +0200
++++ Makefile	2020-06-28 22:03:34.218179700 +0200
+@@ -39,7 +39,7 @@ SUBDIRS_ALL = $(SUBDIRS) test ctest utes
  .PHONY : all libs netlib $(RELA) test ctest shared install
  .NOTPARALLEL : all libs $(RELA) prof lapack-test install blas-test
  
@@ -9,7 +9,7 @@
  	@echo
  	@echo " OpenBLAS build complete. ($(LIB_COMPONENTS))"
  	@echo
-@@ -108,6 +108,10 @@
+@@ -131,6 +131,10 @@ ifeq ($(OSNAME), WINNT)
  endif
  ifeq ($(OSNAME), CYGWIN_NT)
  	@$(MAKE) -C exports dll
@@ -20,21 +20,21 @@
  endif
  endif
  
---- ../../origsrc/OpenBLAS-0.2.20/ctest/Makefile	2017-07-24 06:03:35.000000000 +0200
-+++ ctest/Makefile	2018-02-12 12:34:57.261121900 +0100
-@@ -7,7 +7,7 @@
- 
- override CFLAGS += -DADD$(BU) -DCBLAS
+--- origsrc/OpenBLAS-0.3.10/ctest/Makefile	2020-06-14 22:03:04.000000000 +0200
++++ ctest/Makefile	2020-06-28 22:03:34.218179700 +0200
+@@ -9,7 +9,7 @@ override CFLAGS += -DADD$(BU) -DCBLAS
+ override TARGET_ARCH=
+ override TARGET_MACH=
  
 -LIB = $(TOPDIR)/$(LIBNAME)
 +LIB = $(TOPDIR)/libblas.dll.a
  
  stestl1o = c_sblas1.o
  
---- ../../origsrc/OpenBLAS-0.2.20/test/Makefile	2017-07-24 06:03:35.000000000 +0200
-+++ test/Makefile	2018-02-12 12:31:49.911721900 +0100
-@@ -126,49 +126,49 @@
- 
+--- origsrc/OpenBLAS-0.3.10/test/Makefile	2020-06-14 22:03:04.000000000 +0200
++++ test/Makefile	2020-06-28 22:07:30.214388000 +0200
+@@ -152,54 +152,54 @@ endif
+ endif
  
  sblat1 : sblat1.$(SUFFIX) ../$(LIBNAME)
 -	$(FC) $(FLDFLAGS) -o sblat1 sblat1.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
@@ -76,6 +76,12 @@
 -	$(FC) $(FLDFLAGS) -o sblat3 sblat3.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
 +	$(FC) $(FLDFLAGS) -o sblat3 sblat3.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
  
+ ifeq ($(BUILD_HALF),1)
+ test_shgemm : compare_sgemm_shgemm.c ../$(LIBNAME)
+-	$(FC) $(FLDFLAGS) -o test_shgemm compare_sgemm_shgemm.c ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
++	$(FC) $(FLDFLAGS) -o test_shgemm compare_sgemm_shgemm.c ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
+ endif
+ 
  dblat3 : dblat3.$(SUFFIX) ../$(LIBNAME)
 -	$(FC) $(FLDFLAGS) -o dblat3 dblat3.$(SUFFIX) ../$(LIBNAME) $(EXTRALIB) $(CEXTRALIB)
 +	$(FC) $(FLDFLAGS) -o dblat3 dblat3.$(SUFFIX) ../libblas.dll.a $(EXTRALIB) $(CEXTRALIB)
@@ -98,9 +104,9 @@
  
  
  
---- ../../origsrc/OpenBLAS-0.2.20/utest/Makefile	2018-02-13 00:19:52.580821900 +0100
-+++ utest/Makefile	2018-02-12 12:32:15.386521900 +0100
-@@ -26,7 +26,7 @@
+--- origsrc/OpenBLAS-0.3.10/utest/Makefile	2020-06-14 22:03:04.000000000 +0200
++++ utest/Makefile	2020-06-28 22:03:34.233805600 +0200
+@@ -38,7 +38,7 @@ endif
  all : run_test
  
  $(UTESTBIN): $(OBJS)

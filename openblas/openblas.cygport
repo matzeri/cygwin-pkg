@@ -1,5 +1,5 @@
 NAME="openblas"
-VERSION=0.3.9
+VERSION=0.3.10
 RELEASE=1
 
 CATEGORY="Math"
@@ -11,7 +11,8 @@ SRC_URI="https://github.com/xianyi/OpenBLAS/archive/v${PV}.tar.gz"
 SRC_DIR="OpenBLAS-${PV}"
 
 PATCH_URI="
-cygwin-shared.patch"
+0.3.10-openblas-shared.patch
+"
 
 # PKG_NAMES="openblas libopenblas libopenblas-devel"
 PKG_NAMES="libopenblas openblas-doc"
