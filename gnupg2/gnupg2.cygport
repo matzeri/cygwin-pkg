@@ -1,5 +1,5 @@
 NAME="gnupg2"
-VERSION=2.2.20
+VERSION=2.2.21
 RELEASE=1
 CATEGORY="Utils"
 SUMMARY="GNU tool for secure communication and data storage"
