@@ -1,5 +1,5 @@
 NAME="ngspice"
-VERSION=31
+VERSION=32
 RELEASE=1
 
 CATEGORY="Math"
@@ -15,6 +15,7 @@ SRC_URI="http://sourceforge.net/projects/ngspice/files/ng-spice-rework/${PV}/ngs
 SRC_DIR="${PN}-${PV}"
 
 PKG_NAMES="${PN} lib${PN}-devel lib${PN}0"
+BUILD_REQUIRES="libedit-devel libfftw3-devel libfontconfig-devel libncurses-devel libX11-devel libXaw-devel libXft-devel libXt-devel pkg-config"
 
 ngspice_CONTENTS='usr/bin/*.exe usr/share usr/lib/ngspice'
 
