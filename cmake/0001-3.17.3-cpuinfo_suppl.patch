@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Lemures Lemniscati <lemures.lemniscati@gmail.com>
+Date: Sat, 18 Jul 2020 08:22:59 +0900
+Subject: [PATCH] 3.17.3-cpuinfo_suppl
+
+---
+ Source/kwsys/SystemInformation.cxx | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/Source/kwsys/SystemInformation.cxx b/Source/kwsys/SystemInformation.cxx
+index 1d070e5520..1a0cf7d0b7 100644
+--- a/Source/kwsys/SystemInformation.cxx
++++ b/Source/kwsys/SystemInformation.cxx
+@@ -3715,7 +3715,17 @@ SystemInformationImplementation::GetHostMemoryUsed()
+   GlobalMemoryStatusEx(&statex);
+   return (statex.ullTotalPhys - statex.ullAvailPhys) / 1024;
+ #  endif
+-#elif defined(__linux) || defined(__CYGWIN__)
++#elif defined(__CYGWIN__)
++  const char* names[3] = { "MemTotal:", "MemFree:", NULL };
++  SystemInformation::LongLong values[2] = { SystemInformation::LongLong(0) };
++  int ierr = GetFieldsFromFile("/proc/meminfo", names, values);
++  if (ierr) {
++    return ierr;
++    }
++  SystemInformation::LongLong& memTotal = values[0];
++  SystemInformation::LongLong& memFree = values[1];
++  return memTotal - memFree;
++#elif defined(__linux)
+   const char* names[3] = { "MemTotal:", "MemAvailable:", NULL };
+   SystemInformation::LongLong values[2] = { SystemInformation::LongLong(0) };
+   int ierr = GetFieldsFromFile("/proc/meminfo", names, values);
+-- 
+2.27.0
+

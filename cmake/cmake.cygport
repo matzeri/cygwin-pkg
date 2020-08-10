@@ -2,7 +2,7 @@ inherit emacs qt5
 
 NAME="cmake"
 VERSION=3.17.3
-RELEASE=1
+RELEASE=2
 CATEGORY="Devel"
 SUMMARY="Cross-platform makefile generation system"
 DESCRIPTION="CMake is used to control the software compilation process using
@@ -22,6 +22,7 @@ PATCH_URI="
 	3.17.3-findtclsh.patch
 	3.17.3-cpuinfo.patch
 	3.17.3-cygwin-paths.patch
+	0001-3.17.3-cpuinfo_suppl.patch
 "
 
 PKG_NAMES="${NAME} ${NAME}-gui ${NAME}-doc emacs-cmake"
