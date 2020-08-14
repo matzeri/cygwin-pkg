@@ -1,0 +1,11 @@
+--- origsrc/ImageMagick-6.9.11-27/coders/ghostscript-private.h	2020-08-10 02:15:26.000000000 +0200
++++ coders/ghostscript-private.h	2020-08-13 16:25:32.839697600 +0200
+@@ -91,7 +91,7 @@ static inline MagickBooleanType InvokeGh
+     *ghost_info;
+ 
+   gs_main_instance
+-    *interpreter;
++    *interpreter=NULL;
+ 
+   gsapi_revision_t
+     revision;

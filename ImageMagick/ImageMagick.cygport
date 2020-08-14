@@ -1,8 +1,8 @@
 inherit perl
 
 NAME="ImageMagick"
-VERSION="6.9.10.11"
-RELEASE=4
+VERSION="6.9.11.27"
+RELEASE=1
 
 CATEGORY="Graphics"
 SUMMARY="Image processing suite"
@@ -16,7 +16,8 @@ HOMEPAGE="http://www.imagemagick.org/"
 
 SRC_URI="http://www.imagemagick.org/download/${PN}-${PV%.${PV[4]}}-${PV[4]}.tar.lz"
 SRC_DIR=${P%.${PV[4]}}-${PV[4]}
-PATCH_URI="AC_CHECK_SIZEOF.patch"
+PATCH_URI="AC_CHECK_SIZEOF.patch
+interpreter-NULL.patch"
 
 PKG_NAMES="ImageMagick ImageMagick-doc libMagickCore6_6 libMagickC++6_8 libMagickWand6_6 libMagick-devel perl-Image-Magick"
 
@@ -44,7 +45,7 @@ libMagick_devel_CONTENTS="usr/bin/*-config usr/include/ usr/lib/lib* usr/lib/pkg
 perl_Image_Magick_SUMMARY="${SUMMARY} ((Perl bindings)"
 perl_Image_Magick_CONTENTS="${PERL_VENDORARCH#/} usr/share/man/man3/"
 
-DIFF_EXCLUDES="Makefile.PL *-config.h version.h ltdl m4 tap-driver.sh"
+DIFF_EXCLUDES="Makefile.PL *-config.h version.h ltdl m4 tap-driver.sh check.sh"
 
 src_compile() {
 	cd ${S}
