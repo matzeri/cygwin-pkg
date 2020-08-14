@@ -1,0 +1,47 @@
+NAME="libde265"
+VERSION="1.0.5"
+RELEASE=1
+
+DESCRIPTION="open source implementation of the h.265 video codec"
+HOMEPAGE="https://github.com/strukturag/libde265"
+SRC_URI="https://github.com/strukturag/libde265/releases/download/v${PV}/${NAME}-${PV}.tar.gz"
+SRC_DIR="${NAME}-${PV}"
+PATCH_URI="1.0.5-undefined.patch"
+
+CATEGORY="Graphics"
+PKG_NAMES="${PN}-tool ${PN}-devel ${PN}_0"
+
+libde265_tool_SUMMARY="libde265 tools"
+libde265_tool_CONTENTS="
+usr/bin/*.exe
+usr/share"
+
+libde265_devel_SUMMARY="libde265 library (devel)"
+libde265_devel_CONTENTS="
+usr/include/libde265
+usr/lib/libde265.dll.a
+usr/lib/pkgconfig/"
+
+libde265_0_SUMMARY="libde265 library (runtime)"
+libde265_0_CONTENTS="usr/bin/cygde265-0.dll"
+
+DIFF_EXCLUDES=""
+
+src_compile() {
+	cd ${S}
+    	cygautoreconf 
+	cd ${B}
+	cygconf --enable-shared \
+		--enable-static=no 
+	cygmake 
+}
+
+src_test() {
+	cd ${B}
+	cygmake test 
+}
+
+src_install() {
+	cd ${B}
+        cyginstall  
+}
