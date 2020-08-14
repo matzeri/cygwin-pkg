@@ -1,7 +1,7 @@
 inherit perl
 
 NAME="ImageMagick"
-VERSION="6.9.11.27"
+VERSION="7.0.10.27"
 RELEASE=1
 
 CATEGORY="Graphics"
@@ -19,24 +19,25 @@ SRC_DIR=${P%.${PV[4]}}-${PV[4]}
 PATCH_URI="AC_CHECK_SIZEOF.patch
 interpreter-NULL.patch"
 
-PKG_NAMES="ImageMagick ImageMagick-doc libMagickCore6_6 libMagickC++6_8 libMagickWand6_6 libMagick-devel perl-Image-Magick"
+PKG_NAMES="ImageMagick ImageMagick-doc libMagickCore7_7 libMagickC++7_4 libMagickWand7_7 libMagick-devel perl-Image-Magick"
 
 ImageMagick_SUMMARY="${SUMMARY} (utilities)"
-ImageMagick_CONTENTS="--exclude=*-config.* --exclude=index.html --exclude=www
+ImageMagick_CONTENTS="--exclude=*-config* --exclude=index.html --exclude=www
                       --exclude=images --exclude=man3 --exclude=perl
-                      etc/ usr/bin/*.exe usr/share/doc/ usr/share/man/"
+		      --exclude=*.dll 
+                      etc/ usr/bin/ usr/share/doc/ usr/share/man/"
 
 ImageMagick_doc_SUMMARY="${SUMMARY} (documentation)"
-ImageMagick_doc_CONTENTS="usr/share/doc/${PN}-6/index.html usr/share/doc/${PN}-6/*/"
+ImageMagick_doc_CONTENTS="usr/share/doc/${PN}-7/index.html usr/share/doc/${PN}-7/*/"
 
-libMagickCore6_6_SUMMARY="${SUMMARY} (runtime)"
-libMagickCore6_6_CONTENTS="usr/bin/cygMagickCore-6.Q16-6.dll usr/lib/${P%.${PV[4]}}/ usr/share/${PN}-6/"
+libMagickCore7_7_SUMMARY="${SUMMARY} (runtime)"
+libMagickCore7_7_CONTENTS="usr/bin/cygMagickCore-7.Q16HDRI-7.dll usr/lib/${P%.${PV[4]}}/ usr/share/${PN}-7/"
 
-libMagickC__6_8_SUMMARY="${SUMMARY} (runtime C++)"
-libMagickC__6_8_CONTENTS="usr/bin/cygMagick++-6.Q16-8.dll"
+libMagickC__7_4_SUMMARY="${SUMMARY} (runtime C++)"
+libMagickC__7_4_CONTENTS="usr/bin/cygMagick++-7.Q16HDRI-4.dll"
 
-libMagickWand6_6_SUMMARY="${SUMMARY} (runtime C++)"
-libMagickWand6_6_CONTENTS="usr/bin/cygMagickWand-6.Q16-6.dll"
+libMagickWand7_7_SUMMARY="${SUMMARY} (runtime C++)"
+libMagickWand7_7_CONTENTS="usr/bin/cygMagickWand-7.Q16HDRI-7.dll"
 
 libMagick_devel_SUMMARY="${SUMMARY} (development)"
 libMagick_devel_CONTENTS="usr/bin/*-config usr/include/ usr/lib/lib* usr/lib/pkgconfig/
