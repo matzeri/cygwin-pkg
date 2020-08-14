@@ -1,0 +1,55 @@
+NAME="libheif"
+VERSION="1.7.0"
+RELEASE=1
+
+DESCRIPTION="HEIF and AVIF (AV1 Image File Format) file format decoder and encoder."
+HOMEPAGE="https://github.com/strukturag/libheif"
+SRC_URI="https://github.com/strukturag/libheif/releases/download/v${PV}/${NAME}-${PV}.tar.gz"
+SRC_DIR="${NAME}-${PV}"
+PATCH_URI="1.7.0-undefined.patch"
+
+CATEGORY="Graphics"
+PKG_NAMES="${PN}-tool ${PN}-devel ${PN}1"
+
+libheif_tool_SUMMARY="libheif tools"
+libheif_tool_CONTENTS="
+usr/bin/heif-convert.exe
+usr/bin/heif-enc.exe
+usr/bin/heif-info.exe
+usr/bin/heif-thumbnailer.exe
+usr/share"
+
+libheif_devel_SUMMARY="libheif library (devel)"
+libheif_devel_CONTENTS="
+usr/include/libheif
+usr/lib/libheif.dll.a
+usr/lib/pkgconfig/"
+
+libheif1_SUMMARY="libheif library (runtime)"
+libheif1_CONTENTS="
+usr/bin/cygheif-1.dll
+usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/cygpixbufloader-heif.dll
+etc/postinstall/libheif.sh
+"
+
+DIFF_EXCLUDES=""
+
+src_compile() {
+	cd ${S}
+    	cygautoreconf 
+	cd ${B}
+	cygconf --enable-shared \
+		--enable-static=no \
+		--enable-tests 
+	cygmake 
+}
+
+src_test() {
+	cd ${B}
+	cygmake test 
+}
+
+src_install() {
+	cd ${B}
+        cyginstall  
+}
