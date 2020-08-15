@@ -1,5 +1,5 @@
 NAME="postgresql"
-VERSION=12.2
+VERSION=12.4
 RELEASE=1
 
 CATEGORY="Database"
@@ -19,6 +19,8 @@ RESTRICT="debuginfo"
 MAKEOPTS="${MAKEOPTS} -j1"
 PACKAGE_BUGREPORT="cygwin@cygwin.com"
 CYGCONF_ARGS="LDFLAGS=-Wl,-no-undefined --enable-nls --with-openssl --with-perl --with-python --with-ldap --with-system-tzdata=/usr/share/zoneinfo"
+
+PYTHON="python3.8"
 
 PKG_NAMES="${PN} ${PN}-devel ${PN}-client ${PN}-contrib ${PN}-doc \
   ${PN}-plperl ${PN}-plpython \
