@@ -1,0 +1,11 @@
+--- origsrc/librsb-1.2.0.9/scripts/rsb_h_to_rsb_fi.sh	2020-08-07 16:13:21.000000000 +0200
++++ src/librsb-1.2.0.9/scripts/rsb_h_to_rsb_fi.sh	2020-08-15 16:21:49.630701000 +0200
+@@ -23,7 +23,7 @@ BLDDIR=
+ if test $# = 0 ; then SRCDIR=. ; else SRCDIR="$1"; fi
+ if test $# = 1 ; then BLDDIR=. ; else BLDDIR="$2"; fi
+ IF=${SRCDIR}/rsb.h
+-TF=${BLDDIR}/rsb_types.h
++TF=${SRCDIR}/rsb_types.h
+ CH2ICFB=./ch2icfb
+ (
+ ${CH2ICFB} < ${IF} | grep -v 'END MODULE rsb' 
