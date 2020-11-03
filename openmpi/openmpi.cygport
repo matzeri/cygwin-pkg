@@ -1,5 +1,5 @@
 NAME="openmpi"
-VERSION="3.1.6"
+VERSION="4.0.5"
 RELEASE=1
 
 CATEGORY="Libs"
@@ -9,7 +9,8 @@ typically used for parallel and/or distributed computing. Open MPI is an open
 source, freely available, high performance implementation of the MPI spec."
 
 HOMEPAGE="http://www.open-mpi.org"
-SRC_URI="http://www.open-mpi.org/software/ompi/v3.1/downloads/${P}.tar.bz2"
+SRC_URI="http://www.open-mpi.org/software/ompi/v4.0/downloads/${P}.tar.bz2"
+SRC_DIR="${P}"
 
 PATCH_URI="
 openmpi-README.patch
@@ -79,9 +80,9 @@ src_install() {
 	cd ${B}
         cyginstall
 
-	echo -e "#\n# Avoid PMIX error on 3.1.5 for " >> ${D}/etc/pmix-mca-params.conf
-	echo "# https://www.mail-archive.com/devel@lists.open-mpi.org//msg21004.html" >> ${D}/etc/pmix-mca-params.conf
-	echo "gds = ^ds21" >> ${D}/etc/pmix-mca-params.conf
+	echo -e "#\n# Avoid PMIX error on 4.0.x for " >> ${D}/etc/pmix-mca-params.conf
+	echo "# https://www.mail-archive.com/devel@lists.open-mpi.org//msg21141.html" >> ${D}/etc/pmix-mca-params.conf
+	echo "gds = hash" >> ${D}/etc/pmix-mca-params.conf
 
 	make_etc_defaults /etc/openmpi-default-hostfile \
 	/etc/openmpi-mca-params.conf /etc/openmpi-totalview.tcl \
