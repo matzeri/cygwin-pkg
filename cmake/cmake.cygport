@@ -35,6 +35,7 @@ BUILD_REQUIRES="
   liblzma-devel\
   libzstd-devel\
   python38-sphinx\
+  python38-alabaster\
   emacs\
 " # This list might be insufficient.
 
