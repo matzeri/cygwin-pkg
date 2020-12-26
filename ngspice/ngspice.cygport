@@ -1,5 +1,5 @@
 NAME="ngspice"
-VERSION=32
+VERSION=33
 RELEASE=1
 
 CATEGORY="Math"
