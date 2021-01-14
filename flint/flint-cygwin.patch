@@ -1,6 +1,6 @@
---- origsrc/flint-2.5.2/Makefile.in	2015-08-13 18:16:22.000000000 +0200
-+++ Makefile.in	2017-12-31 09:36:31.042251600 +0100
-@@ -197,11 +197,12 @@ else
+--- origsrc/flint-2.7.0/Makefile.in	2021-01-12 22:47:54.878455900 +0100
++++ Makefile.in	2021-01-12 22:50:07.581546300 +0100
+@@ -198,11 +198,12 @@ else
  endif
  
  install: library
@@ -15,32 +15,35 @@
  	fi
  	$(AT)if [ "$(FLINT_STATIC)" -eq "1" ]; then \
  		cp libflint.a "$(DESTDIR)$(PREFIX)/$(LIBDIR)"; \
---- origsrc/flint-2.5.2/configure	2015-08-13 18:16:22.000000000 +0200
-+++ configure	2017-12-31 09:04:18.311705700 +0100
-@@ -435,11 +435,17 @@ if [ -z "$FLINT_LIB" ]; then
-          FLINT_LIBNAME="libflint.dylib"
-          FLINT_LIB="libflint-$FLINT_MAJOR.$FLINT_MINOR.$FLINT_PATCH.dylib"
-          EXTRA_SHARED_FLAGS="-install_name $PREFIX/lib/$FLINT_LIB -compatibility_version $FLINT_MAJOR.$FLINT_MINOR -current_version $FLINT_MAJOR.$FLINT_MINOR.$FLINT_PATCH -Wl,-rpath,$GMP_LIB_DIR -Wl,-rpath,$MPFR_LIB_DIR";;
+--- origsrc/flint-2.7.0/configure	2021-01-12 22:47:54.571467600 +0100
++++ configure	2021-01-12 22:54:31.780090200 +0100
+@@ -467,7 +467,7 @@ if [ -z "$FLINT_LIB" ]; then
+          EXTRA_SHARED_FLAGS="$EXTRA_SHARED_FLAGS -compatibility_version $FLINT_MAJOR.$FLINT_MINOR"
+          EXTRA_SHARED_FLAGS="$EXTRA_SHARED_FLAGS -current_version $FLINT_MAJOR.$FLINT_MINOR.$FLINT_PATCH"
+          ;;
 -      CYGWIN* | MINGW*)
 +      MINGW*)
           FLINT_LIBNAME="libflint.dll"
           FLINT_LIB="libflint-$FLINT_MAJOR.dll"
-          EXTRA_SHARED_FLAGS="-static-libgcc -shared -Wl,--export-all-symbols -Wl,-soname,libflint-$FLINT_MAJOR.dll.$FLINT_MINOR.$FLINT_PATCH -Wl,-rpath,$GMP_LIB_DIR -Wl,-rpath,$MPFR_LIB_DIR"
-          FLINT_DLL=1;;
+          EXTRA_SHARED_FLAGS="-static-libgcc"
+@@ -476,6 +476,12 @@ if [ -z "$FLINT_LIB" ]; then
+          EXTRA_SHARED_FLAGS="$EXTRA_SHARED_FLAGS -Wl,-soname,libflint-$FLINT_MAJOR.dll.$FLINT_MINOR.$FLINT_PATCH"
+          FLINT_DLL=1
+          ;;
 +      CYGWIN*)
 +         FLINT_LIBNAME="cygflint.dll"
 +         FLINT_LIB="cygflint-$FLINT_MAJOR.dll"
-+ 	 FLINT_IMPLIB="libflint.dll.a"
++         FLINT_IMPLIB="libflint.dll.a"
 +         EXTRA_SHARED_FLAGS="-shared -Wl,--export-all-symbols -Wl,-soname,libflint-$FLINT_MAJOR.dll.$FLINT_MINOR.$FLINT_PATCH -Wl,-rpath,$GMP_LIB_DIR -Wl,-rpath,$MPFR_LIB_DIR -Wl,--out-implib=$FLINT_IMPLIB"
 +         FLINT_DLL=1;;
        *)
- 	 FLINT_LIBNAME="libflint.so"
+          FLINT_LIBNAME="libflint.so"
           FLINT_LIB="libflint.so.$FLINT_MAJOR.$FLINT_MINOR.$FLINT_PATCH"
-@@ -714,6 +720,7 @@ echo "FLINT_STATIC=$STATIC" >> Makefile
- echo "FLINT_SHARED=$SHARED" >> Makefile
+@@ -786,6 +792,7 @@ echo "FLINT_SHARED=$SHARED" >> Makefile
  echo "FLINT_LIB=$FLINT_LIB" >> Makefile
  echo "FLINT_LIBNAME=$FLINT_LIBNAME" >> Makefile
+ echo "OS=$OS" >> Makefile
 +echo "FLINT_IMPLIB=$FLINT_IMPLIB" >> Makefile
  echo "FLINT_SOLIB=$FLINT_SOLIB" >> Makefile
+ echo "FLINT_MAJOR=$FLINT_MAJOR" >> Makefile
  echo "EXEEXT=$EXEEXT" >> Makefile
- echo "PREFIX=$PREFIX" >> Makefile

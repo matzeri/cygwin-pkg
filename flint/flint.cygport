@@ -1,6 +1,6 @@
 NAME="flint"
-VERSION=2.5.2
-RELEASE=2
+VERSION=2.7.0
+RELEASE=1
 
 CATEGORY="Math"
 SUMMARY="Fast Library for Number Theory"
@@ -14,13 +14,15 @@ flint-cygwin.patch
 configure-prefix.patch
 t-NTL-interface.patch"
 
-PKG_NAMES="libflint13 libflint-devel"
+PKG_NAMES="libflint15 libflint-devel"
 
-libflint13_CONTENTS="usr/bin/cygflint-13.dll"
-libflint13_SUMMARY="${SUMMARY} - runtime"
+libflint15_CONTENTS="usr/bin/cygflint-15.dll"
+libflint15_SUMMARY="${SUMMARY} - runtime"
 
 libflint_devel_CONTENTS="usr/lib usr/include usr/share"
 libflint_devel_SUMMARY="${SUMMARY} - devel"
+
+BUILD_REQUIRES="libgmp_devel libntl_devel liblapack-devel libmpfr-devel"
 
 DIFF_EXCLUDES=""
 KEEP_LA_FILES="none"
@@ -41,5 +43,6 @@ src_compile() {
 
 src_test() {
 	cd ${B}
+	PATH="${B}:${PATH}"
 	cygmake -i check
 }
