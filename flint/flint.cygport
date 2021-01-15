@@ -22,7 +22,7 @@ libflint15_SUMMARY="${SUMMARY} - runtime"
 libflint_devel_CONTENTS="usr/lib usr/include usr/share"
 libflint_devel_SUMMARY="${SUMMARY} - devel"
 
-BUILD_REQUIRES="libgmp_devel libntl_devel liblapack-devel libmpfr-devel"
+BUILD_REQUIRES="libgmp-devel libntl-devel liblapack-devel libmpfr-devel"
 
 DIFF_EXCLUDES=""
 KEEP_LA_FILES="none"
