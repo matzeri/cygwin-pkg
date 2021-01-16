@@ -14,7 +14,7 @@ SRC_URI="http://www.greenwoodsoftware.com/less/${PN}-${PV}.tar.gz
 http://www.greenwoodsoftware.com/less/${PN}-${PV}.sig"
 
 PKG_NAMES="less"
-BUILD_REQQUIRES="libncurses-devel libpcre-devel"
+BUILD_REQUIRES="libncurses-devel libpcre-devel"
 
 less_CONTENTS="usr"
 
