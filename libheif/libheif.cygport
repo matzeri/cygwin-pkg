@@ -1,5 +1,5 @@
 NAME="libheif"
-VERSION="1.7.0"
+VERSION="1.10.0"
 RELEASE=1
 
 DESCRIPTION="HEIF and AVIF (AV1 Image File Format) file format decoder and encoder."
@@ -10,6 +10,8 @@ PATCH_URI="1.7.0-undefined.patch"
 
 CATEGORY="Graphics"
 PKG_NAMES="${PN}-tool ${PN}-devel ${PN}1"
+
+BUILD_REQUIRES="pkg-config libheif-devel libjpeg-devel libpng16-devel libglib2.0-devel libgdk_pixbuf2.0-devel"
 
 libheif_tool_SUMMARY="libheif tools"
 libheif_tool_CONTENTS="
