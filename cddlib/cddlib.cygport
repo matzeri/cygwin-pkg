@@ -1,6 +1,6 @@
 NAME="cddlib"
-VERSION="094j"
-OV="0.94j"
+VERSION="094m"
+OV="0.94m"
 
 RELEASE=1
 
@@ -11,7 +11,10 @@ SUMMARY="general convex polyhedron library"
 HOMEPAGE="http://www.inf.ethz.ch/personal/fukudak/cdd_home/cdd.html"
 SRC_URI="https://github.com/cddlib/cddlib/releases/download/${OV}/cddlib-${OV}.tar.gz"
 SRC_DIR="${PN}-${OV}"
-PATCH_URI="cddlib-undefined.patch"
+
+PATCH_URI="
+cddlib-notest.patch
+cddlib-undefined.patch"
 
 PKG_NAMES="cddlib-tools cddlib0 cddlibgmp0 cddlib-devel"
 
@@ -27,7 +30,7 @@ cddlibgmp0_SUMMARY="${SUMMARY} - gmp runtime"
 cddlib_devel_CONTENTS="usr/lib usr/include"
 cddlib_devel_SUMMARY="${SUMMARY} - devel"
 
-DEPEND="gmp"
+BUILD_REQUIRES="libgmp-devel" 
 
 src_compile()
 {
