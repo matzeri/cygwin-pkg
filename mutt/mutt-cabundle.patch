@@ -1,20 +1,23 @@
---- origsrc/mutt-1.14.0/contrib/Makefile.am	2020-05-02 23:08:56.000000000 +0200
-+++ contrib/Makefile.am	2020-05-09 08:41:26.551099000 +0200
+--- origsrc/mutt-2.0.5/contrib/Makefile.am	2020-11-22 18:37:14.000000000 +0100
++++ contrib/Makefile.am	2021-02-21 18:23:24.683116100 +0100
 @@ -6,7 +6,7 @@ SAMPLES = Mush.rc Pine.rc gpg.rc pgp2.rc
  	sample.mailcap sample.muttrc sample.muttrc-sidebar sample.muttrc-tlr \
  	sample.muttrc-compress sample.muttrc-starter \
  	sample.vimrc-sidebar colors.default colors.linux smime.rc \
 -	ca-bundle.crt smime_keys_test.pl mutt_xtitle markdown2html \
 +	smime_keys_test.pl mutt_xtitle markdown2html \
- 	bgedit-detectgui.sh bgedit-screen-tmux.sh
+ 	bgedit-detectgui.sh bgedit-screen-tmux.sh \
+ 	mutt_oauth2.py mutt_oauth2.py.README
  
- EXTRA_DIST = language.txt language50.txt  \
---- origsrc/mutt-1.14.0/doc/smime-notes.txt	2020-05-02 23:08:56.000000000 +0200
-+++ doc/smime-notes.txt	2020-05-09 08:42:52.563667800 +0200
-@@ -40,8 +40,9 @@ How to add use mutt's S/MIME capabilitie
- - Edit the smime_sign_as line in your muttrc, replacing the keyid with your
-   own.
+--- origsrc/mutt-2.0.5/doc/smime-notes.txt	2020-05-02 23:08:56.000000000 +0200
++++ doc/smime-notes.txt	2021-02-21 18:25:18.642942300 +0100
+@@ -37,11 +37,9 @@ How to add use mutt's S/MIME capabilitie
+       The number (including the ".0" at the end) is your keyid. You will
+       need this number in the next step.
  
+-- Edit the smime_sign_as line in your muttrc, replacing the keyid with your
+-  own.
+-
 -- You probably want to import the trusted roots in
 -  contrib/ca-bundle.crt. This makes you trust anything that was ultimately
 +- There is no more ca-bundle.crt file with the trusted roots to import shipped

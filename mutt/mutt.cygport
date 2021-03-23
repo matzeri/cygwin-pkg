@@ -1,5 +1,5 @@
 NAME="mutt"
-VERSION=1.14.7
+VERSION=2.0.5
 RELEASE=1
 
 CATEGORY="Mail"
@@ -26,19 +26,19 @@ src_compile() {
 	cd ${S}
 	cygautoreconf 
 	cd ${B}
-    	export ac_cv_func_mmap_fixed_mapped=yes
+	export ac_cv_func_mmap_fixed_mapped=yes
 	cygconf -C \
-        --with-mailpath=/var/spool/mail \
-        --disable-dependency-tracking \
-        --docdir=/usr/share/doc/mutt \
-        --enable-fcntl \
-        --enable-hcache \
-        --enable-iconv \
+	--with-mailpath=/var/spool/mail \
+	--disable-dependency-tracking \
+	--docdir=/usr/share/doc/mutt \
+	--enable-fcntl \
+	--enable-hcache \
+	--enable-iconv \
 	--enable-sidebar \
-        --enable-imap \
-        --enable-locales-fix \
-        --enable-pop \
-        --with-ssl \
+	--enable-imap \
+	--enable-locales-fix \
+	--enable-pop \
+	--with-ssl \
 	--enable-smtp \
 	--enable-gpgme \
 	--with-gss \
