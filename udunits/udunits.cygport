@@ -1,11 +1,13 @@
 NAME="udunits"
-VERSION=2.2.27.6
+VERSION=2.2.28
 RELEASE=1
 
 DESCRIPTION="The UDUNITS-2 package provides support for units of physical quantities "
 HOMEPAGE="http://www.unidata.ucar.edu/software/udunits/"
-SRC_URI="https://github.com/Unidata/UDUNITS-2/archive/v${PV}.tar.gz" 
-SRC_DIR="UDUNITS-2-${PV}"
+SRC_URI="https://artifacts.unidata.ucar.edu/repository/downloads-udunits/udunits-${PV}.tar.gz" 
+# SRC_URI="https://github.com/Unidata/UDUNITS-2/archive/v${PV}.tar.gz" 
+SRC_DIR="udunits-${PV}"
+PATCH_URI="2.2.28-CYGWIN.patch"
 
 abi=0
 
@@ -25,7 +27,7 @@ libudunits_devel_CONTENTS="
   usr/lib/
 "
 udunits_CATEGORY="Math"
-udunits_SUMMARY="UDUNITS-2 package provides support for units of physical quantities"
+udunits_SUMMARY="provides support for units of physical quantities"
 libudunits0_CATEGORY="Math Libs"
 libudunits0_SUMMARY="UDUNITS-2 - (runtime)"
 libudunits_devel_CATEGORY="Math Devel Libs"
@@ -36,11 +38,11 @@ KEEP_LA_FILES="none"
 
 
 src_compile() {
-        cd ${S}
+	cd ${S}
 	cygautoreconf	
-        cd ${B}
-        cygconf
-        cygmake
+	cd ${B}
+	cygconf
+	cygmake
 }
 
 src_install() {
@@ -51,7 +53,7 @@ src_install() {
 }
 
 src_test() {
-       cd ${B}
-       make check
+	cd ${B}
+	make check
 }
 
