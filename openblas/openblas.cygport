@@ -1,5 +1,5 @@
 NAME="openblas"
-VERSION=0.3.14
+VERSION=0.3.15
 RELEASE=1
 
 CATEGORY="Math"
