@@ -12,6 +12,7 @@ SRC_URI="ftp://cirrus.ucsd.edu/pub/ncview/${PN}-${PV}.tar.gz"
 PKG_NAMES="ncview"
 ncview_CONTENTS="etc/ usr/"
 
+BUILD_REQUIRES="libnetcdf-devel libpng16-devel libX11-devel libXt-devel libXaw-devel"
 KEEP_LA_FILES="none"
 DIFF_EXCLUDES="*.in *.m4 INSTALL configure depcomp install-sh missing"
 
