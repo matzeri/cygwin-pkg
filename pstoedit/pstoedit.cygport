@@ -1,5 +1,5 @@
 NAME="pstoedit"
-VERSION=3.73
+VERSION=3.75
 RELEASE=1
 CATEGORY="Graphics"
 SUMMARY="A tool converting PostScript and PDF files into various vector graphic formats"
@@ -8,9 +8,9 @@ including xfig, ai, idraw, metapost, gnu metafile, and others."
 
 HOMEPAGE="http://www.pstoedit.net/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+PATCH_URI="3.75-Magick7++.patch"
 
-# Build dependencies only
-DEPEND="libEMF-devel libplotter-devel"
+BUILD_REQUIRES="ghostscript libEMF-devel libplotter-devel libming1 libgd-devel libMagick-devel libming-devel libplotter-devel libzip-devel"
 
 abi=0
 PKG_NAMES="${PN} lib${PN}${abi} ${PN}-devel"
@@ -30,7 +30,7 @@ libpstoedit0_CONTENTS="
 "
 pstoedit_devel_CATEGORY="Devel ${CATEGORY}"
 pstoedit_devel_SUMMARY="${SUMMARY} (development)"
-pstoedit_devel_REQUIRES="libEMF-devel libgd-devel libMagick-devel libming-devel libplotter-devel gcc-core gcc-g++ libzip-devel"
+pstoedit_devel_REQUIRES="libEMF-devel libgd-devel libMagick-devel libming-devel libplotter-devel libzip-devel"
 pstoedit_devel_CONTENTS="
   usr/include/
   usr/lib/lib*
@@ -38,13 +38,9 @@ pstoedit_devel_CONTENTS="
   usr/share/aclocal/
 "
 
-
 DIFF_EXCLUDES="copying"
- 
 MAKEOPTS="-j1"
-
 CPPFLAGS+=-I/usr/lib/libzip/include
-
 
 src_install() {
 	cd ${B}
