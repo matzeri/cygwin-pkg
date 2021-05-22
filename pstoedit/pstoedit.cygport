@@ -10,7 +10,7 @@ HOMEPAGE="http://www.pstoedit.net/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 PATCH_URI="3.75-Magick7++.patch"
 
-BUILD_REQUIRES="ghostscript libEMF-devel libplotter-devel libming1 libgd-devel libMagick-devel libming-devel libplotter-devel libzip-devel"
+BUILD_REQUIRES="ghostscript pkg-config libEMF-devel libplotter-devel libming1 libgd-devel libMagick-devel libming-devel libplotter-devel libzip-devel texlive-collection-latex texlive-collection-binextra texlive groff "
 
 abi=0
 PKG_NAMES="${PN} lib${PN}${abi} ${PN}-devel"
