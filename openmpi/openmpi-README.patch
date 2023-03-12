@@ -1,9 +1,0 @@
---- /dev/null	2017-02-18 18:44:55.000000000 +0100
-+++ CYGWIN-PATCHES/README	2017-02-18 18:41:30.111947300 +0100
-@@ -0,0 +1,6 @@
-+The Open MPI Project is an open source Message Passing Interface implementation that is developed and maintained by a consortium of academic, research, and industry partners. Open MPI is therefore able to combine the expertise, technologies, and resources from all across the High Performance Computing community in order to build the best MPI library available. Open MPI offers advantages for system and software vendors, application developers and computer science researchers. 
-+
-+------------------------------------------
-+
-+cygserver must run as service (usually by cygrunsrv -S cygserver)
-+
